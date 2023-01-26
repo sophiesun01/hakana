@@ -123,6 +123,11 @@ pub fn init(
                         .help("Output a summary of issue counts"),
                 )
                 .arg(
+                    arg!(--"show-function-pagerank")
+                        .required(false)
+                        .help("Compute the highest-ranked functions"),
+                )
+                .arg(
                     arg!(--"output" <PATH>)
                         .required(false)
                         .help("File to save output to"),
@@ -405,6 +410,7 @@ pub fn init(
             let show_symbol_map = sub_matches.is_present("show-symbol-map");
             let ignore_mixed_issues = sub_matches.is_present("ignore-mixed-issues");
             let show_issue_stats = sub_matches.is_present("show-issue-stats");
+            let show_function_pagerank = sub_matches.is_present("show-function-pagerank");
             let do_ast_diff = sub_matches.is_present("diff");
 
             let mut issue_kinds_filter = FxHashSet::default();
@@ -488,6 +494,10 @@ pub fn init(
                     for (issue, count) in issues_by_kind {
                         println!("{}\t{}", issue.to_string(), count);
                     }
+                }
+
+                if show_function_pagerank {
+                    
                 }
 
                 if show_symbol_map {

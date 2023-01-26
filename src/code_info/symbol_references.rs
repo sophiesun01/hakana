@@ -1,7 +1,9 @@
+use ndarray::{Array1, Array2};
 use rustc_hash::{FxHashMap, FxHashSet};
 use serde::{Deserialize, Serialize};
 
 use crate::{
+    codebase_info::CodebaseInfo,
     diff::CodebaseDiff,
     function_context::{FunctionContext, FunctionLikeIdentifier},
     StrId,
@@ -523,6 +525,136 @@ impl SymbolReferences {
         )
     }
 
+    pub fn get_ranked_functions(&self, codebase: &CodebaseInfo) -> Vec<FunctionLikeIdentifier> {
+        let mut functionlike_ids = codebase
+            .functionlike_infos
+            .iter()
+            .filter(|(_, v)| v.is_production_code)
+            .map(|(k, _)| (k, None))
+            .collect::<Vec<_>>();
+
+        functionlike_ids.extend(
+            codebase
+                .classlike_infos
+                .iter()
+                .filter(|(_, v)| v.is_production_code)
+                .map(|c| {
+                    c.1.methods
+                        .keys()
+                        .into_iter()
+                        .map(|m| (c.0, Some(m)))
+                        .collect::<Vec<_>>()
+                })
+                .flatten(),
+        );
+
+        println!("building matrix of size {}", functionlike_ids.len());
+
+        let matrix = self.build_matrix(&functionlike_ids);
+
+        println!("calculating rank");
+
+        let mut ranked_ids = calculate_rank(matrix, 100)
+            .into_iter()
+            .enumerate()
+            .map(|e| (functionlike_ids[e.0], e.1))
+            .filter(|e| e.1 > 0.0)
+            .collect::<Vec<_>>();
+
+        ranked_ids.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
+
+        ranked_ids
+            .into_iter()
+            .map(|(id, _)| {
+                if let Some(member_id) = id.1 {
+                    FunctionLikeIdentifier::Method(*id.0, *member_id)
+                } else {
+                    FunctionLikeIdentifier::Function(*id.0)
+                }
+            })
+            .collect()
+    }
+
+    fn build_matrix(&self, functionlike_ids: &Vec<(&StrId, Option<&StrId>)>) -> Array2<f32> {
+        let len = functionlike_ids.len();
+        let mut matrix = Array2::<f32>::zeros((len, len));
+
+        for j in 0..len {
+            let source = functionlike_ids[j];
+
+            let refs = match source.1 {
+                Some(source_member_id) => (
+                    self.classlike_member_references_to_symbols
+                        .get(&(*source.0, *source_member_id)),
+                    self.classlike_member_references_to_members
+                        .get(&(*source.0, *source_member_id)),
+                ),
+                _ => (
+                    self.symbol_references_to_symbols.get(&source.0),
+                    self.symbol_references_to_members.get(&source.0),
+                ),
+            };
+
+            if j % 10000 == 0 {
+                println!("{}", j);
+            }
+
+            if let (None, None) = refs {
+                continue;
+            }
+
+            for i in 0..len {
+                if i == j {
+                    continue;
+                }
+
+                let target = functionlike_ids[i];
+
+                if match target.1 {
+                    Some(target_member_id) => {
+                        if let Some(refs) = refs.1 {
+                            refs.contains(&(*target.0, *target_member_id))
+                        } else {
+                            false
+                        }
+                    }
+                    _ => {
+                        if let Some(refs) = refs.0 {
+                            refs.contains(&target.0)
+                        } else {
+                            false
+                        }
+                    }
+                } {
+                    matrix[[i, j]] = 1.0;
+                };
+            }
+        }
+
+        println!("Summing columns");
+
+        let sum_column = matrix.sum_axis(ndarray::Axis(0)).to_vec();
+
+        println!("Normalizing matrix");
+
+        for i in 0..len {
+            if i % 10000 == 0 {
+                println!("{}", i);
+            }
+
+            for j in 0..len {
+                if i == j {
+                    continue;
+                }
+                if sum_column[j] != 0.0 {
+                    matrix[[i, j]] = matrix[[i, j]] / sum_column[j];
+                }
+            }
+        }
+
+        matrix
+    }
+
     pub fn remove_references_from_invalid_symbols(
         &mut self,
         invalid_symbols: &FxHashSet<StrId>,
@@ -546,4 +678,34 @@ impl SymbolReferences {
         self.classlike_member_references_to_symbols_in_signature
             .retain(|symbol, _| !invalid_symbol_members.contains(symbol));
     }
+}
+
+fn calculate_rank(similarity_matrix: Array2<f32>, limit: usize) -> Vec<f32> {
+    let edges_count = similarity_matrix.shape()[1];
+    let threshold = 0.001;
+    // Initialize a vector with the same value 1/number of sentences. Uniformly distributed across
+    // all sentences. NOTE: perhaps we can make some sentences more important than the rest?
+    let initial_vector: Vec<f32> = vec![1.0 / edges_count as f32; edges_count];
+    let mut result = Array1::from(initial_vector);
+    let mut prev_result = result.clone();
+    let damping_factor = 0.85;
+    let initial_m =
+        damping_factor * similarity_matrix + (1.0 - damping_factor) / edges_count as f32;
+    for _ in 0..limit {
+        println!("looping");
+        result = initial_m.dot(&result);
+        let delta = &result - &prev_result;
+        let mut converged = true;
+        for i in 0..delta.len() {
+            if delta[i] > threshold {
+                converged = false;
+                break;
+            }
+        }
+        if converged {
+            break;
+        }
+        prev_result = result.clone();
+    }
+    result.into_raw_vec()
 }

@@ -136,6 +136,8 @@ pub struct FunctionLikeInfo {
     pub type_resolution_context: Option<TypeResolutionContext>,
 
     pub where_constraints: Vec<(StrId, TUnion)>,
+
+    pub is_production_code: bool,
 }
 
 impl FunctionLikeInfo {
@@ -173,6 +175,7 @@ impl FunctionLikeInfo {
             ignore_taints_if_true: false,
             type_resolution_context: None,
             where_constraints: vec![],
+            is_production_code: true,
         }
     }
 }

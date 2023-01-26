@@ -222,6 +222,14 @@ pub fn scan_and_analyze(
         find_unused_definitions(&mut analysis_result, &config, &codebase, &ignored_paths);
     }
 
+    let ranked_functions = analysis_result
+        .symbol_references
+        .get_ranked_functions(&codebase);
+
+    for functionlike_id in ranked_functions {
+        println!("{}", functionlike_id.to_string(&codebase.interner));
+    }
+
     let interner = codebase.interner;
 
     std::thread::spawn(move || {
@@ -306,10 +314,8 @@ fn find_files_in_dir(
                 if extension.eq("hack") || extension.eq("php") || extension.eq("hhi") {
                     let path = path.to_str().unwrap().to_string();
 
-                    for ignore_pattern in &ignore_patterns {
-                        if ignore_pattern.matches(&path) {
-                            continue 'walker_entry;
-                        }
+                    if ignore_patterns.iter().any(|p| p.matches(&path)) {
+                        continue 'walker_entry;
                     }
 
                     files_to_scan.insert(
