@@ -138,6 +138,16 @@ pub(crate) fn analyze<'expr, 'map, 'new_expr, 'tast>(
 
     if ternary_type.is_mixed() {
         let codebase = statements_analyzer.get_codebase();
+
+        if let Some(_) = statements_analyzer.get_config().classlikes_to_rename {
+            analysis_data.handle_hint_in_migration(
+                hint,
+                &statements_analyzer.get_file_analyzer().resolved_names,
+                &context.function_context.calling_class,
+                statements_analyzer,
+            );
+        }
+
         let mut hint_type = get_type_from_hint(
             &hint.1,
             context.function_context.calling_class.as_ref(),

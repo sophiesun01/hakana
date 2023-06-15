@@ -2,8 +2,8 @@ use crate::scope_context::{
     control_action::ControlAction, loop_scope::LoopScope, FinallyScope, ScopeContext,
 };
 use crate::{
-    scope_analyzer::ScopeAnalyzer, statements_analyzer::StatementsAnalyzer,
-    function_analysis_data::FunctionAnalysisData,
+    function_analysis_data::FunctionAnalysisData, scope_analyzer::ScopeAnalyzer,
+    statements_analyzer::StatementsAnalyzer,
 };
 use hakana_reflection_info::data_flow::node::DataFlowNode;
 use hakana_type::{combine_union_types, get_named_object};
@@ -154,6 +154,15 @@ pub(crate) fn analyze(
         }
 
         let catch_classlike_name = resolved_names.get(&catch.0 .0.start_offset()).unwrap();
+
+        if let Some(_) = statements_analyzer.get_config().classlikes_to_rename {
+            analysis_data.handle_classlike_reference_in_migration(
+                catch_classlike_name,
+                (catch.0.0.start_offset(), catch.0.0.end_offset()),
+                &context.function_context.calling_class,
+                statements_analyzer,
+            );
+        }
 
         // discard all clauses because crazy stuff may have happened in try block
         catch_context.clauses = vec![];

@@ -36,14 +36,27 @@ pub(crate) fn analyze(
         aast::ClassId_::CIexpr(lhs_expr) => {
             if let aast::Expr_::Id(id) = &lhs_expr.2 {
                 let mut is_static = false;
-                get_id_name(
+                let classlike_name = get_id_name(
                     id,
                     &context.function_context.calling_class,
                     codebase,
                     &mut is_static,
                     statements_analyzer.get_file_analyzer().resolved_names,
                 )
-                .unwrap()
+                .unwrap();
+
+                if let Some(_) = statements_analyzer.get_config().classlikes_to_rename {
+                    if id.1 != "self" && id.1 != "parent" && id.1 != "static" {
+                        analysis_data.handle_classlike_reference_in_migration(
+                            &classlike_name,
+                            (id.0.start_offset(), id.0.end_offset()),
+                            &context.function_context.calling_class,
+                            statements_analyzer,
+                        );
+                    }
+                }
+
+                classlike_name
             } else {
                 analyze_variable_static_property_fetch(
                     statements_analyzer,

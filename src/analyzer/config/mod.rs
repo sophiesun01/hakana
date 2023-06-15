@@ -33,6 +33,7 @@ pub struct Config {
     pub remove_fixmes: bool,
     pub all_custom_issues: FxHashSet<String>,
     pub ast_diff: bool,
+    pub classlikes_to_rename: Option<FxHashMap<String, String>>,
 }
 
 #[derive(Clone, Debug)]
@@ -74,6 +75,7 @@ impl Config {
             all_custom_issues,
             allowable_issues: None,
             ast_diff: false,
+            classlikes_to_rename: None,
         }
     }
 

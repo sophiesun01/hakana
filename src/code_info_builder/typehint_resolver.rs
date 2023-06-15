@@ -1,4 +1,3 @@
-
 use hakana_reflection_info::functionlike_parameter::FnParameter;
 use hakana_reflection_info::t_atomic::DictKey;
 use hakana_reflection_info::t_atomic::TAtomic;
@@ -421,7 +420,7 @@ pub fn get_type_from_hint(
                 "num" => TAtomic::TNum,
                 "mixed" => TAtomic::TMixed,
                 "dynamic" => TAtomic::TMixedWithFlags(true, false, false, false),
-                "vec" | "HH\\varray" | "varray" => {
+                "vec" | "HH\\vec" | "HH\\varray" | "varray" => {
                     if let Some(first) = extra_info.first() {
                         get_vec_type_from_hint(first, classlike_name, type_context, resolved_names)
                     } else {
@@ -433,7 +432,7 @@ pub fn get_type_from_hint(
                         }
                     }
                 }
-                "dict" | "HH\\darray" | "darray" => get_dict_type_from_hints(
+                "dict" | "HH\\dict" | "HH\\darray" | "darray" => get_dict_type_from_hints(
                     extra_info.first(),
                     extra_info.get(1),
                     classlike_name,

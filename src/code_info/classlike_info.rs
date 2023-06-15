@@ -206,7 +206,7 @@ pub struct ClassLikeInfo {
     pub child_classlikes: Option<FxHashSet<StrId>>,
 
     pub uses_position: Option<(usize, usize)>,
-    pub namespace_position: Option<(usize, usize)>,
+    pub namespace_bounds: Option<(usize, usize)>,
 
     pub is_production_code: bool,
 }
@@ -271,7 +271,7 @@ impl ClassLikeInfo {
             generated: false,
             child_classlikes: None,
             uses_position: None,
-            namespace_position: None,
+            namespace_bounds: None,
             is_production_code: true,
             template_readonly: FxHashSet::default(),
         }

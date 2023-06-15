@@ -1,4 +1,4 @@
-use hakana_reflection_info::{StrId, ThreadedInterner};
+use hakana_reflection_info::{file_info::UsesFlippedMap, StrId, ThreadedInterner};
 use rustc_hash::FxHashMap;
 
 use oxidized::aast::NsKind;
@@ -11,6 +11,21 @@ pub struct NameResolutionContext {
     namespace_aliases: FxHashMap<StrId, StrId>,
     const_aliases: FxHashMap<StrId, StrId>,
     fun_aliases: FxHashMap<StrId, StrId>,
+}
+
+impl NameResolutionContext {
+    pub(crate) fn get_flipped_uses(&self) -> UsesFlippedMap {
+        UsesFlippedMap {
+            type_aliases_flipped: self.type_aliases.iter().map(|(k, v)| (*v, *k)).collect(),
+            namespace_aliases_flipped: self
+                .namespace_aliases
+                .iter()
+                .map(|(k, v)| (*v, *k))
+                .collect(),
+            const_aliases_flipped: self.const_aliases.iter().map(|(k, v)| (*v, *k)).collect(),
+            fun_aliases_flipped: self.fun_aliases.iter().map(|(k, v)| (*v, *k)).collect(),
+        }
+    }
 }
 
 impl NameResolutionContext {
@@ -27,7 +42,7 @@ impl NameResolutionContext {
 
 #[derive(Clone, Debug)]
 pub struct NameContext<'a> {
-    name_resolution_contexts: Vec<NameResolutionContext>,
+    pub name_resolution_contexts: Vec<NameResolutionContext>,
     namespace_name: Option<String>,
     pub symbol_name: Option<StrId>,
     pub member_name: Option<StrId>,

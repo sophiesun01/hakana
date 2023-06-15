@@ -1,6 +1,7 @@
 use aast_parser::rust_aast_parser_types::Env as AastParserEnv;
 
 use hakana_reflection_info::code_location::{FilePath, HPos};
+use hakana_reflection_info::file_info::UsesFlippedMap;
 use hakana_reflection_info::{StrId, ThreadedInterner, STR_EMPTY};
 use name_context::NameContext;
 use naming_visitor::Scanner;
@@ -68,7 +69,7 @@ pub fn get_aast_for_path_and_contents(
         return Err(ParserError::SyntaxError {
             message: first_error.message.to_string(),
             pos: HPos {
-                file_path: file_path,
+                file_path,
                 start_offset: first_error.start_offset,
                 end_offset: first_error.end_offset,
                 start_line: line_count,
@@ -125,7 +126,7 @@ pub fn scope_names<'ast>(
     program: &'ast aast::Program<(), ()>,
     interner: &mut ThreadedInterner,
     mut name_context: NameContext<'ast>,
-) -> (FxHashMap<usize, StrId>, Uses) {
+) -> (FxHashMap<usize, StrId>, Uses, UsesFlippedMap) {
     let mut scanner = Scanner {
         interner,
         resolved_names: FxHashMap::default(),
@@ -141,5 +142,6 @@ pub fn scope_names<'ast>(
             symbol_uses: scanner.symbol_uses,
             symbol_member_uses: scanner.symbol_member_uses,
         },
+        name_context.name_resolution_contexts.last().unwrap().get_flipped_uses()
     )
 }

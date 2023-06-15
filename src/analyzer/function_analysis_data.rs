@@ -1,7 +1,9 @@
+use crate::scope_analyzer::ScopeAnalyzer;
+use crate::statements_analyzer::StatementsAnalyzer;
 use crate::{config::Config, scope_context::CaseScope};
 use hakana_reflection_info::analysis_result::Replacement;
 use hakana_reflection_info::code_location::StmtStart;
-use hakana_reflection_info::FileSource;
+use hakana_reflection_info::file_info::UsesFlippedMap;
 use hakana_reflection_info::{
     assertion::Assertion,
     data_flow::graph::{DataFlowGraph, GraphKind, WholeProgramKind},
@@ -10,7 +12,10 @@ use hakana_reflection_info::{
     symbol_references::SymbolReferences,
     t_union::TUnion,
 };
+use hakana_reflection_info::{FileSource, Interner, StrId};
 use hakana_type::template::TemplateBound;
+use oxidized::ast_defs;
+use oxidized::tast::{Hint, Hint_};
 use oxidized::{ast_defs::Pos, prim_defs::Comment};
 use rustc_hash::{FxHashMap, FxHashSet};
 use std::{collections::BTreeMap, rc::Rc};
@@ -39,6 +44,7 @@ pub struct FunctionAnalysisData {
     pub hakana_fixme_or_ignores: BTreeMap<usize, Vec<(IssueKind, (usize, usize, u64, bool))>>,
     pub matched_ignore_positions: FxHashSet<(usize, usize)>,
     pub type_variable_bounds: FxHashMap<String, (Vec<TemplateBound>, Vec<TemplateBound>)>,
+    pub first_statement_offset: Option<usize>,
 }
 
 impl FunctionAnalysisData {
@@ -77,6 +83,7 @@ impl FunctionAnalysisData {
             matched_ignore_positions: FxHashSet::default(),
             issue_counts: FxHashMap::default(),
             type_variable_bounds: FxHashMap::default(),
+            first_statement_offset: None, 
         }
     }
 
@@ -151,6 +158,255 @@ impl FunctionAnalysisData {
             true
         } else {
             false
+        }
+    }
+
+    pub fn handle_hint_in_migration(
+        &mut self,
+        hint: &Hint,
+        resolved_names: &FxHashMap<usize, StrId>,
+        calling_classlike_name: &Option<StrId>,
+        statements_analyzer: &StatementsAnalyzer,
+    ) {
+        match &*hint.1 {
+            Hint_::Happly(id, type_params) => {
+                let applied_type = &id.1;
+
+                match applied_type.as_str() {
+                    "int"
+                    | "string"
+                    | "arraykey"
+                    | "bool"
+                    | "float"
+                    | "nonnull"
+                    | "null"
+                    | "nothing"
+                    | "noreturn"
+                    | "void"
+                    | "num"
+                    | "mixed"
+                    | "dynamic"
+                    | "vec"
+                    | "HH\\vec"
+                    | "HH\\varray"
+                    | "varray"
+                    | "dict"
+                    | "HH\\dict"
+                    | "HH\\darray"
+                    | "darray"
+                    | "classname"
+                    | "typename"
+                    | "vec_or_dict"
+                    | "varray_or_darray"
+                    | "resource"
+                    | "_"
+                    | "HH\\FIXME\\MISSING_RETURN_TYPE"
+                    | "\\HH\\FIXME\\MISSING_RETURN_TYPE" => {}
+                    _ => {
+                        if let Some(resolved_name) = resolved_names.get(&id.0.start_offset()) {
+                            self.handle_classlike_reference_in_migration(
+                                resolved_name,
+                                (id.0.start_offset(), id.0.end_offset()),
+                                calling_classlike_name,
+                                statements_analyzer,
+                            );
+                        }
+                    }
+                }
+
+                for type_param in type_params {
+                    self.handle_hint_in_migration(
+                        type_param,
+                        resolved_names,
+                        calling_classlike_name,
+                        statements_analyzer,
+                    );
+                }
+            }
+            Hint_::Hshape(shape_info) => {
+                for field in &shape_info.field_map {
+                    self.handle_hint_in_migration(
+                        &field.hint,
+                        resolved_names,
+                        calling_classlike_name,
+                        statements_analyzer,
+                    );
+
+                    match &field.name {
+                        ast_defs::ShapeFieldName::SFclassConst(lhs, _) => {
+                            let lhs_name = resolved_names.get(&lhs.0.start_offset()).unwrap();
+                            self.handle_classlike_reference_in_migration(
+                                lhs_name,
+                                (lhs.0.start_offset(), lhs.0.end_offset()),
+                                calling_classlike_name,
+                                statements_analyzer,
+                            );
+                        }
+                        _ => {}
+                    }
+                }
+            }
+            Hint_::Htuple(tuple_hints) => {
+                for hint in tuple_hints {
+                    self.handle_hint_in_migration(
+                        hint,
+                        resolved_names,
+                        calling_classlike_name,
+                        statements_analyzer,
+                    );
+                }
+            }
+            Hint_::Hoption(inner) => {
+                self.handle_hint_in_migration(
+                    inner,
+                    resolved_names,
+                    calling_classlike_name,
+                    statements_analyzer,
+                );
+            }
+            Hint_::Hfun(hint_fun) => {
+                for param_hint in &hint_fun.param_tys {
+                    self.handle_hint_in_migration(
+                        param_hint,
+                        resolved_names,
+                        calling_classlike_name,
+                        statements_analyzer,
+                    );
+                }
+                self.handle_hint_in_migration(
+                    &hint_fun.return_ty,
+                    resolved_names,
+                    calling_classlike_name,
+                    statements_analyzer,
+                );
+            }
+            Hint_::Haccess(class, _) => {
+                self.handle_hint_in_migration(
+                    class,
+                    resolved_names,
+                    calling_classlike_name,
+                    statements_analyzer,
+                );
+            }
+            Hint_::Hsoft(hint) => {
+                self.handle_hint_in_migration(
+                    hint,
+                    resolved_names,
+                    calling_classlike_name,
+                    statements_analyzer,
+                );
+            }
+            _ => {}
+        }
+    }
+
+    pub fn handle_classlike_reference_in_migration(
+        &mut self,
+        classlike_name: &StrId,
+        range: (usize, usize),
+        calling_classlike_name: &Option<StrId>,
+        statements_analyzer: &StatementsAnalyzer,
+    ) {
+        let config = statements_analyzer.get_config();
+        let interner = statements_analyzer.get_interner();
+        let codebase = statements_analyzer.get_codebase();
+
+        let classlike_name_str = interner.lookup(classlike_name);
+
+        // if we're outside a moved class, but we're changing all references to a class
+        if let Some(classlikes_to_rename) = &config.classlikes_to_rename {
+            if let Some(destination_name_str) = classlikes_to_rename.get(classlike_name_str) {
+                let uses_flipped_maps = &codebase
+                    .files
+                    .get(statements_analyzer.get_file_path())
+                    .unwrap()
+                    .uses_flipped_map;
+
+                let mut source_namespace = statements_analyzer.get_namespace().clone();
+
+                if let Some(calling_classlike_name) = calling_classlike_name {
+                    let calling_classlike_name_str = interner.lookup(calling_classlike_name);
+
+                    if let Some(destination_calling_name_str) =
+                        classlikes_to_rename.get(calling_classlike_name_str)
+                    {
+                        let mut new_source_parts = destination_calling_name_str
+                            .split("\\")
+                            .into_iter()
+                            .collect::<Vec<_>>();
+                        new_source_parts.pop();
+
+                        if new_source_parts.is_empty() {
+                            source_namespace = None;
+                        } else {
+                            source_namespace = Some(new_source_parts.join("\\"));
+                        }
+                    }
+                }
+
+                let class_name = FunctionAnalysisData::get_class_name_from_uses(
+                    destination_name_str.to_string(),
+                    source_namespace,
+                    uses_flipped_maps,
+                    interner,
+                );
+
+                self.replacements
+                    .insert(range, Replacement::Substitute(class_name));
+            }
+        }
+    }
+
+    pub(crate) fn get_class_name_from_uses(
+        value: String,
+        namespace: Option<String>,
+        uses_flipped_map: &UsesFlippedMap,
+        interner: &Interner,
+    ) -> String {
+        if let Some(namespace) = &namespace {
+            if value.starts_with(&(namespace.clone() + "\\")) {
+                let candidate = &value[namespace.len() + 1..];
+                let candidate_parts = candidate.split("\\");
+                let base_namespace = interner
+                    .get(candidate_parts.into_iter().next().unwrap())
+                    .unwrap();
+
+                if !uses_flipped_map
+                    .type_aliases_flipped
+                    .contains_key(&base_namespace)
+                {
+                    return candidate.to_string();
+                }
+            }
+        } else {
+            if !value.contains("\\") {
+                return value;
+            }
+        }
+
+        // check if any of the "use namespace ..." statements are a match
+        if value.contains("\\") {
+            let mut parts = value.split("\\").into_iter().collect::<Vec<_>>();
+            let mut suffix = parts.pop().unwrap().to_string();
+
+            while !parts.is_empty() {
+                let base_namespace = interner.get(&parts.join("\\")).unwrap();
+
+                if let Some(namespace_id) = uses_flipped_map
+                    .namespace_aliases_flipped
+                    .get(&base_namespace)
+                {
+                    return interner.lookup(namespace_id).to_string() + "\\" + &suffix;
+                }
+
+                suffix = parts.pop().unwrap().to_string() + "\\" + &suffix;
+            }
+        }
+
+        if let Some(_) = &namespace {
+            "\\".to_string() + &value
+        } else {
+            value
         }
     }
 

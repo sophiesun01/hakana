@@ -65,7 +65,7 @@ pub(crate) fn scan(
     let mut signature_end = storage.name_location.end_offset;
 
     storage.uses_position = uses_position;
-    storage.namespace_position = namespace_position;
+    storage.namespace_bounds = namespace_position;
 
     storage.is_production_code = file_source.is_production_code;
 

@@ -22,24 +22,43 @@ pub(crate) fn analyze(
     analysis_result: &mut AnalysisResult,
 ) {
     match def {
-        aast::Def::Fun(_) => {
+        aast::Def::Fun(fun) => {
             let file_analyzer = scope_analyzer.get_file_analyzer();
             let mut function_analyzer = FunctionLikeAnalyzer::new(file_analyzer);
-            function_analyzer.analyze_fun(def.as_fun().unwrap(), analysis_result);
+            function_analyzer.analyze_fun(fun, analysis_result);
+
+            if analysis_data.first_statement_offset.is_none() {
+                analysis_data.first_statement_offset =
+                    Some(fun.fun.span.first_char_of_line().start_offset());
+            }
         }
-        aast::Def::Class(boxed) => {
+        aast::Def::Class(class) => {
             let file_analyzer = scope_analyzer.get_file_analyzer();
             let mut class_analyzer = ClassLikeAnalyzer::new(file_analyzer);
-            class_analyzer.analyze(
-                &boxed,
-                statements_analyzer,
-                analysis_result,
-            );
+            class_analyzer.analyze(&class, statements_analyzer, analysis_result);
+
+            if analysis_data.first_statement_offset.is_none() {
+                analysis_data.first_statement_offset =
+                    Some(class.span.first_char_of_line().start_offset());
+            }
         }
-        aast::Def::Typedef(_) | aast::Def::NamespaceUse(_) => {
-            // already handled
+        aast::Def::Typedef(t) => {
+            if analysis_data.first_statement_offset.is_none() {
+                analysis_data.first_statement_offset =
+                    Some(t.name.0.first_char_of_line().start_offset());
+            }
+        }
+        aast::Def::NamespaceUse(u) => {
+            if analysis_data.first_statement_offset.is_none() {
+                analysis_data.first_statement_offset =
+                    Some(u[0].1 .0.first_char_of_line().start_offset());
+            }
         }
         aast::Def::Stmt(boxed) => {
+            if analysis_data.first_statement_offset.is_none() {
+                analysis_data.first_statement_offset = Some(boxed.0.start_offset());
+            }
+
             stmt_analyzer::analyze(
                 statements_analyzer,
                 boxed,
@@ -67,6 +86,11 @@ pub(crate) fn analyze(
                 &mut context,
                 &mut None,
             );
+
+            if analysis_data.first_statement_offset.is_none() {
+                analysis_data.first_statement_offset =
+                    Some(boxed.span.first_char_of_line().start_offset());
+            }
         }
         aast::Def::Namespace(_) => {
             // already handled?

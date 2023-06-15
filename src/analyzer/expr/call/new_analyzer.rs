@@ -87,9 +87,16 @@ pub(crate) fn analyze(
                     _ => {
                         let resolved_names = statements_analyzer.get_file_analyzer().resolved_names;
 
-                        let name_string = resolved_names.get(&id.0.start_offset()).unwrap().clone();
+                        let class_name = resolved_names.get(&id.0.start_offset()).unwrap();
 
-                        get_named_object(name_string)
+                        analysis_data.handle_classlike_reference_in_migration(
+                            class_name,
+                            (id.0.start_offset(), id.0.end_offset()),
+                            &context.function_context.calling_class,
+                            statements_analyzer,
+                        );
+
+                        get_named_object(*class_name)
                     }
                 }
             } else {
@@ -376,6 +383,15 @@ fn analyze_named_constructor(
 
             for (i, (template_name, base_type_map)) in storage.template_types.iter().enumerate() {
                 let mut param_type = if let Some(type_arg) = expr.1.get(i) {
+                    if let Some(_) = statements_analyzer.get_config().classlikes_to_rename {
+                        analysis_data.handle_hint_in_migration(
+                            &type_arg.1,
+                            &statements_analyzer.get_file_analyzer().resolved_names,
+                            &context.function_context.calling_class,
+                            statements_analyzer,
+                        );
+                    }
+
                     get_type_from_hint(
                         &type_arg.1 .1,
                         context.function_context.calling_class.as_ref(),

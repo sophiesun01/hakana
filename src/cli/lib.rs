@@ -222,6 +222,11 @@ pub fn init(
                     arg!(--"debug")
                         .required(false)
                         .help("Add output for debugging"),
+                )
+                .arg(
+                    arg!(--"filter" <PATH>)
+                        .required(false)
+                        .help("Filter the files that we’re removing fixmes from"),
                 ),
         )
         .subcommand(

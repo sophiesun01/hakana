@@ -198,7 +198,8 @@ pub fn scan_single_file(
 
     let name_context = NameContext::new(interner);
 
-    let (resolved_names, uses) = hakana_aast_helper::scope_names(&aast.0, interner, name_context);
+    let (resolved_names, uses, uses_flipped_map) =
+        hakana_aast_helper::scope_names(&aast.0, interner, name_context);
 
     hakana_reflector::collect_info_for_aast(
         &aast.0,
@@ -216,6 +217,7 @@ pub fn scan_single_file(
         },
         true,
         uses,
+        uses_flipped_map,
     );
 
     Ok(resolved_names)

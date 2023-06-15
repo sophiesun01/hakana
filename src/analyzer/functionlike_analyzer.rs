@@ -31,6 +31,7 @@ use hakana_type::type_expander::{self, StaticClassType, TypeExpansionOptions};
 use hakana_type::{add_optional_union_type, get_mixed_any, get_void, type_comparator, wrap_atomic};
 use itertools::Itertools;
 use oxidized::aast;
+use oxidized::ast::TypeHint;
 use oxidized::ast_defs::Pos;
 use rustc_hash::FxHashSet;
 
@@ -100,6 +101,7 @@ impl<'a> FunctionLikeAnalyzer<'a> {
             &function_storage,
             ScopeContext::new(function_context),
             &stmt.fun.params,
+            &stmt.fun.ret,
             &stmt.fun.body.fb_ast.0,
             analysis_result,
             None,
@@ -155,6 +157,7 @@ impl<'a> FunctionLikeAnalyzer<'a> {
             &lambda_storage,
             context,
             &stmt.params,
+            &stmt.ret,
             &stmt.body.fb_ast.0,
             analysis_result,
             Some(analysis_data),
@@ -276,6 +279,7 @@ impl<'a> FunctionLikeAnalyzer<'a> {
             functionlike_storage,
             context,
             &stmt.params,
+            &stmt.ret,
             &stmt.body.fb_ast.0,
             analysis_result,
             None,
@@ -361,6 +365,7 @@ impl<'a> FunctionLikeAnalyzer<'a> {
         functionlike_storage: &FunctionLikeInfo,
         mut context: ScopeContext,
         params: &Vec<aast::FunParam<(), ()>>,
+        return_hint: &TypeHint,
         fb_ast: &Vec<aast::Stmt<(), ()>>,
         analysis_result: &mut AnalysisResult,
         parent_analysis_data: Option<&mut FunctionAnalysisData>,
@@ -393,6 +398,30 @@ impl<'a> FunctionLikeAnalyzer<'a> {
         }
 
         let mut completed_analysis = false;
+
+        if let Some(_) = statements_analyzer.get_config().classlikes_to_rename {
+            if let Some(_) = &self.get_config().classlikes_to_rename {
+                for param_node in params {
+                    if let Some(param_type_node) = &param_node.type_hint.1 {
+                        analysis_data.handle_hint_in_migration(
+                            param_type_node,
+                            statements_analyzer.get_file_analyzer().resolved_names,
+                            &context.function_context.calling_class,
+                            statements_analyzer,
+                        );
+                    }
+                }
+
+                if let Some(return_hint) = &return_hint.1 {
+                    analysis_data.handle_hint_in_migration(
+                        return_hint,
+                        statements_analyzer.get_file_analyzer().resolved_names,
+                        &context.function_context.calling_class,
+                        statements_analyzer,
+                    );
+                }
+            }
+        }
 
         if self.add_param_types_to_context(
             params,
@@ -482,7 +511,7 @@ impl<'a> FunctionLikeAnalyzer<'a> {
             }
         }
 
-        let config = statements_analyzer.get_config();
+        let config = self.get_config();
 
         if config.find_unused_expressions && parent_analysis_data.is_none() {
             report_unused_expressions(
@@ -720,7 +749,7 @@ impl<'a> FunctionLikeAnalyzer<'a> {
         context: &mut ScopeContext,
         statements_analyzer: &mut StatementsAnalyzer,
     ) -> bool {
-        let interner = &statements_analyzer.get_interner();
+        let interner = statements_analyzer.get_interner();
 
         for (i, param) in functionlike_storage.params.iter().enumerate() {
             let mut param_type = if let Some(param_type) = &param.signature_type {
@@ -894,6 +923,38 @@ impl<'a> FunctionLikeAnalyzer<'a> {
             };
 
             let param_node = &params[i];
+
+            if let Some(ref mut current_stmt_offset) = analysis_data.current_stmt_offset {
+                if current_stmt_offset.line != param_node.pos.line() {
+                    analysis_data.current_stmt_offset = Some(StmtStart {
+                        offset: param_node.pos.start_offset(),
+                        line: param_node.pos.line(),
+                        column: param_node.pos.to_raw_span().start.column() as usize,
+                        add_newline: true,
+                    });
+                }
+            } else {
+                analysis_data.current_stmt_offset = Some(StmtStart {
+                    offset: param_node.pos.start_offset(),
+                    line: param_node.pos.line(),
+                    column: param_node.pos.to_raw_span().start.column() as usize,
+                    add_newline: true,
+                });
+            }
+
+            if statements_analyzer.get_config().remove_fixmes {
+                if let Some(line_fixmes) = analysis_data
+                    .hakana_fixme_or_ignores
+                    .get_mut(&param_node.pos.line())
+                {
+                    for (_, (start_offset, _, trailing_location, is_same_line)) in line_fixmes {
+                        if start_offset < &mut param_node.pos.start_offset() {
+                            *trailing_location = param_node.pos.start_offset() as u64;
+                            *is_same_line = true;
+                        }
+                    }
+                }
+            }
 
             if let Some(default) = &param_node.expr {
                 expression_analyzer::analyze(

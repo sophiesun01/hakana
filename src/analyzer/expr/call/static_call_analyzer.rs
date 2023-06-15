@@ -99,11 +99,20 @@ pub(crate) fn analyze(
                     _ => {
                         let resolved_names = statements_analyzer.get_file_analyzer().resolved_names;
 
-                        let name_string = resolved_names.get(&id.0.start_offset()).unwrap().clone();
+                        let name = resolved_names.get(&id.0.start_offset()).unwrap();
 
-                        classlike_name = Some(name_string);
+                        if let Some(_) = statements_analyzer.get_config().classlikes_to_rename {
+                            analysis_data.handle_classlike_reference_in_migration(
+                                name,
+                                (id.0.start_offset(), id.0.end_offset()),
+                                &context.function_context.calling_class,
+                                statements_analyzer,
+                            );
+                        }
 
-                        get_named_object(name_string)
+                        classlike_name = Some(*name);
+
+                        get_named_object(*name)
                     }
                 }
             } else {

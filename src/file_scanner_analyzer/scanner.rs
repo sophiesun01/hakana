@@ -607,7 +607,7 @@ pub(crate) fn scan_file(
         }
     };
 
-    let (resolved_names, uses) =
+    let (resolved_names, uses, uses_flipped_map) =
         hakana_aast_helper::scope_names(&aast.0, interner, empty_name_context);
 
     hakana_reflector::collect_info_for_aast(
@@ -626,6 +626,7 @@ pub(crate) fn scan_file(
         },
         user_defined,
         uses,
+        uses_flipped_map,
     );
 
     Ok((resolved_names, (aast.0, aast.1)))

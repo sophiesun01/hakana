@@ -139,6 +139,15 @@ pub(crate) fn analyze(
                 return false;
             }
 
+            if let Some(_) = statements_analyzer.get_config().classlikes_to_rename {
+                analysis_data.handle_hint_in_migration(
+                    &boxed.1,
+                    &statements_analyzer.get_file_analyzer().resolved_names,
+                    &context.function_context.calling_class,
+                    statements_analyzer,
+                );
+            }
+
             add_decision_dataflow(
                 statements_analyzer,
                 analysis_data,

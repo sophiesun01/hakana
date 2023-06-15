@@ -60,6 +60,15 @@ pub(crate) fn check_arguments_match(
 
     if !type_args.is_empty() {
         for (i, type_arg) in type_args.iter().enumerate() {
+            if let Some(_) = statements_analyzer.get_config().classlikes_to_rename {
+                analysis_data.handle_hint_in_migration(
+                    &type_arg.1,
+                    &statements_analyzer.get_file_analyzer().resolved_names,
+                    &context.function_context.calling_class,
+                    statements_analyzer,
+                );
+            }
+
             let mut param_type = get_type_from_hint(
                 &type_arg.1 .1,
                 context.function_context.calling_class.as_ref(),

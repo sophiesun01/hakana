@@ -4,7 +4,7 @@ use std::sync::Arc;
 use crate::typehint_resolver::get_type_from_hint;
 use hakana_aast_helper::Uses;
 use hakana_reflection_info::attribute_info::AttributeInfo;
-use hakana_reflection_info::file_info::FileInfo;
+use hakana_reflection_info::file_info::{FileInfo, UsesFlippedMap};
 use hakana_reflection_info::functionlike_info::FunctionLikeInfo;
 use hakana_reflection_info::t_union::TUnion;
 use hakana_reflection_info::{
@@ -110,8 +110,8 @@ impl<'ast> Visitor<'ast> for Scanner<'_> {
             &self.file_source,
             self.user_defined,
             &self.file_source.comments,
-            c.namespace_position,
             c.uses_position,
+            c.namespace_position,
             &mut self.ast_nodes,
             &self.uses,
         );
@@ -827,6 +827,7 @@ pub fn collect_info_for_aast(
     file_source: FileSource,
     user_defined: bool,
     uses: Uses,
+    uses_flipped_map: UsesFlippedMap,
 ) {
     let file_path_id = file_source.file_path;
 
@@ -858,6 +859,7 @@ pub fn collect_info_for_aast(
             FileInfo {
                 closure_infos: checker.closures,
                 ast_nodes: checker.ast_nodes,
+                uses_flipped_map,
             },
         );
     }

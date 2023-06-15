@@ -48,10 +48,13 @@ pub(crate) fn analyze(
     }
 
     if statements_analyzer.get_config().remove_fixmes {
-        for (fixme_line, b) in analysis_data.hakana_fixme_or_ignores.iter_mut() {
-            if fixme_line == &stmt.0.line() {
-                for (_, (_, _, end, is_same_line)) in b {
-                    *end = stmt.0.start_offset() as u64;
+        if let Some(line_fixmes) = analysis_data
+            .hakana_fixme_or_ignores
+            .get_mut(&stmt.0.line())
+        {
+            for (_, (start_offset, _, trailing_location, is_same_line)) in line_fixmes {
+                if start_offset < &mut stmt.0.start_offset() {
+                    *trailing_location = stmt.0.start_offset() as u64;
                     *is_same_line = true;
                 }
             }
@@ -251,7 +254,7 @@ pub(crate) fn analyze(
             );
             return false;
         }
-        aast::Stmt_::DeclareLocal(_) => {},
+        aast::Stmt_::DeclareLocal(_) => {}
     }
 
     context.cond_referenced_var_ids = FxHashSet::default();
