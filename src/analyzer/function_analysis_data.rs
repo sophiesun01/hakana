@@ -13,6 +13,7 @@ use hakana_reflection_info::{
     t_union::TUnion,
 };
 use hakana_reflection_info::{FileSource, Interner, StrId};
+use hakana_reflector::typehint_resolver::get_type_references_from_hint;
 use hakana_type::template::TemplateBound;
 use oxidized::ast_defs;
 use oxidized::tast::{Hint, Hint_};
@@ -83,7 +84,7 @@ impl FunctionAnalysisData {
             matched_ignore_positions: FxHashSet::default(),
             issue_counts: FxHashMap::default(),
             type_variable_bounds: FxHashMap::default(),
-            first_statement_offset: None, 
+            first_statement_offset: None,
         }
     }
 
@@ -168,141 +169,21 @@ impl FunctionAnalysisData {
         calling_classlike_name: &Option<StrId>,
         statements_analyzer: &StatementsAnalyzer,
     ) {
-        match &*hint.1 {
-            Hint_::Happly(id, type_params) => {
-                let applied_type = &id.1;
+        let type_references = get_type_references_from_hint(hint, resolved_names);
 
-                match applied_type.as_str() {
-                    "int"
-                    | "string"
-                    | "arraykey"
-                    | "bool"
-                    | "float"
-                    | "nonnull"
-                    | "null"
-                    | "nothing"
-                    | "noreturn"
-                    | "void"
-                    | "num"
-                    | "mixed"
-                    | "dynamic"
-                    | "vec"
-                    | "HH\\vec"
-                    | "HH\\varray"
-                    | "varray"
-                    | "dict"
-                    | "HH\\dict"
-                    | "HH\\darray"
-                    | "darray"
-                    | "classname"
-                    | "typename"
-                    | "vec_or_dict"
-                    | "varray_or_darray"
-                    | "resource"
-                    | "_"
-                    | "HH\\FIXME\\MISSING_RETURN_TYPE"
-                    | "\\HH\\FIXME\\MISSING_RETURN_TYPE" => {}
-                    _ => {
-                        if let Some(resolved_name) = resolved_names.get(&id.0.start_offset()) {
-                            self.handle_classlike_reference_in_migration(
-                                resolved_name,
-                                (id.0.start_offset(), id.0.end_offset()),
-                                calling_classlike_name,
-                                statements_analyzer,
-                            );
-                        }
-                    }
-                }
-
-                for type_param in type_params {
-                    self.handle_hint_in_migration(
-                        type_param,
-                        resolved_names,
-                        calling_classlike_name,
-                        statements_analyzer,
-                    );
-                }
-            }
-            Hint_::Hshape(shape_info) => {
-                for field in &shape_info.field_map {
-                    self.handle_hint_in_migration(
-                        &field.hint,
-                        resolved_names,
-                        calling_classlike_name,
-                        statements_analyzer,
-                    );
-
-                    match &field.name {
-                        ast_defs::ShapeFieldName::SFclassConst(lhs, _) => {
-                            let lhs_name = resolved_names.get(&lhs.0.start_offset()).unwrap();
-                            self.handle_classlike_reference_in_migration(
-                                lhs_name,
-                                (lhs.0.start_offset(), lhs.0.end_offset()),
-                                calling_classlike_name,
-                                statements_analyzer,
-                            );
-                        }
-                        _ => {}
-                    }
-                }
-            }
-            Hint_::Htuple(tuple_hints) => {
-                for hint in tuple_hints {
-                    self.handle_hint_in_migration(
-                        hint,
-                        resolved_names,
-                        calling_classlike_name,
-                        statements_analyzer,
-                    );
-                }
-            }
-            Hint_::Hoption(inner) => {
-                self.handle_hint_in_migration(
-                    inner,
-                    resolved_names,
-                    calling_classlike_name,
-                    statements_analyzer,
-                );
-            }
-            Hint_::Hfun(hint_fun) => {
-                for param_hint in &hint_fun.param_tys {
-                    self.handle_hint_in_migration(
-                        param_hint,
-                        resolved_names,
-                        calling_classlike_name,
-                        statements_analyzer,
-                    );
-                }
-                self.handle_hint_in_migration(
-                    &hint_fun.return_ty,
-                    resolved_names,
-                    calling_classlike_name,
-                    statements_analyzer,
-                );
-            }
-            Hint_::Haccess(class, _) => {
-                self.handle_hint_in_migration(
-                    class,
-                    resolved_names,
-                    calling_classlike_name,
-                    statements_analyzer,
-                );
-            }
-            Hint_::Hsoft(hint) => {
-                self.handle_hint_in_migration(
-                    hint,
-                    resolved_names,
-                    calling_classlike_name,
-                    statements_analyzer,
-                );
-            }
-            _ => {}
+        for (type_name, start_offset, end_offset) in type_references {
+            self.handle_type_reference_in_migration(
+                &type_name,
+                (start_offset, end_offset),
+                calling_classlike_name,
+                statements_analyzer,
+            )
         }
     }
 
-    pub fn handle_classlike_reference_in_migration(
+    pub fn handle_type_reference_in_migration(
         &mut self,
-        classlike_name: &StrId,
+        type_name: &StrId,
         range: (usize, usize),
         calling_classlike_name: &Option<StrId>,
         statements_analyzer: &StatementsAnalyzer,
@@ -311,7 +192,7 @@ impl FunctionAnalysisData {
         let interner = statements_analyzer.get_interner();
         let codebase = statements_analyzer.get_codebase();
 
-        let classlike_name_str = interner.lookup(classlike_name);
+        let classlike_name_str = interner.lookup(type_name);
 
         // if we're outside a moved class, but we're changing all references to a class
         if let Some(classlikes_to_rename) = &config.classlikes_to_rename {
@@ -344,7 +225,7 @@ impl FunctionAnalysisData {
                     }
                 }
 
-                let class_name = FunctionAnalysisData::get_class_name_from_uses(
+                let new_type_name = FunctionAnalysisData::get_class_name_from_uses(
                     destination_name_str.to_string(),
                     source_namespace,
                     uses_flipped_maps,
@@ -352,7 +233,7 @@ impl FunctionAnalysisData {
                 );
 
                 self.replacements
-                    .insert(range, Replacement::Substitute(class_name));
+                    .insert(range, Replacement::Substitute(new_type_name));
             }
         }
     }

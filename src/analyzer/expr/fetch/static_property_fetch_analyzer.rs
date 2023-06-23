@@ -47,7 +47,7 @@ pub(crate) fn analyze(
 
                 if let Some(_) = statements_analyzer.get_config().classlikes_to_rename {
                     if id.1 != "self" && id.1 != "parent" && id.1 != "static" {
-                        analysis_data.handle_classlike_reference_in_migration(
+                        analysis_data.handle_type_reference_in_migration(
                             &classlike_name,
                             (id.0.start_offset(), id.0.end_offset()),
                             &context.function_context.calling_class,

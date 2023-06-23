@@ -102,7 +102,7 @@ pub(crate) fn analyze(
                         let name = resolved_names.get(&id.0.start_offset()).unwrap();
 
                         if let Some(_) = statements_analyzer.get_config().classlikes_to_rename {
-                            analysis_data.handle_classlike_reference_in_migration(
+                            analysis_data.handle_type_reference_in_migration(
                                 name,
                                 (id.0.start_offset(), id.0.end_offset()),
                                 &context.function_context.calling_class,

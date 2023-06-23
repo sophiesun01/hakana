@@ -89,7 +89,7 @@ pub(crate) fn analyze(
 
                         let class_name = resolved_names.get(&id.0.start_offset()).unwrap();
 
-                        analysis_data.handle_classlike_reference_in_migration(
+                        analysis_data.handle_type_reference_in_migration(
                             class_name,
                             (id.0.start_offset(), id.0.end_offset()),
                             &context.function_context.calling_class,

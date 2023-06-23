@@ -156,7 +156,7 @@ pub(crate) fn analyze(
         let catch_classlike_name = resolved_names.get(&catch.0 .0.start_offset()).unwrap();
 
         if let Some(_) = statements_analyzer.get_config().classlikes_to_rename {
-            analysis_data.handle_classlike_reference_in_migration(
+            analysis_data.handle_type_reference_in_migration(
                 catch_classlike_name,
                 (catch.0.0.start_offset(), catch.0.0.end_offset()),
                 &context.function_context.calling_class,
