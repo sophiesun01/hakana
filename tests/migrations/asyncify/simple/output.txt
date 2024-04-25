@@ -1,0 +1,18 @@
+async function async_fn(string $s): Awaitable<string> {
+    return $s;
+}
+
+async function target_fn(string $s): string {
+    echo 'async from sync';
+    return await async_fn($s);
+}
+
+function sync_fn_calls_sync(string $s): string {
+    echo 'sync from sync';
+    return Asio\join(target_fn($s));
+}
+
+async function async_fn_calls_sync(string $s): Awaitable<string> {
+    echo 'sync from sync';
+    return await target_fn($s);
+}

@@ -16,6 +16,11 @@ use rustc_hash::{FxHashMap, FxHashSet};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
+pub enum InlineMigrationKind {
+    Async,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct CodebaseInfo {
     pub classlike_infos: FxHashMap<StrId, ClassLikeInfo>,
     pub functionlike_infos: FxHashMap<(StrId, StrId), FunctionLikeInfo>,
@@ -33,6 +38,8 @@ pub struct CodebaseInfo {
     pub safe_symbols: FxHashSet<StrId>,
     /* Symbol members that have already been checked on a previous Hakana run */
     pub safe_symbol_members: FxHashSet<(StrId, StrId)>,
+
+    pub inline_migrations: Vec<(StrId, StrId, InlineMigrationKind)>,
 }
 
 impl Default for CodebaseInfo {
@@ -57,6 +64,7 @@ impl CodebaseInfo {
             files: FxHashMap::default(),
             safe_symbols: FxHashSet::default(),
             safe_symbol_members: FxHashSet::default(),
+            inline_migrations: vec![],
         }
     }
 

@@ -155,6 +155,15 @@ pub(crate) fn analyze(
 
     let functionlike_id = FunctionLikeIdentifier::Function(name);
 
+    let mut old_asio_join_pos = (0, 0);
+
+    if name == StrId::ASIO_JOIN && context.asio_join_pos.0 == 0 {
+        let start = pos.to_start_and_end_lnum_bol_offset().0;
+        let start_column = start.2 + 1 - start.1;
+        old_asio_join_pos = context.asio_join_pos;
+        context.asio_join_pos = (start.2 as u32, start_column as u32);
+    }
+
     arguments_analyzer::check_arguments_match(
         statements_analyzer,
         expr.1,
@@ -170,6 +179,10 @@ pub(crate) fn analyze(
         pos,
         Some(expr.0 .0),
     )?;
+
+    if name == StrId::ASIO_JOIN && old_asio_join_pos.0 != 0 {
+        context.asio_join_pos = old_asio_join_pos;
+    }
 
     apply_effects(
         functionlike_id,

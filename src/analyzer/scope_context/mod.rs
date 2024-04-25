@@ -169,6 +169,10 @@ pub struct ScopeContext {
 
     pub for_loop_init_bounds: (u32, u32),
 
+    /// offset and indent for most immediate Asio\join call,
+    /// in case we need to insert variables
+    pub asio_join_pos: (u32, u32),
+
     /* Effects for pipe var, if applicable */
     pub pipe_var_effects: u8,
 }
@@ -211,6 +215,7 @@ impl ScopeContext {
             allow_taints: true,
             inside_async: false,
             for_loop_init_bounds: (0, 0),
+            asio_join_pos: (0, 0),
 
             pipe_var_effects: EFFECT_PURE,
         }

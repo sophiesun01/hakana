@@ -6,6 +6,8 @@ use std::time::Duration;
 use hakana_analyzer::config::{self, Config};
 use hakana_analyzer::custom_hook::CustomHook;
 use hakana_reflection_info::analysis_result::AnalysisResult;
+use hakana_reflection_info::code_location::FilePath;
+use hakana_str::StrId;
 use hakana_workhorse::file::FileStatus;
 use hakana_workhorse::{scan_and_analyze_async, SuccessfulScanData};
 use rustc_hash::{FxHashMap, FxHashSet};
@@ -54,6 +56,15 @@ impl LanguageServer for Backend {
                         will_save: Some(false),
                         will_save_wait_until: Some(false),
                         save: Some(TextDocumentSyncSaveOptions::Supported(true)),
+                    },
+                )),
+                code_action_provider: Some(CodeActionProviderCapability::Options(
+                    CodeActionOptions {
+                        code_action_kinds: Some(vec![CodeActionKind::REFACTOR]),
+                        work_done_progress_options: WorkDoneProgressOptions {
+                            work_done_progress: Some(true),
+                        },
+                        resolve_provider: Some(true),
                     },
                 )),
                 ..ServerCapabilities::default()
@@ -173,6 +184,14 @@ impl LanguageServer for Backend {
             self.do_analysis().await;
             self.emit_issues().await;
         }
+    }
+
+    async fn code_action(&self, params: CodeActionParams) -> Result<Option<CodeActionResponse>> {
+        self.do_code_action(params).await
+    }
+
+    async fn code_action_resolve(&self, _: CodeAction) -> Result<CodeAction> {
+        Err(tower_lsp::jsonrpc::Error::method_not_found())
     }
 
     async fn hover(&self, _: HoverParams) -> Result<Option<Hover>> {
@@ -315,6 +334,77 @@ impl Backend {
                 .log_message(MessageType::INFO, "Diagnostics sent")
                 .await;
         }
+    }
+
+    async fn do_code_action(&self, params: CodeActionParams) -> Result<Option<CodeActionResponse>> {
+        if let Some(previous_scan_data) = &*self.previous_scan_data.read().await {
+            let interner = &previous_scan_data.interner;
+            let codebase = &previous_scan_data.codebase;
+
+            if let Some(strid) = interner.get(params.text_document.uri.path()) {
+                let file_path = FilePath(strid);
+                if let (Some(_), Some(file_info)) = (
+                    previous_scan_data
+                        .file_system
+                        .file_hashes_and_times
+                        .get(&file_path),
+                    codebase.files.get(&file_path),
+                ) {
+                    let mut node_ref = (StrId::EMPTY, StrId::EMPTY);
+
+                    for ast_node in &file_info.ast_nodes {
+                        if (params.range.start.line + 1 >= ast_node.start_line)
+                            && (params.range.end.line + 1 < ast_node.end_line)
+                        {
+                            node_ref.0 = ast_node.name;
+
+                            for child_node in &ast_node.children {
+                                if (params.range.start.line + 1 >= child_node.start_line)
+                                    && (params.range.end.line + 1 < child_node.end_line)
+                                {
+                                    node_ref.1 = child_node.name;
+                                    break;
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+
+                    if node_ref.0 != StrId::EMPTY {
+                        if let Some(functionlike_info) = codebase.functionlike_infos.get(&node_ref)
+                        {
+                            if let Some(name_location) = functionlike_info.name_location {
+                                if (params.range.start.line + 1 >= name_location.start_line)
+                                    && (params.range.end.line <= name_location.end_line)
+                                    && !functionlike_info.is_async
+                                    && functionlike_info.has_asio_join
+                                {
+                                    return Ok(Some(vec![CodeActionOrCommand::CodeAction(
+                                        CodeAction {
+                                            title: "Asyncify".to_string(),
+                                            command: None,
+                                            kind: Some(CodeActionKind::REFACTOR),
+                                            diagnostics: None,
+                                            edit: None,
+                                            is_preferred: None,
+                                            disabled: None,
+                                            data: Some(serde_json::Value::String(
+                                                interner.lookup(&node_ref.0).to_string()
+                                                    + "::"
+                                                    + interner.lookup(&node_ref.1),
+                                            )),
+                                        },
+                                    )]));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Ok(Some(vec![]))
     }
 }
 
