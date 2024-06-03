@@ -454,6 +454,24 @@ pub fn get_aast_for_path(
     get_aast_for_path_and_contents(file_path, file_path_str, file_contents)
 }
 
+pub fn dump_aast_for_path(
+    file_path_str: &str,
+    output_file_str: &str,
+) -> std::result::Result<FxHashMap<u32, StrId>, ParserError> {
+    // println!("{}", file_path_str);
+    let aast = match get_aast_for_path(FilePath(StrId::EMPTY), file_path_str) {
+        Ok(aast) => aast,
+        Err(err) => return Err(err),
+    };
+
+    // let aast_filename = "aast-output/aast.txt";
+    let mut aast_file = fs::File::create(output_file_str).expect("Unable to create file");
+    let aast_format = format!("{:#?}", aast);
+    aast_file.write_all(aast_format.as_bytes()).expect("Unable to write to file");
+    println!("Output saved to: {}", output_file_str);
+    Ok(Default::default())
+}
+
 fn update_progressbar(percentage: u64, bar: Option<Arc<ProgressBar>>) {
     if let Some(bar) = bar {
         bar.set_position(percentage);

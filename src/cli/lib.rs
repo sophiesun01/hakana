@@ -18,6 +18,7 @@ use std::io::Write;
 use std::path::Path;
 use std::process::exit;
 use std::sync::Arc;
+use std::time::{SystemTime};
 use test_runners::test_runner::TestRunner;
 
 pub mod test_runners;
@@ -436,6 +437,26 @@ pub fn init(
                     .arg(arg!(<TEST> "The test to run"))
                     .arg_required_else_help(true),
             )
+            .subcommand(
+                Command::new("aast")
+                    .about("Writes out AAST to folder aast-output")
+                    .arg(
+                        arg!(--"f" <PATH>)
+                            .required(true)
+                            .help("The file hakana analyzes to generate the AST"),
+                    )
+                    .arg(
+                        arg!(--"o" <PATH>)
+                            .required(true)
+                            .help("The output file path to write the AAST to"),
+                    )
+                    .arg(
+                        arg!(--"st")
+                            .required(false)
+                            .help("Whether to show timing information for the AAST generation process"),
+                    )
+            )
+
             .get_matches();
 
     let cwd = (env::current_dir()).unwrap().to_str().unwrap().to_string();
@@ -648,6 +669,11 @@ pub fn init(
                 header,
                 repeat,
                 random_seed,
+            );
+        }
+        Some(("aast", sub_matches)) => {
+            do_aast(
+                sub_matches
             );
         }
         _ => unreachable!(), // If all subcommands are defined above, anything else is unreachable!()
@@ -1407,6 +1433,25 @@ fn do_analysis(
             println!("{}", mixed_sources.join("\n"));
         }
     }
+}
+
+fn do_aast(
+    sub_matches: &clap::ArgMatches
+){
+    let file_path_str = sub_matches.value_of("f").unwrap();
+    let output_path_str = sub_matches.value_of("o").unwrap();
+    let show_timing = sub_matches.is_present("st");
+    if show_timing{
+        let start_time = SystemTime::now();
+        let _ = hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str);
+        let end_time = SystemTime::now();
+        let duration = end_time.duration_since(start_time).unwrap();
+        println!("Function execution time: {:?}", duration);
+    }
+    else{
+        let _ = hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str);
+    }
+    
 }
 
 fn write_output_files(
