@@ -1,0 +1,15 @@
+Basic Functions
+Original
+cargo run --bin hakana aast -f aast-output/basic_fun.hack  -o aast-output/basic_fun.txt -t 
+3.087ms
+New
+cargo run --bin hakana new_aast -f aast-output/basic_fun.hack  -o aast-output/basic_fun_new.txt -t
+2.95ms
+
+Basic Structs
+Original
+cargo run --bin hakana aast -f aast-output/basic_struct.hack  -o aast-output/basic_struct.txt -t 
+3.087ms
+New
+cargo run --bin hakana new_aast -f aast-output/basic_struct.hack  -o aast-output/basic_struct_new.txt -t
+2.95ms

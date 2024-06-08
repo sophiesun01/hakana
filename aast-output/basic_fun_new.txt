@@ -1,0 +1,97 @@
+Program {
+    kind: "program",
+    children: [
+        Fun {
+            kind: "Fun",
+            doc_comment: "So Stupid",
+            child: FunDef {
+                kind: "FunDef",
+                name: Id(root|aast-output/basic_fun.hack(2:9-22), "addTwoNumbers"),
+                span: root|aast-output/basic_fun.hack(2:0-6:0),
+                params: [
+                    FunParam {
+                        kind: "FunParam",
+                        name: "$a",
+                        type_hint: TypeHint {
+                            kind: "TypeHint",
+                            value: Happly(
+                                Id(root|aast-output/basic_fun.hack(2:23-26), "int"),
+                                [],
+                            ),
+                        },
+                        is_variadic: false,
+                    },
+                    FunParam {
+                        kind: "FunParam",
+                        name: "$b",
+                        type_hint: TypeHint {
+                            kind: "TypeHint",
+                            value: Happly(
+                                Id(root|aast-output/basic_fun.hack(2:31-34), "int"),
+                                [],
+                            ),
+                        },
+                        is_variadic: false,
+                    },
+                ],
+                body: FuncBody {
+                    kind: "FuncBody",
+                    child: [
+                        Stmt(
+                            root|aast-output/basic_fun.hack(4:4-19),
+                            Return(
+                                Some(
+                                    Expr(
+                                        (),
+                                        root|aast-output/basic_fun.hack(4:11-18),
+                                        Binop(
+                                            Binop {
+                                                bop: Plus,
+                                                lhs: Expr(
+                                                    (),
+                                                    root|aast-output/basic_fun.hack(4:11-13),
+                                                    Lvar(
+                                                        Lid(
+                                                            root|aast-output/basic_fun.hack(4:11-13),
+                                                            (
+                                                                0,
+                                                                "$a",
+                                                            ),
+                                                        ),
+                                                    ),
+                                                ),
+                                                rhs: Expr(
+                                                    (),
+                                                    root|aast-output/basic_fun.hack(4:16-18),
+                                                    Lvar(
+                                                        Lid(
+                                                            root|aast-output/basic_fun.hack(4:16-18),
+                                                            (
+                                                                0,
+                                                                "$b",
+                                                            ),
+                                                        ),
+                                                    ),
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ],
+                },
+                ret: Ret {
+                    kind: "ret",
+                    type_hint: TypeHint {
+                        kind: "Id",
+                        value: Happly(
+                            Id(root|aast-output/basic_fun.hack(2:40-43), "int"),
+                            [],
+                        ),
+                    },
+                },
+            },
+        },
+    ],
+}

@@ -441,19 +441,54 @@ pub fn init(
                 Command::new("aast")
                     .about("Writes out AAST to folder aast-output")
                     .arg(
-                        arg!(--"f" <PATH>)
+                        arg!(--"file" <PATH>)
+                            .short('f')
                             .required(true)
                             .help("The file hakana analyzes to generate the AST"),
                     )
                     .arg(
-                        arg!(--"o" <PATH>)
+                        arg!(--"output" <PATH>)
+                            .short('o')
                             .required(true)
                             .help("The output file path to write the AAST to"),
                     )
                     .arg(
-                        arg!(--"st")
+                        arg!(--"show-timing")
+                            .short('t')
                             .required(false)
-                            .help("Whether to show timing information for the AAST generation process"),
+                            .help("If set, timing info will be displayed"),
+                    )
+                    .arg(
+                        arg!(--"debug")
+                            .required(false)
+                            .help("Whether to show debug output"),
+                    )
+            )
+            .subcommand(
+                Command::new("new_aast")
+                    .about("Writes out AAST to folder aast-output")
+                    .arg(
+                        arg!(--"file" <PATH>)
+                            .short('f')
+                            .required(true)
+                            .help("The file hakana analyzes to generate the AST"),
+                    )
+                    .arg(
+                        arg!(--"output" <PATH>)
+                            .short('o')
+                            .required(true)
+                            .help("The output file path to write the AAST to"),
+                    )
+                    .arg(
+                        arg!(--"show-timing")
+                            .short('t')
+                            .required(false)
+                            .help("If set, timing info will be displayed"),
+                    )
+                    .arg(
+                        arg!(--"debug")
+                            .required(false)
+                            .help("Whether to show debug output"),
                     )
             )
 
@@ -462,7 +497,7 @@ pub fn init(
     let cwd = (env::current_dir()).unwrap().to_str().unwrap().to_string();
 
     let threads = match matches.subcommand() {
-        Some(("test", _)) => 1,
+        Some(("test", _)) | Some(("aast", _)) | Some(("new_aast", _)) => 1,
         Some((_, sub_matches)) => {
             if let Some(val) = sub_matches.value_of("threads").map(|f| f.to_string()) {
                 val.parse::<u8>().unwrap()
@@ -477,7 +512,8 @@ pub fn init(
         Some(("test", sub_matches)) => {
             if sub_matches.is_present("debug") {
                 Logger::CommandLine(Verbosity::Debugging)
-            } else {
+            } 
+            else {
                 Logger::DevNull
             }
         }
@@ -492,7 +528,7 @@ pub fn init(
     };
 
     let root_dir = match matches.subcommand() {
-        Some(("test", _)) => cwd.as_str().to_string(),
+        Some(("test", _) | ("aast", _) | ("new_aast", _)) => cwd.as_str().to_string(),
         Some((_, sub_matches)) => sub_matches
             .value_of("root")
             .unwrap_or(cwd.as_str())
@@ -501,7 +537,7 @@ pub fn init(
     };
 
     let config_path = match matches.subcommand() {
-        Some(("test", _)) => None,
+        Some(("test", _) | ("aast", _) | ("new_aast", _)) => None,
         Some((_, sub_matches)) => Some(
             sub_matches
                 .value_of("config")
@@ -672,9 +708,10 @@ pub fn init(
             );
         }
         Some(("aast", sub_matches)) => {
-            do_aast(
-                sub_matches
-            );
+            do_aast(sub_matches, logger);
+        }
+        Some(("new_aast", sub_matches)) => {
+            do_new_aast(sub_matches, logger);
         }
         _ => unreachable!(), // If all subcommands are defined above, anything else is unreachable!()
     }
@@ -1435,12 +1472,39 @@ fn do_analysis(
     }
 }
 
+// fn do_aast(
+//     sub_matches: &clap::ArgMatches, 
+//     logger: Logger,
+//     ) -> std::result::Result<(), ParserError> {
+//     let file_path_str = sub_matches.value_of("file").unwrap();
+//     let output_path_str = sub_matches.value_of("output").unwrap();
+//     let show_timing = sub_matches.is_present("show-timing");
+//     if show_timing{
+//         let start_time = SystemTime::now();
+//         let _ = hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str)?;
+//         let end_time = SystemTime::now();
+//         let duration = end_time.duration_since(start_time).unwrap();
+//         println!("Function execution time: {:?}", duration);
+//     }
+//     else{
+//        let result =hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str)?;
+//        let result = match result {
+//             Ok(result) => result,
+//             Err(error) => match error {
+//                 ParserError::NotAHackFile => return Err("Not a Hack file".to_string()),
+//                 ParserError::CannotReadFile => return Err("Cannot read file".to_string()),
+//             },
+//         }
+//     };  
+// }
+
 fn do_aast(
-    sub_matches: &clap::ArgMatches
-){
-    let file_path_str = sub_matches.value_of("f").unwrap();
-    let output_path_str = sub_matches.value_of("o").unwrap();
-    let show_timing = sub_matches.is_present("st");
+    sub_matches: &clap::ArgMatches, 
+    logger: Logger,
+    ) {
+    let file_path_str = sub_matches.value_of("file").unwrap();
+    let output_path_str = sub_matches.value_of("output").unwrap();
+    let show_timing = sub_matches.is_present("show-timing");
     if show_timing{
         let start_time = SystemTime::now();
         let _ = hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str);
@@ -1449,9 +1513,27 @@ fn do_aast(
         println!("Function execution time: {:?}", duration);
     }
     else{
-        let _ = hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str);
+       let result =hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str);
+    };  
+}
+
+fn do_new_aast(
+    sub_matches: &clap::ArgMatches, 
+    logger: Logger,
+    ) {
+    let file_path_str = sub_matches.value_of("file").unwrap();
+    let output_path_str = sub_matches.value_of("output").unwrap();
+    let show_timing = sub_matches.is_present("show-timing");
+    if show_timing{
+        let start_time = SystemTime::now();
+        let _ = hakana_workhorse::dump_new_aast_for_path(file_path_str, output_path_str);
+        let end_time = SystemTime::now();
+        let duration = end_time.duration_since(start_time).unwrap();
+        println!("Function execution time: {:?}", duration);
     }
-    
+    else{
+       let result =hakana_workhorse::dump_new_aast_for_path(file_path_str, output_path_str);
+    };  
 }
 
 fn write_output_files(

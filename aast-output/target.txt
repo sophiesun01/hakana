@@ -1,0 +1,39 @@
+{
+	"kind": "Program",
+	"children": [
+		{
+			"kind": "Fun",
+			"doc_comment": "/** The sum of two integers */",
+			"child": {
+				"kind": "FunDef",
+				"name": {"kind": "Id", "value":"add"},
+				"ret": {"kind": "Id", "value":"int"},
+				"params": [
+					{
+						"kind": "FunParam",
+						"name": {"kind": "Id", "value": "$a"},
+						"type_hint": {"kind": "Id", "value": "int"}
+					},
+					{
+						"kind": "FunParam",
+						"name": {"kind": "Id", "value": "$b"},
+						"type_hint": {"kind": "Id", "value": "int"}
+					}
+				],
+				"body": {
+					"kind": "FuncBody",
+					"child": {
+						"kind": "Block",
+						"children": [
+							{
+								"kind": "Stmt",
+								"child": ...
+							}
+						]
+					}
+				}
+			}
+
+		}
+	]
+}

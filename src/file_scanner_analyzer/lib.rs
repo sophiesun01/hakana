@@ -1,4 +1,6 @@
 pub(crate) mod populator;
+use crate::aast::Def;
+use crate::aast::FunDefJson;
 
 use analyzer::analyze_files;
 use diff::{mark_safe_symbols_from_diff, CachedAnalysis};
@@ -17,11 +19,16 @@ use hakana_reflection_info::symbol_references::SymbolReferences;
 use hakana_str::{Interner, StrId};
 use indicatif::ProgressBar;
 use oxidized::aast;
+
+use oxidized::ast::Hint_;
+use oxidized::ast::Hint;
 use oxidized::scoured_comments::ScouredComments;
 use populator::populate_codebase;
 use rust_embed::RustEmbed;
 use rustc_hash::{FxHashMap, FxHashSet};
 use scanner::{scan_files, ScanFilesResult};
+use serde::{Serialize, Deserialize};
+use serde_json::{self, json};
 use std::fs;
 use std::io::{self, Write};
 use std::sync::{Arc, Mutex};
@@ -447,30 +454,202 @@ pub fn get_aast_for_path(
     } else {
         match fs::read_to_string(file_path_str) {
             Ok(str_file) => str_file,
-            Err(_) => return Err(ParserError::CannotReadFile),
+            Err(err) => {
+                eprintln!("Error reading file: {}", err); // Need to do some better error propagation
+                return Err(ParserError::CannotReadFile);
+            }
         }
     };
-
     get_aast_for_path_and_contents(file_path, file_path_str, file_contents)
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Program {
+    kind: String,
+    children: Vec<Fun>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Fun {
+    kind: String,
+    doc_comment: String,
+    child: FunDef,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct FunDef {
+    pub kind: String,
+    pub name: aast::Sid, //change this into a Name Struct Eventually
+    pub span: aast::Pos,
+    pub params: Vec<FunParam>,
+    pub body: FuncBody,
+    pub ret: Ret
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct FunParam {
+    kind: String,
+    name: String,
+    type_hint: TypeHint,
+    is_variadic: aast::IsVariadic,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct FuncBody {
+    kind: String,
+    child: Vec<aast::Stmt<(), ()>>
+}
+#[derive(Serialize, Deserialize, Debug)]
+struct Ret {
+    kind: String,
+    type_hint: TypeHint
+}
+#[derive(Serialize, Deserialize, Debug)]
+struct TypeHint {
+    kind: String,
+    value: Hint_
+}
+
+pub fn dump_new_aast_for_path(
+    file_path_str: &str,
+    output_file_str: &str,
+    ) -> std::result::Result<(), ParserError> {
+    let (aast, comments, idk) = match get_aast_for_path(FilePath(StrId::EMPTY), file_path_str) {
+        Ok(aast) => aast,
+        Err(err) => {
+            return Err(err);
+        }
+    };
+    // println!("{:#?}", comments);
+    // println!("{}", idk);
+    // println!("{}", serde_json::from_string(&aast).unwrap());
+    // let aast_str = serde_json::to_string(&aast).unwrap();
+    // let aast_json: Program = serde_json::from_str(&aast_str).unwrap();
+    // println!("{}", aast_str);
+    // println!("{}", len(aast_json));
+    // println!("{}", aast_json.to_string());
+    // println!("{:#?}", aast_json);
+    let mut child_arr: Vec<Fun> = Vec::new();
+
+    for def in aast.iter(){
+        // println!("{:?}", node);
+        match def {
+            Def::Fun(f) => {
+                let fr = &f.fun.ret;
+                let rh_json = TypeHint { 
+                    kind: "Id".to_string(), //Wtf can we do about Ex
+                    value: *(fr.1.clone().unwrap().1)
+                };
+                let fr_json = Ret{
+                    kind: "ret".to_string(),
+                    type_hint: rh_json
+                };
+
+                let fp = &f.fun.params;
+                let mut fp_arr: Vec<FunParam> = Vec::new();
+                for param in fp.iter(){
+                    let th_json = TypeHint{
+                        kind: "TypeHint".to_string(),
+                        // value: param.type_hint.1.unwrap().1.clone(),
+                        value: *(param.type_hint.1.clone().unwrap().1)
+                    };
+                    let fp_json = FunParam{
+                        kind: "FunParam".to_string(),
+                        name: param.name.clone(),
+                        type_hint: th_json,
+                        is_variadic: param.is_variadic
+                    };
+                    fp_arr.push(fp_json);
+                }
+
+                let fb = &f.fun.body;
+                let fb_json = FuncBody { 
+                    kind: "FuncBody".to_string(),
+                    child: fb.fb_ast.0.clone()
+                };
+
+                let fd_json = FunDef{
+                    kind: "FunDef".to_string(),
+                    name: f.name.clone(), 
+                    span: f.fun.span.clone(),
+                    params: fp_arr,
+                    body: fb_json,
+                    ret: fr_json
+                };
+
+                let f_json = Fun{
+                    kind: "Fun".to_string(),
+                    doc_comment: "So Stupid".to_string(),
+                    child: fd_json
+                };
+                println!("{:#?}", f_json);
+                // println!("{}", serde_json::to_string(&f).unwrap());
+                // println!("{}", serde_json::to_string(&def).unwrap());
+                // println!("{
+                child_arr.push(f_json)
+            }
+            Def::Class(c) => {
+                // Handle Class case
+            }
+            Def::Stmt(s) => {
+                // Handle Stmt case
+            }
+            Def::Typedef(t) => {
+                // Handle Typedef case
+            }
+            Def::Constant(c) => {
+                // Handle Constant case
+            }
+            Def::Namespace(n) => {
+                // Handle Namespace case
+            }
+            Def::NamespaceUse(nu) => {
+                // Handle NamespaceUse case
+            }
+            Def::SetNamespaceEnv(sne) => {
+                // Handle SetNamespaceEnv case
+            }
+            Def::FileAttributes(fa) => {
+                // Handle FileAttributes case
+            }
+            Def::Module(m) => {
+                // Handle Module case
+            }
+            Def::SetModule(m) => {
+                // Handle Module case
+            }
+        }
+
+    }  
+    let program: Program = Program{
+        kind: "program".to_string(),
+        children: child_arr
+    };
+    let mut aast_file = fs::File::create(output_file_str).expect("Unable to create file");
+    let aast_format = format!("{:#?}", program);
+    aast_file.write_all(aast_format.as_bytes()).expect("Unable to write to file");
+    println!("Output saved to: {}", output_file_str);
+    Ok(Default::default())
+}
+
 
 pub fn dump_aast_for_path(
     file_path_str: &str,
     output_file_str: &str,
-) -> std::result::Result<FxHashMap<u32, StrId>, ParserError> {
-    // println!("{}", file_path_str);
-    let aast = match get_aast_for_path(FilePath(StrId::EMPTY), file_path_str) {
+    ) -> std::result::Result<(), ParserError> {
+    let (aast, comments, idk) = match get_aast_for_path(FilePath(StrId::EMPTY), file_path_str) {
         Ok(aast) => aast,
-        Err(err) => return Err(err),
+        Err(err) => {
+            return Err(err);
+        }
     };
-
-    // let aast_filename = "aast-output/aast.txt";
     let mut aast_file = fs::File::create(output_file_str).expect("Unable to create file");
     let aast_format = format!("{:#?}", aast);
     aast_file.write_all(aast_format.as_bytes()).expect("Unable to write to file");
     println!("Output saved to: {}", output_file_str);
     Ok(Default::default())
 }
+
 
 fn update_progressbar(percentage: u64, bar: Option<Arc<ProgressBar>>) {
     if let Some(bar) = bar {
