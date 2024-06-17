@@ -12,7 +12,8 @@ use serde_json::{self, json};
 use serde_json::Value;
 
 pub(crate) struct Scanner {
-    pub tree_stack: Vec<serde_json::Value>
+    pub tree_stack: Vec<serde_json::Value>,
+    pub tree: String
     // pub interner: &'a mut ThreadedInterner
 }
 pub(crate) struct Context {
@@ -57,7 +58,9 @@ impl <'ast>Visitor<'ast> for Scanner {
             "kind": "Program",
             "child": self.tree_stack.pop(),
         });
-        println!("{}", serde_json::to_string_pretty(&obj).unwrap());
+
+        self.tree = serde_json::to_string_pretty(&obj).unwrap();
+        // println!("{}", serde_json::to_string_pretty(&obj).unwrap());
         Ok(Default::default())
     }
 	fn visit_fun_def(

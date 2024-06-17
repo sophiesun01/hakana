@@ -1,4 +1,125 @@
-Program {
-    kind: "program",
-    children: [],
+{
+  "kind": "Program",
+  "child": {
+    "kind": "FunDef",
+    "name": [
+      {
+        "Tiny": {
+          "file": "root|aast-output/basic_fun.hack",
+          "span": 87961064440397
+        }
+      },
+      "addTwoNumbers"
+    ],
+    "doc_comment": "Testing 123",
+    "child": {
+      "kind": "Fun",
+      "body": {
+        "kind": "FuncBody",
+        "children": {
+          "kind": "Expr",
+          "child": {
+            "kind": "Binop",
+            "child": {
+              "bop": "Plus",
+              "lhs": [
+                null,
+                {
+                  "Tiny": {
+                    "file": "root|aast-output/basic_fun.hack",
+                    "span": 290271338169026
+                  }
+                },
+                {
+                  "Lvar": [
+                    {
+                      "Tiny": {
+                        "file": "root|aast-output/basic_fun.hack",
+                        "span": 290271338169026
+                      }
+                    },
+                    [
+                      0,
+                      "$a"
+                    ]
+                  ]
+                }
+              ],
+              "rhs": [
+                null,
+                {
+                  "Tiny": {
+                    "file": "root|aast-output/basic_fun.hack",
+                    "span": 290271338169346
+                  }
+                },
+                {
+                  "Lvar": [
+                    {
+                      "Tiny": {
+                        "file": "root|aast-output/basic_fun.hack",
+                        "span": 290271338169346
+                      }
+                    },
+                    [
+                      0,
+                      "$b"
+                    ]
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "params": {
+        "kind": "FuncParam",
+        "name": "$a",
+        "children": {
+          "kind": "TypeHint",
+          "child": {
+            "Happly": [
+              [
+                {
+                  "Tiny": {
+                    "file": "root|aast-output/basic_fun.hack",
+                    "span": 87961064441795
+                  }
+                },
+                "int"
+              ],
+              [],
+              [
+                {
+                  "Tiny": {
+                    "file": "root|aast-output/basic_fun.hack",
+                    "span": 87961064441283
+                  }
+                },
+                "int"
+              ],
+              []
+            ]
+          }
+        }
+      },
+      "ret": {
+        "kind": "TypeHint",
+        "child": {
+          "Happly": [
+            [
+              {
+                "Tiny": {
+                  "file": "root|aast-output/basic_fun.hack",
+                  "span": 87961064442371
+                }
+              },
+              "int"
+            ],
+            []
+          ]
+        }
+      }
+    }
+  }
 }

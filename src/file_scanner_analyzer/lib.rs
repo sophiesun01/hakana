@@ -545,18 +545,16 @@ pub fn dump_new_aast_for_path(
 
     let mut scanner = Scanner {
             tree_stack: Vec::<serde_json::Value>::new(),
+            tree: String::new(),
         };
 
     let mut context = Context {};
 
     visit(&mut scanner, &mut context, &aast).unwrap();
     
-    let program: Program = Program{
-        kind: "program".to_string(),
-        children: child_arr
-    };
     let mut aast_file = fs::File::create(output_file_str).expect("Unable to create file");
-    let aast_format = format!("{:#?}", program);
+    let aast_format = scanner.tree;
+    
     aast_file.write_all(aast_format.as_bytes()).expect("Unable to write to file");
     println!("Output saved to: {}", output_file_str);
     Ok(Default::default())
