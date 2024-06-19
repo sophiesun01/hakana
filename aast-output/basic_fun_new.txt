@@ -7,65 +7,50 @@
       "doc_comment": "Testing 123",
       "child": {
         "kind": "Fun",
-        "ret": {
-          "kind": "TypeHint",
-          "child": {
-            "kind": "Hint",
-            "type": "Apply",
-            "name": "int"
-          }
-        },
+        "ret": "Type Test",
         "params": [
           {
             "kind": "FuncParam",
             "name": "$a",
-            "children": {
-              "kind": "TypeHint",
-              "child": {
-                "kind": "Hint",
-                "type": "Apply",
-                "name": "int"
-              }
-            }
+            "type": "Type Test",
+            "visibility": null
           },
           {
             "kind": "FuncParam",
             "name": "$b",
-            "children": {
-              "kind": "TypeHint",
-              "child": {
-                "kind": "Hint",
-                "type": "Apply",
-                "name": "int"
-              }
-            }
+            "type": "Type Test",
+            "visibility": null
           }
         ],
         "body": {
           "kind": "FuncBody",
-          "children": [
-            {
-              "kind": "Stmt",
-              "type": {
-                "kind": "Expr",
-                "type": "Binop",
-                "expr": {
-                  "kind": "Binop",
-                  "bop": "Plus",
-                  "lhs": {
-                    "kind": "Expr",
-                    "type": "LocalVar",
-                    "name": "$a"
-                  },
-                  "rhs": {
-                    "kind": "Expr",
-                    "type": "LocalVar",
-                    "name": "$b"
+          "body": {
+            "kind": "Block",
+            "stmts": [
+              {
+                "kind": "Stmt",
+                "type": "Return",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Plus",
+                    "lhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$a"
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$b"
+                    }
                   }
                 }
               }
-            }
-          ]
+            ]
+          }
         }
       }
     }

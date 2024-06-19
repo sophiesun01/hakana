@@ -3,7 +3,8 @@
   "definitions": [
     {
       "kind": "Stmt",
-      "type": {
+      "type": "Expr",
+      "stmt": {
         "kind": "Expr",
         "type": "Binop",
         "expr": {
@@ -12,7 +13,7 @@
           "lhs": {
             "kind": "Expr",
             "type": "LocalVar",
-            "name": "$test"
+            "expr": "$test"
           },
           "rhs": {
             "kind": "Expr",
@@ -24,14 +25,27 @@
     },
     {
       "kind": "Stmt",
-      "type": {
-        "kind": "Stmt",
-        "type": {
+      "type": "If",
+      "stmt": [
+        {
           "kind": "Expr",
           "type": "LocalVar",
-          "name": "$test"
+          "expr": "$test"
+        },
+        {
+          "kind": "Block",
+          "stmts": []
+        },
+        {
+          "kind": "Block",
+          "stmts": [
+            {
+              "kind": "Stmt",
+              "type": "Noop"
+            }
+          ]
         }
-      }
+      ]
     }
   ]
 }
