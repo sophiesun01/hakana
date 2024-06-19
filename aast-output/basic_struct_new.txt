@@ -1,145 +1,136 @@
-Program {
-    kind: "program",
-    children: [
-        Fun {
-            kind: "Fun",
-            doc_comment: "So Stupid",
-            child: FunDef {
-                kind: "FunDef",
-                name: Id(root|aast-output/basic_struct.hack(19:9-13), "main"),
-                span: root|aast-output/basic_struct.hack(18:0-26:0),
-                params: [],
-                body: FuncBody {
-                    kind: "FuncBody",
-                    child: [
-                        Stmt(
-                            root|aast-output/basic_struct.hack(21:2-31),
-                            Expr(
-                                Expr(
-                                    (),
-                                    root|aast-output/basic_struct.hack(21:2-30),
-                                    Binop(
-                                        Binop {
-                                            bop: Eq(
-                                                None,
-                                            ),
-                                            lhs: Expr(
-                                                (),
-                                                root|aast-output/basic_struct.hack(21:2-8),
-                                                Lvar(
-                                                    Lid(
-                                                        root|aast-output/basic_struct.hack(21:2-8),
-                                                        (
-                                                            0,
-                                                            "$point",
-                                                        ),
-                                                    ),
-                                                ),
-                                            ),
-                                            rhs: Expr(
-                                                (),
-                                                root|aast-output/basic_struct.hack(21:11-30),
-                                                New(
-                                                    (
-                                                        ClassId(
-                                                            (),
-                                                            root|aast-output/basic_struct.hack(21:11-30),
-                                                            CIexpr(
-                                                                Expr(
-                                                                    (),
-                                                                    root|aast-output/basic_struct.hack(21:15-20),
-                                                                    Id(
-                                                                        Id(root|aast-output/basic_struct.hack(21:15-20), "Point"),
-                                                                    ),
-                                                                ),
-                                                            ),
-                                                        ),
-                                                        [],
-                                                        [
-                                                            Expr(
-                                                                (),
-                                                                root|aast-output/basic_struct.hack(21:21-24),
-                                                                Float(
-                                                                    "1.0",
-                                                                ),
-                                                            ),
-                                                            Expr(
-                                                                (),
-                                                                root|aast-output/basic_struct.hack(21:26-29),
-                                                                Float(
-                                                                    "2.0",
-                                                                ),
-                                                            ),
-                                                        ],
-                                                        None,
-                                                        (),
-                                                    ),
-                                                ),
-                                            ),
-                                        },
-                                    ),
-                                ),
-                            ),
-                        ),
-                        Stmt(
-                            root|aast-output/basic_struct.hack(24:2-18),
-                            Expr(
-                                Expr(
-                                    (),
-                                    root|aast-output/basic_struct.hack(24:2-17),
-                                    Call(
-                                        CallExpr {
-                                            func: Expr(
-                                                (),
-                                                root|aast-output/basic_struct.hack(24:2-15),
-                                                ObjGet(
-                                                    (
-                                                        Expr(
-                                                            (),
-                                                            root|aast-output/basic_struct.hack(24:2-8),
-                                                            Lvar(
-                                                                Lid(
-                                                                    root|aast-output/basic_struct.hack(24:2-8),
-                                                                    (
-                                                                        0,
-                                                                        "$point",
-                                                                    ),
-                                                                ),
-                                                            ),
-                                                        ),
-                                                        Expr(
-                                                            (),
-                                                            root|aast-output/basic_struct.hack(24:10-15),
-                                                            Id(
-                                                                Id(root|aast-output/basic_struct.hack(24:10-15), "print"),
-                                                            ),
-                                                        ),
-                                                        OGNullthrows,
-                                                        IsMethod,
-                                                    ),
-                                                ),
-                                            ),
-                                            targs: [],
-                                            args: [],
-                                            unpacked_arg: None,
-                                        },
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ],
-                },
-                ret: Ret {
-                    kind: "ret",
-                    type_hint: TypeHint {
-                        kind: "Id",
-                        value: Happly(
-                            Id(root|aast-output/basic_struct.hack(19:17-21), "void"),
-                            [],
-                        ),
-                    },
-                },
-            },
+{
+  "kind": "Program",
+  "definitions": [
+    {
+      "kind": "Class",
+      "name": "Point",
+      "class_kind": {
+        "kind": "Class",
+        "abstraction": "Concrete"
+      },
+      "vars": [
+        {
+          "kind": "ClassVar",
+          "abstract": false,
+          "readonly": false,
+          "visibility": "public",
+          "type": {
+            "kind": "TypeHint",
+            "child": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "float"
+            }
+          },
+          "id": "x",
+          "is_static": false
         },
-    ],
+        {
+          "kind": "ClassVar",
+          "abstract": false,
+          "readonly": false,
+          "visibility": "public",
+          "type": {
+            "kind": "TypeHint",
+            "child": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "float"
+            }
+          },
+          "id": "y",
+          "is_static": false
+        }
+      ],
+      "methods": [
+        {
+          "kind": "Method",
+          "name": "print",
+          "params": [],
+          "visibility": "public",
+          "is_final": false,
+          "is_abstract": false,
+          "is_static": false,
+          "body": {
+            "kind": "FuncBody",
+            "children": [
+              {
+                "kind": "Stmt",
+                "type": {
+                  "kind": "Expr",
+                  "type": "Call",
+                  "expr": {
+                    "kind": "CallExpr",
+                    "func": {
+                      "kind": "Expr",
+                      "type": "Id",
+                      "id": "echo"
+                    },
+                    "targs": []
+                  }
+                }
+              }
+            ]
+          },
+          "ret": {
+            "kind": "TypeHint",
+            "child": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "void"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "FunDef",
+      "name": "main",
+      "doc_comment": "Testing 123",
+      "child": {
+        "kind": "Fun",
+        "ret": {
+          "kind": "TypeHint",
+          "child": {
+            "kind": "Hint",
+            "type": "Apply",
+            "name": "void"
+          }
+        },
+        "params": [],
+        "body": {
+          "kind": "FuncBody",
+          "children": [
+            {
+              "kind": "Stmt",
+              "type": {
+                "kind": "Expr",
+                "type": "Call",
+                "expr": {
+                  "kind": "CallExpr",
+                  "func": {
+                    "kind": "Expr",
+                    "type": "ObjGet",
+                    "expr": [
+                      {
+                        "kind": "Expr",
+                        "type": "LocalVar",
+                        "name": "$point"
+                      },
+                      {
+                        "kind": "Expr",
+                        "type": "Id",
+                        "id": "print"
+                      }
+                    ]
+                  },
+                  "targs": []
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

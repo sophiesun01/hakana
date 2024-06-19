@@ -1,4 +1,37 @@
-Program {
-    kind: "program",
-    children: [],
+{
+  "kind": "Program",
+  "definitions": [
+    {
+      "kind": "Stmt",
+      "type": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "name": "$test"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "Int",
+            "expr": "1"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": {
+        "kind": "Stmt",
+        "type": {
+          "kind": "Expr",
+          "type": "LocalVar",
+          "name": "$test"
+        }
+      }
+    }
+  ]
 }

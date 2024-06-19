@@ -1,0 +1,75 @@
+Program(
+    [
+        Stmt(
+            Stmt(
+                root|aast-output/basic_stmt.hack(1:0-10),
+                Expr(
+                    Expr(
+                        (),
+                        root|aast-output/basic_stmt.hack(1:0-9),
+                        Binop(
+                            Binop {
+                                bop: Eq(
+                                    None,
+                                ),
+                                lhs: Expr(
+                                    (),
+                                    root|aast-output/basic_stmt.hack(1:0-5),
+                                    Lvar(
+                                        Lid(
+                                            root|aast-output/basic_stmt.hack(1:0-5),
+                                            (
+                                                0,
+                                                "$test",
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                                rhs: Expr(
+                                    (),
+                                    root|aast-output/basic_stmt.hack(1:8-9),
+                                    Int(
+                                        "1",
+                                    ),
+                                ),
+                            },
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        Stmt(
+            Stmt(
+                root|aast-output/basic_stmt.hack(2:0-12),
+                If(
+                    (
+                        Expr(
+                            (),
+                            root|aast-output/basic_stmt.hack(2:4-9),
+                            Lvar(
+                                Lid(
+                                    root|aast-output/basic_stmt.hack(2:4-9),
+                                    (
+                                        0,
+                                        "$test",
+                                    ),
+                                ),
+                            ),
+                        ),
+                        Block(
+                            [],
+                        ),
+                        Block(
+                            [
+                                Stmt(
+                                    Pos::NONE,
+                                    Noop,
+                                ),
+                            ],
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ],
+)

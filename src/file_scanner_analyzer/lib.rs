@@ -545,6 +545,7 @@ pub fn dump_new_aast_for_path(
 
     let mut scanner = Scanner {
             tree_stack: Vec::<serde_json::Value>::new(),
+            string_stack: Vec::<String>::new(),
             tree: String::new(),
         };
 
@@ -557,7 +558,7 @@ pub fn dump_new_aast_for_path(
     
     aast_file.write_all(aast_format.as_bytes()).expect("Unable to write to file");
     println!("Output saved to: {}", output_file_str);
-    Ok(Default::default())
+    Ok(())
 }
 
 
