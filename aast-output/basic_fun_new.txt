@@ -7,19 +7,37 @@
       "doc_comment": "Testing 123",
       "child": {
         "kind": "Fun",
-        "ret": "Type Test",
+        "span": {
+          "kind": "Pos",
+          "file": "root|aast-output/basic_fun.hack",
+          "startLine": 2,
+          "endLine": 6
+        },
+        "ret": {
+          "kind": "Hint",
+          "type": "Apply",
+          "name": "int"
+        },
         "params": [
           {
             "kind": "FuncParam",
             "name": "$a",
-            "type": "Type Test",
-            "visibility": null
+            "type": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "int"
+            },
+            "visibility": "None"
           },
           {
             "kind": "FuncParam",
             "name": "$b",
-            "type": "Type Test",
-            "visibility": null
+            "type": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "int"
+            },
+            "visibility": "None"
           }
         ],
         "body": {

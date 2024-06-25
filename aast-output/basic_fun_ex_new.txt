@@ -1,0 +1,173 @@
+{
+  "kind": "Program",
+  "definitions": [
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$a"
+          },
+          "rhs": {
+            "kind": "Vec",
+            "type": "ValCollection",
+            "expr": [
+              {
+                "kind": "Expr",
+                "type": "Int",
+                "expr": "1"
+              },
+              {
+                "kind": "Expr",
+                "type": "Int",
+                "expr": "2"
+              },
+              {
+                "kind": "Expr",
+                "type": "Int",
+                "expr": "3"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Call",
+        "expr": {
+          "kind": "CallExpr",
+          "func": {
+            "kind": "Expr",
+            "type": "Id",
+            "expr": "foo"
+          },
+          "args": [
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$a"
+            },
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "kind": "FunDef",
+      "name": "foo",
+      "doc_comment": "Testing 123",
+      "child": {
+        "kind": "Fun",
+        "ret": "Type Test",
+        "params": [
+          {
+            "kind": "FuncParam",
+            "name": "$a",
+            "type": "Type Test",
+            "visibility": null
+          }
+        ],
+        "body": {
+          "kind": "FuncBody",
+          "body": {
+            "kind": "Block",
+            "stmts": [
+              {
+                "kind": "Stmt",
+                "type": "Expr",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Eq",
+                    "lhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$c"
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "type": "Float",
+                      "expr": "1.0"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "Stmt",
+                "type": "Expr",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Eq",
+                    "lhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$d"
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "type": "Int",
+                      "expr": "0"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "Stmt",
+                "type": "Try",
+                "stmt": [
+                  {
+                    "kind": "Block",
+                    "stmts": []
+                  },
+                  {
+                    "kind": "AsExpr",
+                    "type": "AsV",
+                    "asExpr": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$val"
+                    }
+                  },
+                  {
+                    "kind": "Expr",
+                    "type": "LocalVar",
+                    "expr": "$a"
+                  }
+                ]
+              },
+              {
+                "kind": "Stmt",
+                "type": "Return",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "LocalVar",
+                  "expr": "$c"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

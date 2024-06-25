@@ -1,6 +1,4 @@
 pub(crate) mod populator;
-use crate::aast::Def;
-use crate::aast::Stmt;
 use crate::ast_visitors::{Scanner, Context};
 
 use analyzer::analyze_files;
@@ -26,8 +24,7 @@ use indicatif::ProgressBar;
 
 use oxidized::{
     aast,
-    aast_visitor::{visit, AstParams, Node, Visitor},
-    ast_defs,
+    aast_visitor::{visit}
 };
 use oxidized::ast::Hint_;
 use oxidized::ast::Stmt_;
@@ -526,22 +523,13 @@ pub fn dump_new_aast_for_path(
     output_file_str: &str,
     ) -> std::result::Result<(), ParserError> {
     
-    let (aast, comments, idk) = match get_aast_for_path(FilePath(StrId::EMPTY), file_path_str) {
+    let (aast, _comments, _idk) = match get_aast_for_path(FilePath(StrId::EMPTY), file_path_str) {
         Ok(aast) => aast,
         Err(err) => {
             return Err(err);
         }
     };
-    // println!("{:#?}", comments);
-    // println!("{}", idk);
-    // println!("{}", serde_json::from_string(&aast).unwrap());
-    // let aast_str = serde_json::to_string(&aast).unwrap();
-    // let aast_json: Program = serde_json::from_str(&aast_str).unwrap();
-    // println!("{}", aast_str);
-    // println!("{}", len(aast_json));
-    // println!("{}", aast_json.to_string());
-    // println!("{:#?}", aast_json);
-    let mut child_arr: Vec<Fun> = Vec::new();
+
 
     let mut scanner = Scanner {
             tree_stack: Vec::<serde_json::Value>::new(),

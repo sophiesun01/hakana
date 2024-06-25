@@ -2,6 +2,11 @@
   "kind": "Program",
   "definitions": [
     {
+      "kind": "Expr",
+      "type": "LocalVar",
+      "expr": "$x"
+    },
+    {
       "kind": "Stmt",
       "type": "Expr",
       "stmt": {
@@ -12,40 +17,44 @@
           "bop": "Eq",
           "lhs": {
             "kind": "Expr",
-            "type": "LocalVar",
-            "expr": "$test"
+            "type": "String",
+            "expr": [
+              98,
+              97,
+              122
+            ]
           },
           "rhs": {
             "kind": "Expr",
-            "type": "Int",
-            "expr": "1"
+            "type": "Shape"
           }
         }
       }
     },
     {
+      "kind": "Expr",
+      "type": "LocalVar",
+      "expr": "$x"
+    },
+    {
       "kind": "Stmt",
-      "type": "If",
-      "stmt": [
-        {
-          "kind": "Expr",
-          "type": "LocalVar",
-          "expr": "$test"
-        },
-        {
-          "kind": "Block",
-          "stmts": []
-        },
-        {
-          "kind": "Block",
-          "stmts": [
-            {
-              "kind": "Stmt",
-              "type": "Noop"
-            }
-          ]
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "Null"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "Shape"
+          }
         }
-      ]
+      }
     }
   ]
 }

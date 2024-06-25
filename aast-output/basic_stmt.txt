@@ -1,12 +1,173 @@
 Program(
     [
+        Typedef(
+            Typedef {
+                annotation: (),
+                name: Id(root|aast-output/basic_stmt.hack(11:5-8), "Foo"),
+                tparams: [],
+                as_constraint: None,
+                super_constraint: None,
+                kind: Hint(
+                    root|aast-output/basic_stmt.hack(11:11-34),
+                    Hshape(
+                        NastShapeInfo {
+                            allows_unknown_fields: false,
+                            field_map: [
+                                ShapeFieldInfo {
+                                    optional: false,
+                                    hint: Hint(
+                                        root|aast-output/basic_stmt.hack(11:26-33),
+                                        Hoption(
+                                            Hint(
+                                                root|aast-output/basic_stmt.hack(11:27-33),
+                                                Happly(
+                                                    Id(root|aast-output/basic_stmt.hack(11:27-33), "string"),
+                                                    [],
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                    name: SFlitStr(
+                                        (
+                                            root|aast-output/basic_stmt.hack(11:17-22),
+                                            "bar",
+                                        ),
+                                    ),
+                                },
+                            ],
+                        },
+                    ),
+                ),
+                user_attributes: UserAttributes(
+                    [],
+                ),
+                file_attributes: [],
+                mode: Mstrict,
+                vis: Transparent,
+                namespace: Env {
+                    ns_uses: {
+                        "Rx": "HH\\Rx",
+                    },
+                    class_uses: {
+                        "AnyArray": "HH\\AnyArray",
+                        "AsyncFunctionWaitHandle": "HH\\AsyncFunctionWaitHandle",
+                        "AsyncGenerator": "HH\\AsyncGenerator",
+                        "AsyncGeneratorWaitHandle": "HH\\AsyncGeneratorWaitHandle",
+                        "AsyncIterator": "HH\\AsyncIterator",
+                        "AsyncKeyedIterator": "HH\\AsyncKeyedIterator",
+                        "AwaitAllWaitHandle": "HH\\AwaitAllWaitHandle",
+                        "Awaitable": "HH\\Awaitable",
+                        "Collection": "HH\\Collection",
+                        "ConcurrentWaitHandle": "HH\\ConcurrentWaitHandle",
+                        "ConditionWaitHandle": "HH\\ConditionWaitHandle",
+                        "Container": "HH\\Container",
+                        "ExternalThreadEventWaitHandle": "HH\\ExternalThreadEventWaitHandle",
+                        "IMemoizeParam": "HH\\IMemoizeParam",
+                        "ImmMap": "HH\\ImmMap",
+                        "ImmSet": "HH\\ImmSet",
+                        "ImmVector": "HH\\ImmVector",
+                        "InvariantException": "HH\\InvariantException",
+                        "Iterable": "HH\\Iterable",
+                        "Iterator": "HH\\Iterator",
+                        "KeyedContainer": "HH\\KeyedContainer",
+                        "KeyedIterable": "HH\\KeyedIterable",
+                        "KeyedIterator": "HH\\KeyedIterator",
+                        "KeyedTraversable": "HH\\KeyedTraversable",
+                        "Map": "HH\\Map",
+                        "ObjprofObjectStats": "HH\\ObjprofObjectStats",
+                        "ObjprofPathsStats": "HH\\ObjprofPathsStats",
+                        "ObjprofStringStats": "HH\\ObjprofStringStats",
+                        "Pair": "HH\\Pair",
+                        "RescheduleWaitHandle": "HH\\RescheduleWaitHandle",
+                        "ResumableWaitHandle": "HH\\ResumableWaitHandle",
+                        "Set": "HH\\Set",
+                        "Shapes": "HH\\Shapes",
+                        "SleepWaitHandle": "HH\\SleepWaitHandle",
+                        "StaticWaitHandle": "HH\\StaticWaitHandle",
+                        "Traversable": "HH\\Traversable",
+                        "TypeStructure": "HH\\TypeStructure",
+                        "TypeStructureKind": "HH\\TypeStructureKind",
+                        "UNSAFESingletonMemoizeParam": "HH\\UNSAFESingletonMemoizeParam",
+                        "Vector": "HH\\Vector",
+                        "WaitableWaitHandle": "HH\\WaitableWaitHandle",
+                        "XenonSample": "HH\\XenonSample",
+                        "classname": "HH\\classname",
+                        "darray": "HH\\darray",
+                        "dict": "HH\\dict",
+                        "keyset": "HH\\keyset",
+                        "supportdyn": "HH\\supportdyn",
+                        "typename": "HH\\typename",
+                        "varray": "HH\\varray",
+                        "varray_or_darray": "HH\\varray_or_darray",
+                        "vec": "HH\\vec",
+                        "vec_or_dict": "HH\\vec_or_dict",
+                    },
+                    fun_uses: {
+                        "asio_get_current_context_idx": "HH\\asio_get_current_context_idx",
+                        "asio_get_running": "HH\\asio_get_running",
+                        "asio_get_running_in_context": "HH\\asio_get_running_in_context",
+                        "class_meth": "HH\\class_meth",
+                        "darray": "HH\\darray",
+                        "dict": "HH\\dict",
+                        "fun": "HH\\fun",
+                        "heapgraph_create": "HH\\heapgraph_create",
+                        "heapgraph_dfs_edges": "HH\\heapgraph_dfs_edges",
+                        "heapgraph_dfs_nodes": "HH\\heapgraph_dfs_nodes",
+                        "heapgraph_edge": "HH\\heapgraph_edge",
+                        "heapgraph_foreach_edge": "HH\\heapgraph_foreach_edge",
+                        "heapgraph_foreach_node": "HH\\heapgraph_foreach_node",
+                        "heapgraph_foreach_root": "HH\\heapgraph_foreach_root",
+                        "heapgraph_node": "HH\\heapgraph_node",
+                        "heapgraph_node_in_edges": "HH\\heapgraph_node_in_edges",
+                        "heapgraph_node_out_edges": "HH\\heapgraph_node_out_edges",
+                        "heapgraph_stats": "HH\\heapgraph_stats",
+                        "idx": "HH\\idx",
+                        "idx_readonly": "HH\\idx_readonly",
+                        "inst_meth": "HH\\inst_meth",
+                        "invariant": "HH\\invariant",
+                        "invariant_callback_register": "HH\\invariant_callback_register",
+                        "invariant_violation": "HH\\invariant_violation",
+                        "is_darray": "HH\\is_darray",
+                        "is_dict": "HH\\is_dict",
+                        "is_keyset": "HH\\is_keyset",
+                        "is_varray": "HH\\is_varray",
+                        "is_vec": "HH\\is_vec",
+                        "keyset": "HH\\keyset",
+                        "meth_caller": "HH\\meth_caller",
+                        "objprof_get_data": "HH\\objprof_get_data",
+                        "objprof_get_data_extended": "HH\\objprof_get_data_extended",
+                        "objprof_get_paths": "HH\\objprof_get_paths",
+                        "package_exists": "HH\\package_exists",
+                        "server_warmup_status": "HH\\server_warmup_status",
+                        "thread_mark_stack": "HH\\thread_mark_stack",
+                        "thread_memory_stats": "HH\\thread_memory_stats",
+                        "type_structure": "HH\\type_structure",
+                        "type_structure_for_alias": "HH\\type_structure_for_alias",
+                        "varray": "HH\\varray",
+                        "vec": "HH\\vec",
+                        "xenon_get_data": "HH\\xenon_get_data",
+                    },
+                    const_uses: {},
+                    name: None,
+                    is_codegen: false,
+                    disable_xhp_element_mangling: false,
+                },
+                span: root|aast-output/basic_stmt.hack(11:0-35),
+                emit_id: None,
+                is_ctx: false,
+                internal: false,
+                module: None,
+                docs_url: None,
+                doc_comment: None,
+            },
+        ),
         Stmt(
             Stmt(
-                root|aast-output/basic_stmt.hack(1:0-10),
+                root|aast-output/basic_stmt.hack(12:0-27),
                 Expr(
                     Expr(
                         (),
-                        root|aast-output/basic_stmt.hack(1:0-9),
+                        root|aast-output/basic_stmt.hack(12:0-26),
                         Binop(
                             Binop {
                                 bop: Eq(
@@ -14,22 +175,38 @@ Program(
                                 ),
                                 lhs: Expr(
                                     (),
-                                    root|aast-output/basic_stmt.hack(1:0-5),
+                                    root|aast-output/basic_stmt.hack(12:0-2),
                                     Lvar(
                                         Lid(
-                                            root|aast-output/basic_stmt.hack(1:0-5),
+                                            root|aast-output/basic_stmt.hack(12:0-2),
                                             (
                                                 0,
-                                                "$test",
+                                                "$x",
                                             ),
                                         ),
                                     ),
                                 ),
                                 rhs: Expr(
                                     (),
-                                    root|aast-output/basic_stmt.hack(1:8-9),
-                                    Int(
-                                        "1",
+                                    root|aast-output/basic_stmt.hack(12:5-26),
+                                    Shape(
+                                        [
+                                            (
+                                                SFlitStr(
+                                                    (
+                                                        root|aast-output/basic_stmt.hack(12:11-16),
+                                                        "bar",
+                                                    ),
+                                                ),
+                                                Expr(
+                                                    (),
+                                                    root|aast-output/basic_stmt.hack(12:20-25),
+                                                    String(
+                                                        "baz",
+                                                    ),
+                                                ),
+                                            ),
+                                        ],
                                     ),
                                 ),
                             },
@@ -40,32 +217,51 @@ Program(
         ),
         Stmt(
             Stmt(
-                root|aast-output/basic_stmt.hack(2:0-12),
-                If(
-                    (
-                        Expr(
-                            (),
-                            root|aast-output/basic_stmt.hack(2:4-9),
-                            Lvar(
-                                Lid(
-                                    root|aast-output/basic_stmt.hack(2:4-9),
-                                    (
-                                        0,
-                                        "$test",
+                root|aast-output/basic_stmt.hack(13:0-26),
+                Expr(
+                    Expr(
+                        (),
+                        root|aast-output/basic_stmt.hack(13:0-25),
+                        Binop(
+                            Binop {
+                                bop: Eq(
+                                    None,
+                                ),
+                                lhs: Expr(
+                                    (),
+                                    root|aast-output/basic_stmt.hack(13:0-2),
+                                    Lvar(
+                                        Lid(
+                                            root|aast-output/basic_stmt.hack(13:0-2),
+                                            (
+                                                0,
+                                                "$x",
+                                            ),
+                                        ),
                                     ),
                                 ),
-                            ),
-                        ),
-                        Block(
-                            [],
-                        ),
-                        Block(
-                            [
-                                Stmt(
-                                    Pos::NONE,
-                                    Noop,
+                                rhs: Expr(
+                                    (),
+                                    root|aast-output/basic_stmt.hack(13:5-25),
+                                    Shape(
+                                        [
+                                            (
+                                                SFlitStr(
+                                                    (
+                                                        root|aast-output/basic_stmt.hack(13:11-16),
+                                                        "bar",
+                                                    ),
+                                                ),
+                                                Expr(
+                                                    (),
+                                                    root|aast-output/basic_stmt.hack(13:20-24),
+                                                    Null,
+                                                ),
+                                            ),
+                                        ],
+                                    ),
                                 ),
-                            ],
+                            },
                         ),
                     ),
                 ),
