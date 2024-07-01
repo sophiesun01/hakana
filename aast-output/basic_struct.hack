@@ -4,12 +4,13 @@ class Point {
   public float $y;
 
   // Constructor
+
   public function __construct(float $x, float $y) {
     $this->x = $x;
     $this->y = $y;
   }
 
-  // Method to print the point
+  // // Method to print the point
   public function print(): void {
     echo "Point: (" . $this->x . ", " . $this->y . ")\n";
   }

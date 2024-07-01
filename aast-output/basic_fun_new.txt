@@ -4,40 +4,68 @@
     {
       "kind": "FunDef",
       "name": "addTwoNumbers",
-      "doc_comment": "Testing 123",
       "child": {
         "kind": "Fun",
         "span": {
           "kind": "Pos",
           "file": "root|aast-output/basic_fun.hack",
           "startLine": 2,
-          "endLine": 6
+          "startBol": 20,
+          "startOffset": 20,
+          "endLine": 6,
+          "endBol": 90,
+          "endOffset": 90
         },
         "ret": {
           "kind": "Hint",
           "type": "Apply",
-          "name": "int"
+          "name": "int",
+          "hints": []
         },
         "params": [
           {
-            "kind": "FuncParam",
+            "kind": "FunParam",
             "name": "$a",
-            "type": {
+            "type_hint": {
               "kind": "Hint",
               "type": "Apply",
-              "name": "int"
+              "name": "int",
+              "hints": []
             },
-            "visibility": "None"
+            "pos": {
+              "kind": "Pos",
+              "file": "root|aast-output/basic_fun.hack",
+              "startLine": 2,
+              "startBol": 20,
+              "startOffset": 47,
+              "endLine": 2,
+              "endBol": 20,
+              "endOffset": 49
+            },
+            "expr": null,
+            "visibility": "Unknown"
           },
           {
-            "kind": "FuncParam",
+            "kind": "FunParam",
             "name": "$b",
-            "type": {
+            "type_hint": {
               "kind": "Hint",
               "type": "Apply",
-              "name": "int"
+              "name": "int",
+              "hints": []
             },
-            "visibility": "None"
+            "pos": {
+              "kind": "Pos",
+              "file": "root|aast-output/basic_fun.hack",
+              "startLine": 2,
+              "startBol": 20,
+              "startOffset": 55,
+              "endLine": 2,
+              "endBol": 20,
+              "endOffset": 57
+            },
+            "expr": null,
+            "visibility": "Unknown"
           }
         ],
         "body": {
@@ -47,29 +75,12 @@
             "stmts": [
               {
                 "kind": "Stmt",
-                "type": "Return",
-                "stmt": {
-                  "kind": "Expr",
-                  "type": "Binop",
-                  "expr": {
-                    "kind": "Binop",
-                    "bop": "Plus",
-                    "lhs": {
-                      "kind": "Expr",
-                      "type": "LocalVar",
-                      "expr": "$a"
-                    },
-                    "rhs": {
-                      "kind": "Expr",
-                      "type": "LocalVar",
-                      "expr": "$b"
-                    }
-                  }
-                }
+                "type": "Noop"
               }
             ]
           }
-        }
+        },
+        "doc_comment": null
       }
     }
   ]

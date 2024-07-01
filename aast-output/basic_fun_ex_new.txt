@@ -16,8 +16,9 @@
             "expr": "$a"
           },
           "rhs": {
-            "kind": "Vec",
+            "kind": "Expr",
             "type": "ValCollection",
+            "VcKind": "Vec",
             "expr": [
               {
                 "kind": "Expr",
@@ -73,13 +74,51 @@
       "doc_comment": "Testing 123",
       "child": {
         "kind": "Fun",
-        "ret": "Type Test",
+        "span": {
+          "kind": "Pos",
+          "file": "root|aast-output/basic_fun_ex.hack",
+          "startLine": 76,
+          "startBol": 970,
+          "startOffset": 970,
+          "endLine": 86,
+          "endBol": 1076,
+          "endOffset": 1076
+        },
+        "ret": {
+          "kind": "Hint",
+          "type": "Apply",
+          "name": "arraykey",
+          "hints": []
+        },
         "params": [
           {
             "kind": "FuncParam",
             "name": "$a",
-            "type": "Type Test",
-            "visibility": null
+            "type_hint": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "vec",
+              "hints": [
+                {
+                  "kind": "Hint",
+                  "type": "Apply",
+                  "name": "int",
+                  "hints": []
+                }
+              ]
+            },
+            "pos": {
+              "kind": "Pos",
+              "file": "root|aast-output/basic_fun_ex.hack",
+              "startLine": 76,
+              "startBol": 970,
+              "startOffset": 992,
+              "endLine": 76,
+              "endBol": 970,
+              "endOffset": 994
+            },
+            "expr": null,
+            "visibility": "None"
           }
         ],
         "body": {

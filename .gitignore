@@ -22,3 +22,7 @@ Cargo.lock
 .hakana_cache
 */.hakana_cache
 tests/**/*/actual.txt
+node_modules/
+package-lock.json
+package.json
+.gitignore

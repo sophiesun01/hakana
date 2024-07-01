@@ -2,44 +2,6 @@ Program(
     [
         Stmt(
             Stmt(
-                root|aast-output/basic_fun_ex.hack(53:0-13),
-                Expr(
-                    Expr(
-                        (),
-                        root|aast-output/basic_fun_ex.hack(53:0-12),
-                        Binop(
-                            Binop {
-                                bop: Eq(
-                                    None,
-                                ),
-                                lhs: Expr(
-                                    (),
-                                    root|aast-output/basic_fun_ex.hack(53:0-2),
-                                    Lvar(
-                                        Lid(
-                                            root|aast-output/basic_fun_ex.hack(53:0-2),
-                                            (
-                                                0,
-                                                "$b",
-                                            ),
-                                        ),
-                                    ),
-                                ),
-                                rhs: Expr(
-                                    (),
-                                    root|aast-output/basic_fun_ex.hack(53:5-12),
-                                    String(
-                                        "hello",
-                                    ),
-                                ),
-                            },
-                        ),
-                    ),
-                ),
-            ),
-        ),
-        Stmt(
-            Stmt(
                 root|aast-output/basic_fun_ex.hack(72:0-16),
                 Expr(
                     Expr(

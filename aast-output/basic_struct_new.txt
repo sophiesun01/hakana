@@ -2,134 +2,443 @@
   "kind": "Program",
   "definitions": [
     {
-      "kind": "Class",
-      "name": "Point",
-      "class_kind": {
-        "kind": "Class",
-        "abstraction": "Concrete"
-      },
-      "vars": [
-        {
-          "kind": "ClassVar",
-          "abstract": false,
-          "readonly": false,
-          "visibility": "public",
-          "type": {
-            "kind": "TypeHint",
-            "child": {
-              "kind": "Hint",
-              "type": "Apply",
-              "name": "float"
-            }
-          },
-          "id": "x",
-          "is_static": false
+      "kind": "FunDef",
+      "name": "main",
+      "child": {
+        "kind": "Fun",
+        "span": {
+          "kind": "Pos",
+          "file": "root|aast-output/basic_struct.hack",
+          "startLine": 19,
+          "startBol": 317,
+          "startOffset": 317,
+          "endLine": 27,
+          "endBol": 471,
+          "endOffset": 471
         },
-        {
-          "kind": "ClassVar",
-          "abstract": false,
-          "readonly": false,
-          "visibility": "public",
-          "type": {
-            "kind": "TypeHint",
-            "child": {
-              "kind": "Hint",
-              "type": "Apply",
-              "name": "float"
-            }
+        "ret": {
+          "kind": "Class",
+          "name": "Point",
+          "span": {
+            "kind": "Pos",
+            "file": "root|aast-output/basic_struct.hack",
+            "startLine": 2,
+            "startBol": 18,
+            "startOffset": 18,
+            "endLine": 17,
+            "endBol": 314,
+            "endOffset": 315
           },
-          "id": "y",
-          "is_static": false
-        }
-      ],
-      "methods": [
-        {
-          "kind": "Method",
-          "name": "print",
-          "params": [],
-          "visibility": "public",
-          "is_final": false,
-          "is_abstract": false,
-          "is_static": false,
+          "class_kind": "ConcreteClass",
+          "uses": [],
+          "extends": [],
+          "implements": [],
+          "where_constraints": [],
+          "vars": [
+            {
+              "kind": "ClassVar",
+              "abstract": false,
+              "readonly": false,
+              "visibility": "Public",
+              "type_hint": {
+                "kind": "Hint",
+                "type": "Apply",
+                "name": "float",
+                "hints": []
+              },
+              "name": "x",
+              "span": {
+                "kind": "Pos",
+                "file": "root|aast-output/basic_struct.hack",
+                "startLine": 3,
+                "startBol": 32,
+                "startOffset": 47,
+                "endLine": 3,
+                "endBol": 32,
+                "endOffset": 49
+              },
+              "doc_comment": null,
+              "is_static": false
+            },
+            {
+              "kind": "ClassVar",
+              "abstract": false,
+              "readonly": false,
+              "visibility": "Public",
+              "type_hint": {
+                "kind": "Hint",
+                "type": "Apply",
+                "name": "float",
+                "hints": []
+              },
+              "name": "y",
+              "span": {
+                "kind": "Pos",
+                "file": "root|aast-output/basic_struct.hack",
+                "startLine": 4,
+                "startBol": 51,
+                "startOffset": 66,
+                "endLine": 4,
+                "endBol": 51,
+                "endOffset": 68
+              },
+              "doc_comment": null,
+              "is_static": false
+            }
+          ],
+          "methods": [
+            {
+              "kind": "Method",
+              "name": "__construct",
+              "span": {
+                "kind": "Pos",
+                "file": "root|aast-output/basic_struct.hack",
+                "startLine": 8,
+                "startBol": 89,
+                "startOffset": 107,
+                "endLine": 8,
+                "endBol": 89,
+                "endOffset": 118
+              },
+              "where_constraints": [],
+              "params": [
+                {
+                  "kind": "FunParam",
+                  "name": "$x",
+                  "type_hint": {
+                    "kind": "Hint",
+                    "type": "Apply",
+                    "name": "float",
+                    "hints": []
+                  },
+                  "pos": {
+                    "kind": "Pos",
+                    "file": "root|aast-output/basic_struct.hack",
+                    "startLine": 8,
+                    "startBol": 89,
+                    "startOffset": 125,
+                    "endLine": 8,
+                    "endBol": 89,
+                    "endOffset": 127
+                  },
+                  "expr": null,
+                  "visibility": "Unknown"
+                },
+                {
+                  "kind": "FunParam",
+                  "name": "$y",
+                  "type_hint": {
+                    "kind": "Hint",
+                    "type": "Apply",
+                    "name": "float",
+                    "hints": []
+                  },
+                  "pos": {
+                    "kind": "Pos",
+                    "file": "root|aast-output/basic_struct.hack",
+                    "startLine": 8,
+                    "startBol": 89,
+                    "startOffset": 135,
+                    "endLine": 8,
+                    "endBol": 89,
+                    "endOffset": 137
+                  },
+                  "expr": null,
+                  "visibility": "Unknown"
+                }
+              ],
+              "visibility": "Public",
+              "is_final": false,
+              "is_abstract": false,
+              "is_static": false,
+              "body": {
+                "kind": "FuncBody",
+                "body": {
+                  "kind": "Block",
+                  "stmts": [
+                    {
+                      "kind": "Stmt",
+                      "type": "Expr",
+                      "stmt": {
+                        "kind": "Expr",
+                        "type": "Binop",
+                        "expr": {
+                          "kind": "Binop",
+                          "bop": "Eq",
+                          "lhs": {
+                            "kind": "Expr",
+                            "type": "ObjGet",
+                            "expr": [
+                              {
+                                "kind": "Expr",
+                                "type": "LocalVar",
+                                "expr": "$this"
+                              },
+                              {
+                                "kind": "Expr",
+                                "type": "Id",
+                                "expr": "x"
+                              }
+                            ]
+                          },
+                          "rhs": {
+                            "kind": "Expr",
+                            "type": "LocalVar",
+                            "expr": "$x"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "kind": "Stmt",
+                      "type": "Expr",
+                      "stmt": {
+                        "kind": "Expr",
+                        "type": "Binop",
+                        "expr": {
+                          "kind": "Binop",
+                          "bop": "Eq",
+                          "lhs": {
+                            "kind": "Expr",
+                            "type": "ObjGet",
+                            "expr": [
+                              {
+                                "kind": "Expr",
+                                "type": "LocalVar",
+                                "expr": "$this"
+                              },
+                              {
+                                "kind": "Expr",
+                                "type": "Id",
+                                "expr": "y"
+                              }
+                            ]
+                          },
+                          "rhs": {
+                            "kind": "Expr",
+                            "type": "LocalVar",
+                            "expr": "$y"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "ret": "None",
+              "doc_comment": null
+            },
+            {
+              "kind": "Method",
+              "name": "print",
+              "span": {
+                "kind": "Pos",
+                "file": "root|aast-output/basic_struct.hack",
+                "startLine": 14,
+                "startBol": 218,
+                "startOffset": 236,
+                "endLine": 14,
+                "endBol": 218,
+                "endOffset": 241
+              },
+              "where_constraints": [],
+              "params": [],
+              "visibility": "Public",
+              "is_final": false,
+              "is_abstract": false,
+              "is_static": false,
+              "body": {
+                "kind": "FuncBody",
+                "body": {
+                  "kind": "Block",
+                  "stmts": [
+                    {
+                      "kind": "Stmt",
+                      "type": "Expr",
+                      "stmt": {
+                        "kind": "Expr",
+                        "type": "Call",
+                        "expr": {
+                          "kind": "CallExpr",
+                          "func": {
+                            "kind": "Expr",
+                            "type": "Id",
+                            "expr": "echo"
+                          },
+                          "args": [
+                            {
+                              "kind": "Expr",
+                              "type": "Binop",
+                              "expr": {
+                                "kind": "Binop",
+                                "bop": "Dot",
+                                "lhs": {
+                                  "kind": "Expr",
+                                  "type": "Binop",
+                                  "expr": {
+                                    "kind": "Binop",
+                                    "bop": "Dot",
+                                    "lhs": {
+                                      "kind": "Expr",
+                                      "type": "Binop",
+                                      "expr": {
+                                        "kind": "Binop",
+                                        "bop": "Dot",
+                                        "lhs": {
+                                          "kind": "Expr",
+                                          "type": "Binop",
+                                          "expr": {
+                                            "kind": "Binop",
+                                            "bop": "Dot",
+                                            "lhs": {
+                                              "kind": "Expr",
+                                              "type": "String",
+                                              "expr": "Point: ("
+                                            },
+                                            "rhs": {
+                                              "kind": "Expr",
+                                              "type": "ObjGet",
+                                              "expr": [
+                                                {
+                                                  "kind": "Expr",
+                                                  "type": "LocalVar",
+                                                  "expr": "$this"
+                                                },
+                                                {
+                                                  "kind": "Expr",
+                                                  "type": "Id",
+                                                  "expr": "x"
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        },
+                                        "rhs": {
+                                          "kind": "Expr",
+                                          "type": "String",
+                                          "expr": ", "
+                                        }
+                                      }
+                                    },
+                                    "rhs": {
+                                      "kind": "Expr",
+                                      "type": "ObjGet",
+                                      "expr": [
+                                        {
+                                          "kind": "Expr",
+                                          "type": "LocalVar",
+                                          "expr": "$this"
+                                        },
+                                        {
+                                          "kind": "Expr",
+                                          "type": "Id",
+                                          "expr": "y"
+                                        }
+                                      ]
+                                    }
+                                  }
+                                },
+                                "rhs": {
+                                  "kind": "Expr",
+                                  "type": "String",
+                                  "expr": ")\n"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "ret": {
+                "kind": "Hint",
+                "type": "Apply",
+                "name": "void",
+                "hints": []
+              },
+              "doc_comment": null
+            }
+          ],
+          "doc_comment": null
+        },
+        "params": [],
+        "body": {
+          "kind": "FuncBody",
           "body": {
-            "kind": "FuncBody",
-            "children": [
+            "kind": "Block",
+            "stmts": [
               {
                 "kind": "Stmt",
-                "type": {
+                "type": "Expr",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Eq",
+                    "lhs": {
+                      "kind": "Hint",
+                      "type": "Apply",
+                      "name": "void",
+                      "hints": []
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "classId": {
+                        "kind": "Expr",
+                        "type": "LocalVar",
+                        "expr": "$point"
+                      },
+                      "exprs": [
+                        {
+                          "kind": "Expr",
+                          "type": "Float",
+                          "expr": "1.0"
+                        },
+                        {
+                          "kind": "Expr",
+                          "type": "Float",
+                          "expr": "2.0"
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "Stmt",
+                "type": "Expr",
+                "stmt": {
                   "kind": "Expr",
                   "type": "Call",
                   "expr": {
                     "kind": "CallExpr",
                     "func": {
                       "kind": "Expr",
-                      "type": "Id",
-                      "id": "echo"
+                      "type": "ObjGet",
+                      "expr": [
+                        {
+                          "kind": "Expr",
+                          "type": "LocalVar",
+                          "expr": "$point"
+                        },
+                        {
+                          "kind": "Expr",
+                          "type": "Id",
+                          "expr": "print"
+                        }
+                      ]
                     },
-                    "targs": []
+                    "args": []
                   }
                 }
               }
             ]
-          },
-          "ret": {
-            "kind": "TypeHint",
-            "child": {
-              "kind": "Hint",
-              "type": "Apply",
-              "name": "void"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "kind": "FunDef",
-      "name": "main",
-      "doc_comment": "Testing 123",
-      "child": {
-        "kind": "Fun",
-        "ret": {
-          "kind": "TypeHint",
-          "child": {
-            "kind": "Hint",
-            "type": "Apply",
-            "name": "void"
           }
         },
-        "params": [],
-        "body": {
-          "kind": "FuncBody",
-          "children": [
-            {
-              "kind": "Stmt",
-              "type": {
-                "kind": "Expr",
-                "type": "Call",
-                "expr": {
-                  "kind": "CallExpr",
-                  "func": {
-                    "kind": "Expr",
-                    "type": "ObjGet",
-                    "expr": [
-                      {
-                        "kind": "Expr",
-                        "type": "LocalVar",
-                        "name": "$point"
-                      },
-                      {
-                        "kind": "Expr",
-                        "type": "Id",
-                        "id": "print"
-                      }
-                    ]
-                  },
-                  "targs": []
-                }
-              }
-            }
-          ]
-        }
+        "doc_comment": null
       }
     }
   ]

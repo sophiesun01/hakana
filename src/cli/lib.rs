@@ -1472,32 +1472,6 @@ fn do_analysis(
     }
 }
 
-// fn do_aast(
-//     sub_matches: &clap::ArgMatches, 
-//     logger: Logger,
-//     ) -> std::result::Result<(), ParserError> {
-//     let file_path_str = sub_matches.value_of("file").unwrap();
-//     let output_path_str = sub_matches.value_of("output").unwrap();
-//     let show_timing = sub_matches.is_present("show-timing");
-//     if show_timing{
-//         let start_time = SystemTime::now();
-//         let _ = hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str)?;
-//         let end_time = SystemTime::now();
-//         let duration = end_time.duration_since(start_time).unwrap();
-//         println!("Function execution time: {:?}", duration);
-//     }
-//     else{
-//        let result =hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str)?;
-//        let result = match result {
-//             Ok(result) => result,
-//             Err(error) => match error {
-//                 ParserError::NotAHackFile => return Err("Not a Hack file".to_string()),
-//                 ParserError::CannotReadFile => return Err("Cannot read file".to_string()),
-//             },
-//         }
-//     };  
-// }
-
 fn do_aast(
     sub_matches: &clap::ArgMatches, 
     logger: Logger,
@@ -1510,7 +1484,7 @@ fn do_aast(
         let _ = hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str);
         let end_time = SystemTime::now();
         let duration = end_time.duration_since(start_time).unwrap();
-        println!("Function execution time: {:?}", duration);
+        logger.log_sync(&format!("Function execution time: {:?}", duration));
     }
     else{
        let result =hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str);
@@ -1529,7 +1503,7 @@ fn do_new_aast(
         let _ = hakana_workhorse::dump_new_aast_for_path(file_path_str, output_path_str);
         let end_time = SystemTime::now();
         let duration = end_time.duration_since(start_time).unwrap();
-        println!("Function execution time: {:?}", duration);
+        logger.log_sync(&format!("Function execution time: {:?}", duration));
     }
     else{
        let result =hakana_workhorse::dump_new_aast_for_path(file_path_str, output_path_str);

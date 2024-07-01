@@ -2,7 +2,7 @@ Program(
     [
         Class(
             Class_ {
-                span: root|aast-output/basic_struct.hack(2:0-16:1),
+                span: root|aast-output/basic_struct.hack(2:0-17:1),
                 annotation: (),
                 mode: Mstrict,
                 final_: false,
@@ -82,14 +82,14 @@ Program(
                 ],
                 methods: [
                     Method_ {
-                        span: root|aast-output/basic_struct.hack(7:2-10:3),
+                        span: root|aast-output/basic_struct.hack(8:2-11:3),
                         annotation: (),
                         final_: false,
                         abstract_: false,
                         static_: false,
                         readonly_this: false,
                         visibility: Public,
-                        name: Id(root|aast-output/basic_struct.hack(7:18-29), "__construct"),
+                        name: Id(root|aast-output/basic_struct.hack(8:18-29), "__construct"),
                         tparams: [],
                         where_constraints: [],
                         params: [
@@ -99,16 +99,16 @@ Program(
                                     (),
                                     Some(
                                         Hint(
-                                            root|aast-output/basic_struct.hack(7:30-35),
+                                            root|aast-output/basic_struct.hack(8:30-35),
                                             Happly(
-                                                Id(root|aast-output/basic_struct.hack(7:30-35), "float"),
+                                                Id(root|aast-output/basic_struct.hack(8:30-35), "float"),
                                                 [],
                                             ),
                                         ),
                                     ),
                                 ),
                                 is_variadic: false,
-                                pos: root|aast-output/basic_struct.hack(7:36-38),
+                                pos: root|aast-output/basic_struct.hack(8:36-38),
                                 name: "$x",
                                 expr: None,
                                 readonly: None,
@@ -124,16 +124,16 @@ Program(
                                     (),
                                     Some(
                                         Hint(
-                                            root|aast-output/basic_struct.hack(7:40-45),
+                                            root|aast-output/basic_struct.hack(8:40-45),
                                             Happly(
-                                                Id(root|aast-output/basic_struct.hack(7:40-45), "float"),
+                                                Id(root|aast-output/basic_struct.hack(8:40-45), "float"),
                                                 [],
                                             ),
                                         ),
                                     ),
                                 ),
                                 is_variadic: false,
-                                pos: root|aast-output/basic_struct.hack(7:46-48),
+                                pos: root|aast-output/basic_struct.hack(8:46-48),
                                 name: "$y",
                                 expr: None,
                                 readonly: None,
@@ -149,65 +149,6 @@ Program(
                         body: FuncBody {
                             fb_ast: Block(
                                 [
-                                    Stmt(
-                                        root|aast-output/basic_struct.hack(8:4-18),
-                                        Expr(
-                                            Expr(
-                                                (),
-                                                root|aast-output/basic_struct.hack(8:4-17),
-                                                Binop(
-                                                    Binop {
-                                                        bop: Eq(
-                                                            None,
-                                                        ),
-                                                        lhs: Expr(
-                                                            (),
-                                                            root|aast-output/basic_struct.hack(8:4-12),
-                                                            ObjGet(
-                                                                (
-                                                                    Expr(
-                                                                        (),
-                                                                        root|aast-output/basic_struct.hack(8:4-9),
-                                                                        Lvar(
-                                                                            Lid(
-                                                                                root|aast-output/basic_struct.hack(8:4-9),
-                                                                                (
-                                                                                    0,
-                                                                                    "$this",
-                                                                                ),
-                                                                            ),
-                                                                        ),
-                                                                    ),
-                                                                    Expr(
-                                                                        (),
-                                                                        root|aast-output/basic_struct.hack(8:11-12),
-                                                                        Id(
-                                                                            Id(root|aast-output/basic_struct.hack(8:11-12), "x"),
-                                                                        ),
-                                                                    ),
-                                                                    OGNullthrows,
-                                                                    IsProp,
-                                                                ),
-                                                            ),
-                                                        ),
-                                                        rhs: Expr(
-                                                            (),
-                                                            root|aast-output/basic_struct.hack(8:15-17),
-                                                            Lvar(
-                                                                Lid(
-                                                                    root|aast-output/basic_struct.hack(8:15-17),
-                                                                    (
-                                                                        0,
-                                                                        "$x",
-                                                                    ),
-                                                                ),
-                                                            ),
-                                                        ),
-                                                    },
-                                                ),
-                                            ),
-                                        ),
-                                    ),
                                     Stmt(
                                         root|aast-output/basic_struct.hack(9:4-18),
                                         Expr(
@@ -241,7 +182,7 @@ Program(
                                                                         (),
                                                                         root|aast-output/basic_struct.hack(9:11-12),
                                                                         Id(
-                                                                            Id(root|aast-output/basic_struct.hack(9:11-12), "y"),
+                                                                            Id(root|aast-output/basic_struct.hack(9:11-12), "x"),
                                                                         ),
                                                                     ),
                                                                     OGNullthrows,
@@ -255,6 +196,65 @@ Program(
                                                             Lvar(
                                                                 Lid(
                                                                     root|aast-output/basic_struct.hack(9:15-17),
+                                                                    (
+                                                                        0,
+                                                                        "$x",
+                                                                    ),
+                                                                ),
+                                                            ),
+                                                        ),
+                                                    },
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                    Stmt(
+                                        root|aast-output/basic_struct.hack(10:4-18),
+                                        Expr(
+                                            Expr(
+                                                (),
+                                                root|aast-output/basic_struct.hack(10:4-17),
+                                                Binop(
+                                                    Binop {
+                                                        bop: Eq(
+                                                            None,
+                                                        ),
+                                                        lhs: Expr(
+                                                            (),
+                                                            root|aast-output/basic_struct.hack(10:4-12),
+                                                            ObjGet(
+                                                                (
+                                                                    Expr(
+                                                                        (),
+                                                                        root|aast-output/basic_struct.hack(10:4-9),
+                                                                        Lvar(
+                                                                            Lid(
+                                                                                root|aast-output/basic_struct.hack(10:4-9),
+                                                                                (
+                                                                                    0,
+                                                                                    "$this",
+                                                                                ),
+                                                                            ),
+                                                                        ),
+                                                                    ),
+                                                                    Expr(
+                                                                        (),
+                                                                        root|aast-output/basic_struct.hack(10:11-12),
+                                                                        Id(
+                                                                            Id(root|aast-output/basic_struct.hack(10:11-12), "y"),
+                                                                        ),
+                                                                    ),
+                                                                    OGNullthrows,
+                                                                    IsProp,
+                                                                ),
+                                                            ),
+                                                        ),
+                                                        rhs: Expr(
+                                                            (),
+                                                            root|aast-output/basic_struct.hack(10:15-17),
+                                                            Lvar(
+                                                                Lid(
+                                                                    root|aast-output/basic_struct.hack(10:15-17),
                                                                     (
                                                                         0,
                                                                         "$y",
@@ -283,14 +283,14 @@ Program(
                         doc_comment: None,
                     },
                     Method_ {
-                        span: root|aast-output/basic_struct.hack(13:2-15:3),
+                        span: root|aast-output/basic_struct.hack(14:2-16:3),
                         annotation: (),
                         final_: false,
                         abstract_: false,
                         static_: false,
                         readonly_this: false,
                         visibility: Public,
-                        name: Id(root|aast-output/basic_struct.hack(13:18-23), "print"),
+                        name: Id(root|aast-output/basic_struct.hack(14:18-23), "print"),
                         tparams: [],
                         where_constraints: [],
                         params: [],
@@ -300,18 +300,18 @@ Program(
                             fb_ast: Block(
                                 [
                                     Stmt(
-                                        root|aast-output/basic_struct.hack(14:4-57),
+                                        root|aast-output/basic_struct.hack(15:4-57),
                                         Expr(
                                             Expr(
                                                 (),
-                                                root|aast-output/basic_struct.hack(14:4-57),
+                                                root|aast-output/basic_struct.hack(15:4-57),
                                                 Call(
                                                     CallExpr {
                                                         func: Expr(
                                                             (),
-                                                            root|aast-output/basic_struct.hack(14:4-8),
+                                                            root|aast-output/basic_struct.hack(15:4-8),
                                                             Id(
-                                                                Id(root|aast-output/basic_struct.hack(14:4-8), "echo"),
+                                                                Id(root|aast-output/basic_struct.hack(15:4-8), "echo"),
                                                             ),
                                                         ),
                                                         targs: [],
@@ -320,46 +320,46 @@ Program(
                                                                 Pnormal,
                                                                 Expr(
                                                                     (),
-                                                                    root|aast-output/basic_struct.hack(14:9-56),
+                                                                    root|aast-output/basic_struct.hack(15:9-56),
                                                                     Binop(
                                                                         Binop {
                                                                             bop: Dot,
                                                                             lhs: Expr(
                                                                                 (),
-                                                                                root|aast-output/basic_struct.hack(14:9-48),
+                                                                                root|aast-output/basic_struct.hack(15:9-48),
                                                                                 Binop(
                                                                                     Binop {
                                                                                         bop: Dot,
                                                                                         lhs: Expr(
                                                                                             (),
-                                                                                            root|aast-output/basic_struct.hack(14:9-37),
+                                                                                            root|aast-output/basic_struct.hack(15:9-37),
                                                                                             Binop(
                                                                                                 Binop {
                                                                                                     bop: Dot,
                                                                                                     lhs: Expr(
                                                                                                         (),
-                                                                                                        root|aast-output/basic_struct.hack(14:9-30),
+                                                                                                        root|aast-output/basic_struct.hack(15:9-30),
                                                                                                         Binop(
                                                                                                             Binop {
                                                                                                                 bop: Dot,
                                                                                                                 lhs: Expr(
                                                                                                                     (),
-                                                                                                                    root|aast-output/basic_struct.hack(14:9-19),
+                                                                                                                    root|aast-output/basic_struct.hack(15:9-19),
                                                                                                                     String(
                                                                                                                         "Point: (",
                                                                                                                     ),
                                                                                                                 ),
                                                                                                                 rhs: Expr(
                                                                                                                     (),
-                                                                                                                    root|aast-output/basic_struct.hack(14:22-30),
+                                                                                                                    root|aast-output/basic_struct.hack(15:22-30),
                                                                                                                     ObjGet(
                                                                                                                         (
                                                                                                                             Expr(
                                                                                                                                 (),
-                                                                                                                                root|aast-output/basic_struct.hack(14:22-27),
+                                                                                                                                root|aast-output/basic_struct.hack(15:22-27),
                                                                                                                                 Lvar(
                                                                                                                                     Lid(
-                                                                                                                                        root|aast-output/basic_struct.hack(14:22-27),
+                                                                                                                                        root|aast-output/basic_struct.hack(15:22-27),
                                                                                                                                         (
                                                                                                                                             0,
                                                                                                                                             "$this",
@@ -369,9 +369,9 @@ Program(
                                                                                                                             ),
                                                                                                                             Expr(
                                                                                                                                 (),
-                                                                                                                                root|aast-output/basic_struct.hack(14:29-30),
+                                                                                                                                root|aast-output/basic_struct.hack(15:29-30),
                                                                                                                                 Id(
-                                                                                                                                    Id(root|aast-output/basic_struct.hack(14:29-30), "x"),
+                                                                                                                                    Id(root|aast-output/basic_struct.hack(15:29-30), "x"),
                                                                                                                                 ),
                                                                                                                             ),
                                                                                                                             OGNullthrows,
@@ -384,7 +384,7 @@ Program(
                                                                                                     ),
                                                                                                     rhs: Expr(
                                                                                                         (),
-                                                                                                        root|aast-output/basic_struct.hack(14:33-37),
+                                                                                                        root|aast-output/basic_struct.hack(15:33-37),
                                                                                                         String(
                                                                                                             ", ",
                                                                                                         ),
@@ -394,15 +394,15 @@ Program(
                                                                                         ),
                                                                                         rhs: Expr(
                                                                                             (),
-                                                                                            root|aast-output/basic_struct.hack(14:40-48),
+                                                                                            root|aast-output/basic_struct.hack(15:40-48),
                                                                                             ObjGet(
                                                                                                 (
                                                                                                     Expr(
                                                                                                         (),
-                                                                                                        root|aast-output/basic_struct.hack(14:40-45),
+                                                                                                        root|aast-output/basic_struct.hack(15:40-45),
                                                                                                         Lvar(
                                                                                                             Lid(
-                                                                                                                root|aast-output/basic_struct.hack(14:40-45),
+                                                                                                                root|aast-output/basic_struct.hack(15:40-45),
                                                                                                                 (
                                                                                                                     0,
                                                                                                                     "$this",
@@ -412,9 +412,9 @@ Program(
                                                                                                     ),
                                                                                                     Expr(
                                                                                                         (),
-                                                                                                        root|aast-output/basic_struct.hack(14:47-48),
+                                                                                                        root|aast-output/basic_struct.hack(15:47-48),
                                                                                                         Id(
-                                                                                                            Id(root|aast-output/basic_struct.hack(14:47-48), "y"),
+                                                                                                            Id(root|aast-output/basic_struct.hack(15:47-48), "y"),
                                                                                                         ),
                                                                                                     ),
                                                                                                     OGNullthrows,
@@ -427,7 +427,7 @@ Program(
                                                                             ),
                                                                             rhs: Expr(
                                                                                 (),
-                                                                                root|aast-output/basic_struct.hack(14:51-56),
+                                                                                root|aast-output/basic_struct.hack(15:51-56),
                                                                                 String(
                                                                                     ")\n",
                                                                                 ),
@@ -455,9 +455,9 @@ Program(
                             (),
                             Some(
                                 Hint(
-                                    root|aast-output/basic_struct.hack(13:27-31),
+                                    root|aast-output/basic_struct.hack(14:27-31),
                                     Happly(
-                                        Id(root|aast-output/basic_struct.hack(13:27-31), "void"),
+                                        Id(root|aast-output/basic_struct.hack(14:27-31), "void"),
                                         [],
                                     ),
                                 ),
@@ -701,9 +701,9 @@ Program(
                 },
                 file_attributes: [],
                 mode: Mstrict,
-                name: Id(root|aast-output/basic_struct.hack(19:9-13), "main"),
+                name: Id(root|aast-output/basic_struct.hack(20:9-13), "main"),
                 fun: Fun_ {
-                    span: root|aast-output/basic_struct.hack(18:0-26:0),
+                    span: root|aast-output/basic_struct.hack(19:0-27:0),
                     readonly_this: None,
                     annotation: (),
                     readonly_ret: None,
@@ -711,9 +711,9 @@ Program(
                         (),
                         Some(
                             Hint(
-                                root|aast-output/basic_struct.hack(19:17-21),
+                                root|aast-output/basic_struct.hack(20:17-21),
                                 Happly(
-                                    Id(root|aast-output/basic_struct.hack(19:17-21), "void"),
+                                    Id(root|aast-output/basic_struct.hack(20:17-21), "void"),
                                     [],
                                 ),
                             ),
@@ -726,11 +726,11 @@ Program(
                         fb_ast: Block(
                             [
                                 Stmt(
-                                    root|aast-output/basic_struct.hack(21:2-31),
+                                    root|aast-output/basic_struct.hack(22:2-31),
                                     Expr(
                                         Expr(
                                             (),
-                                            root|aast-output/basic_struct.hack(21:2-30),
+                                            root|aast-output/basic_struct.hack(22:2-30),
                                             Binop(
                                                 Binop {
                                                     bop: Eq(
@@ -738,10 +738,10 @@ Program(
                                                     ),
                                                     lhs: Expr(
                                                         (),
-                                                        root|aast-output/basic_struct.hack(21:2-8),
+                                                        root|aast-output/basic_struct.hack(22:2-8),
                                                         Lvar(
                                                             Lid(
-                                                                root|aast-output/basic_struct.hack(21:2-8),
+                                                                root|aast-output/basic_struct.hack(22:2-8),
                                                                 (
                                                                     0,
                                                                     "$point",
@@ -751,18 +751,18 @@ Program(
                                                     ),
                                                     rhs: Expr(
                                                         (),
-                                                        root|aast-output/basic_struct.hack(21:11-30),
+                                                        root|aast-output/basic_struct.hack(22:11-30),
                                                         New(
                                                             (
                                                                 ClassId(
                                                                     (),
-                                                                    root|aast-output/basic_struct.hack(21:11-30),
+                                                                    root|aast-output/basic_struct.hack(22:11-30),
                                                                     CIexpr(
                                                                         Expr(
                                                                             (),
-                                                                            root|aast-output/basic_struct.hack(21:15-20),
+                                                                            root|aast-output/basic_struct.hack(22:15-20),
                                                                             Id(
-                                                                                Id(root|aast-output/basic_struct.hack(21:15-20), "Point"),
+                                                                                Id(root|aast-output/basic_struct.hack(22:15-20), "Point"),
                                                                             ),
                                                                         ),
                                                                     ),
@@ -771,14 +771,14 @@ Program(
                                                                 [
                                                                     Expr(
                                                                         (),
-                                                                        root|aast-output/basic_struct.hack(21:21-24),
+                                                                        root|aast-output/basic_struct.hack(22:21-24),
                                                                         Float(
                                                                             "1.0",
                                                                         ),
                                                                     ),
                                                                     Expr(
                                                                         (),
-                                                                        root|aast-output/basic_struct.hack(21:26-29),
+                                                                        root|aast-output/basic_struct.hack(22:26-29),
                                                                         Float(
                                                                             "2.0",
                                                                         ),
@@ -795,24 +795,24 @@ Program(
                                     ),
                                 ),
                                 Stmt(
-                                    root|aast-output/basic_struct.hack(24:2-18),
+                                    root|aast-output/basic_struct.hack(25:2-18),
                                     Expr(
                                         Expr(
                                             (),
-                                            root|aast-output/basic_struct.hack(24:2-17),
+                                            root|aast-output/basic_struct.hack(25:2-17),
                                             Call(
                                                 CallExpr {
                                                     func: Expr(
                                                         (),
-                                                        root|aast-output/basic_struct.hack(24:2-15),
+                                                        root|aast-output/basic_struct.hack(25:2-15),
                                                         ObjGet(
                                                             (
                                                                 Expr(
                                                                     (),
-                                                                    root|aast-output/basic_struct.hack(24:2-8),
+                                                                    root|aast-output/basic_struct.hack(25:2-8),
                                                                     Lvar(
                                                                         Lid(
-                                                                            root|aast-output/basic_struct.hack(24:2-8),
+                                                                            root|aast-output/basic_struct.hack(25:2-8),
                                                                             (
                                                                                 0,
                                                                                 "$point",
@@ -822,9 +822,9 @@ Program(
                                                                 ),
                                                                 Expr(
                                                                     (),
-                                                                    root|aast-output/basic_struct.hack(24:10-15),
+                                                                    root|aast-output/basic_struct.hack(25:10-15),
                                                                     Id(
-                                                                        Id(root|aast-output/basic_struct.hack(24:10-15), "print"),
+                                                                        Id(root|aast-output/basic_struct.hack(25:10-15), "print"),
                                                                     ),
                                                                 ),
                                                                 OGNullthrows,
@@ -847,7 +847,7 @@ Program(
                     user_attributes: UserAttributes(
                         [
                             UserAttribute {
-                                name: Id(root|aast-output/basic_struct.hack(18:2-14), "__EntryPoint"),
+                                name: Id(root|aast-output/basic_struct.hack(19:2-14), "__EntryPoint"),
                                 params: [],
                             },
                         ],
