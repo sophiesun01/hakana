@@ -3,8 +3,6 @@ use crate::ast_visitors::{Scanner, Context};
 
 use analyzer::analyze_files;
 
-// use ast_visitors::AstJson;
-// use ast_visitors::Context;
 use diff::{mark_safe_symbols_from_diff, CachedAnalysis};
 use file::{FileStatus, VirtualFileSystem};
 use hakana_aast_helper::get_aast_for_path_and_contents;
@@ -24,23 +22,18 @@ use indicatif::ProgressBar;
 
 use oxidized::{
     aast,
-    aast_visitor::{visit}
+    aast_visitor::visit
 };
-use oxidized::ast::Hint_;
-use oxidized::ast::Stmt_;
 use oxidized::scoured_comments::ScouredComments;
 use populator::populate_codebase;
 use rust_embed::RustEmbed;
 use rustc_hash::{FxHashMap, FxHashSet};
 use scanner::{scan_files, ScanFilesResult};
-use serde::{Serialize, Deserialize};
-use serde_json::Value;
-use serde_json::{self, json};
+use serde_json::{self};
 use std::fs;
 use std::io::{self, Write};
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
-use std::collections::VecDeque;
 use tower_lsp::lsp_types::MessageType;
 use tower_lsp::Client;
 use unused_symbols::find_unused_definitions;
@@ -471,65 +464,19 @@ pub fn get_aast_for_path(
     get_aast_for_path_and_contents(file_path, file_path_str, file_contents)
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-struct Program {
-    kind: String,
-    children: Vec<Fun>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-struct Fun {
-    kind: String,
-    doc_comment: String,
-    child: FunDef,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-struct FunDef {
-    pub kind: String,
-    pub name: aast::Sid, //change this into a Name Struct Eventually
-    pub span: aast::Pos,
-    pub params: Vec<FunParam>,
-    pub body: FuncBody,
-    pub ret: Ret
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-struct FunParam {
-    kind: String,
-    name: String,
-    type_hint: TypeHint,
-    is_variadic: aast::IsVariadic,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-struct FuncBody {
-    kind: String,
-    child: Vec<aast::Stmt<(), ()>>
-}
-#[derive(Serialize, Deserialize, Debug)]
-struct Ret {
-    kind: String,
-    type_hint: TypeHint
-}
-#[derive(Serialize, Deserialize, Debug)]
-struct TypeHint {
-    kind: String,
-    value: Hint_
-}
-
 pub fn dump_new_aast_for_path(
     file_path_str: &str,
     output_file_str: &str,
-    ) -> std::result::Result<(), ParserError> {
+    logger: Arc<Logger>,
+    ) -> String{
     
     let (aast, _comments, _idk) = match get_aast_for_path(FilePath(StrId::EMPTY), file_path_str) {
         Ok(aast) => aast,
         Err(err) => {
-            return Err(err);
+            logger.log_sync(&format!("Error in Generating AST {:?}", err));
+            return "AST Error".to_string()
         }
     };
-
 
     let mut scanner = Scanner {
             tree_stack: Vec::<serde_json::Value>::new(),
@@ -545,28 +492,28 @@ pub fn dump_new_aast_for_path(
     let aast_format = scanner.tree;
     
     aast_file.write_all(aast_format.as_bytes()).expect("Unable to write to file");
-    println!("Output saved to: {}", output_file_str);
-    Ok(())
+    logger.log_sync(&format!("Output saved to: {}", output_file_str));
+    aast_format
 }
-
 
 pub fn dump_aast_for_path(
     file_path_str: &str,
     output_file_str: &str,
-    ) -> std::result::Result<(), ParserError> {
+    logger: Arc<Logger>,
+    ) -> String {
     let (aast, _comments, _idk) = match get_aast_for_path(FilePath(StrId::EMPTY), file_path_str) {
         Ok(aast) => aast,
         Err(err) => {
-            return Err(err);
+            logger.log_sync(&format!("Error in Generating AST {:?}", err));
+            return "AST Error".to_string()
         }
     };
     let mut aast_file = fs::File::create(output_file_str).expect("Unable to create file");
     let aast_format = format!("{:#?}", aast);
     aast_file.write_all(aast_format.as_bytes()).expect("Unable to write to file");
-    println!("Output saved to: {}", output_file_str);
-    Ok(Default::default())
+    logger.log_sync(&format!("Output saved to: {}", output_file_str));
+    aast_format
 }
-
 
 fn update_progressbar(percentage: u64, bar: Option<Arc<ProgressBar>>) {
     if let Some(bar) = bar {

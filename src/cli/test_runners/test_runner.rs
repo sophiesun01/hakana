@@ -217,6 +217,14 @@ impl TestRunner {
                 build_checksum,
             );
         }
+  
+        if dir.contains("/ast/") {
+            return self.run_ast_test(
+                dir,
+                logger,
+                test_diagnostics,
+            );
+        }
 
         let cwd = env::current_dir().unwrap().to_str().unwrap().to_string();
 
@@ -418,6 +426,30 @@ impl TestRunner {
                     ("F".to_string(), None, None)
                 }
             }
+        }
+    }
+    fn run_ast_test(
+        &self,
+        dir: String,
+        logger: Arc<Logger>,
+        test_diagnostics: &mut Vec<(String, String)>,
+    ) -> (String, Option<SuccessfulScanData>, Option<AnalysisResult>) {
+        
+        let input_file = format!("{}/input.hack", dir);
+        let output_file = format!("{}/output.txt", dir);
+        let actual_file = format!("{}/actual.txt", dir);
+
+        let output_contents = hakana_workhorse::dump_new_aast_for_path(&input_file, &actual_file, logger);
+        let expected_output_contents = fs::read_to_string(output_file.clone()).unwrap();
+  
+        if output_contents == expected_output_contents {
+            (".".to_string(), None, None)
+        } else {
+            test_diagnostics.push((
+                dir,
+                format!("- {}\n+ {}", expected_output_contents, output_contents),
+            ));
+            ("F".to_string(), None, None)
         }
     }
 

@@ -169,7 +169,7 @@
         "kind": "Fun",
         "span": {
           "kind": "Pos",
-          "file": "root|aast-output/basic_stmt.hack",
+          "file": "root|tests/ast/basic_stmt/input.hack",
           "startLine": 19,
           "startBol": 171,
           "startOffset": 171,
@@ -195,7 +195,7 @@
             },
             "pos": {
               "kind": "Pos",
-              "file": "root|aast-output/basic_stmt.hack",
+              "file": "root|tests/ast/basic_stmt/input.hack",
               "startLine": 19,
               "startBol": 171,
               "startOffset": 188,
@@ -217,7 +217,7 @@
             },
             "pos": {
               "kind": "Pos",
-              "file": "root|aast-output/basic_stmt.hack",
+              "file": "root|tests/ast/basic_stmt/input.hack",
               "startLine": 19,
               "startBol": 171,
               "startOffset": 196,
@@ -323,7 +323,7 @@
         "kind": "Fun",
         "span": {
           "kind": "Pos",
-          "file": "root|aast-output/basic_stmt.hack",
+          "file": "root|tests/ast/basic_stmt/input.hack",
           "startLine": 28,
           "startBol": 272,
           "startOffset": 272,
@@ -349,7 +349,7 @@
             },
             "pos": {
               "kind": "Pos",
-              "file": "root|aast-output/basic_stmt.hack",
+              "file": "root|tests/ast/basic_stmt/input.hack",
               "startLine": 28,
               "startBol": 272,
               "startOffset": 290,
@@ -371,7 +371,7 @@
             },
             "pos": {
               "kind": "Pos",
-              "file": "root|aast-output/basic_stmt.hack",
+              "file": "root|tests/ast/basic_stmt/input.hack",
               "startLine": 28,
               "startBol": 272,
               "startOffset": 298,
@@ -526,7 +526,7 @@
         "kind": "Fun",
         "span": {
           "kind": "Pos",
-          "file": "root|aast-output/basic_stmt.hack",
+          "file": "root|tests/ast/basic_stmt/input.hack",
           "startLine": 40,
           "startBol": 414,
           "startOffset": 414,
@@ -552,7 +552,7 @@
             },
             "pos": {
               "kind": "Pos",
-              "file": "root|aast-output/basic_stmt.hack",
+              "file": "root|tests/ast/basic_stmt/input.hack",
               "startLine": 40,
               "startBol": 414,
               "startOffset": 432,
@@ -574,7 +574,7 @@
             },
             "pos": {
               "kind": "Pos",
-              "file": "root|aast-output/basic_stmt.hack",
+              "file": "root|tests/ast/basic_stmt/input.hack",
               "startLine": 40,
               "startBol": 414,
               "startOffset": 440,
@@ -776,7 +776,7 @@
         "kind": "Fun",
         "span": {
           "kind": "Pos",
-          "file": "root|aast-output/basic_stmt.hack",
+          "file": "root|tests/ast/basic_stmt/input.hack",
           "startLine": 57,
           "startBol": 607,
           "startOffset": 607,
@@ -802,7 +802,7 @@
             },
             "pos": {
               "kind": "Pos",
-              "file": "root|aast-output/basic_stmt.hack",
+              "file": "root|tests/ast/basic_stmt/input.hack",
               "startLine": 57,
               "startBol": 607,
               "startOffset": 625,
@@ -824,7 +824,7 @@
             },
             "pos": {
               "kind": "Pos",
-              "file": "root|aast-output/basic_stmt.hack",
+              "file": "root|tests/ast/basic_stmt/input.hack",
               "startLine": 57,
               "startBol": 607,
               "startOffset": 633,
@@ -1026,7 +1026,7 @@
         "kind": "Fun",
         "span": {
           "kind": "Pos",
-          "file": "root|aast-output/basic_stmt.hack",
+          "file": "root|tests/ast/basic_stmt/input.hack",
           "startLine": 76,
           "startBol": 833,
           "startOffset": 833,
@@ -1059,7 +1059,7 @@
             },
             "pos": {
               "kind": "Pos",
-              "file": "root|aast-output/basic_stmt.hack",
+              "file": "root|tests/ast/basic_stmt/input.hack",
               "startLine": 76,
               "startBol": 833,
               "startOffset": 856,

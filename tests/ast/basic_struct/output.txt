@@ -6,13 +6,13 @@
       "name": "Point",
       "span": {
         "kind": "Pos",
-        "file": "root|aast-output/basic_struct.hack",
+        "file": "root|tests/ast/basic_struct/input.hack",
         "startLine": 2,
         "startBol": 18,
         "startOffset": 18,
         "endLine": 17,
-        "endBol": 311,
-        "endOffset": 312
+        "endBol": 314,
+        "endOffset": 315
       },
       "class_kind": "ConcreteClass",
       "uses": [],
@@ -34,7 +34,7 @@
           "name": "x",
           "span": {
             "kind": "Pos",
-            "file": "root|aast-output/basic_struct.hack",
+            "file": "root|tests/ast/basic_struct/input.hack",
             "startLine": 3,
             "startBol": 32,
             "startOffset": 47,
@@ -60,7 +60,7 @@
           "name": "y",
           "span": {
             "kind": "Pos",
-            "file": "root|aast-output/basic_struct.hack",
+            "file": "root|tests/ast/basic_struct/input.hack",
             "startLine": 4,
             "startBol": 51,
             "startOffset": 66,
@@ -79,7 +79,7 @@
           "name": "__construct",
           "span": {
             "kind": "Pos",
-            "file": "root|aast-output/basic_struct.hack",
+            "file": "root|tests/ast/basic_struct/input.hack",
             "startLine": 8,
             "startBol": 89,
             "startOffset": 107,
@@ -100,7 +100,7 @@
               },
               "pos": {
                 "kind": "Pos",
-                "file": "root|aast-output/basic_struct.hack",
+                "file": "root|tests/ast/basic_struct/input.hack",
                 "startLine": 8,
                 "startBol": 89,
                 "startOffset": 125,
@@ -122,7 +122,7 @@
               },
               "pos": {
                 "kind": "Pos",
-                "file": "root|aast-output/basic_struct.hack",
+                "file": "root|tests/ast/basic_struct/input.hack",
                 "startLine": 8,
                 "startBol": 89,
                 "startOffset": 135,
@@ -220,13 +220,13 @@
           "name": "print",
           "span": {
             "kind": "Pos",
-            "file": "root|aast-output/basic_struct.hack",
+            "file": "root|tests/ast/basic_struct/input.hack",
             "startLine": 14,
-            "startBol": 215,
-            "startOffset": 233,
+            "startBol": 218,
+            "startOffset": 236,
             "endLine": 14,
-            "endBol": 215,
-            "endOffset": 238
+            "endBol": 218,
+            "endOffset": 241
           },
           "where_constraints": [],
           "params": [],
@@ -357,13 +357,13 @@
         "kind": "Fun",
         "span": {
           "kind": "Pos",
-          "file": "root|aast-output/basic_struct.hack",
+          "file": "root|tests/ast/basic_struct/input.hack",
           "startLine": 19,
-          "startBol": 314,
-          "startOffset": 314,
-          "endLine": 26,
-          "endBol": 467,
-          "endOffset": 468
+          "startBol": 317,
+          "startOffset": 317,
+          "endLine": 27,
+          "endBol": 471,
+          "endOffset": 471
         },
         "ret": {
           "kind": "Hint",

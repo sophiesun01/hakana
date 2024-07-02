@@ -18,7 +18,7 @@ use std::io::Write;
 use std::path::Path;
 use std::process::exit;
 use std::sync::Arc;
-use std::time::{SystemTime};
+use std::time::SystemTime;
 use test_runners::test_runner::TestRunner;
 
 pub mod test_runners;
@@ -684,7 +684,7 @@ pub fn init(
             } else {
                 0
             };
-
+            
             let random_seed = if sub_matches.is_present("randomize") {
                 if let Some(val) = sub_matches.value_of("seed").map(|f| f.to_string()) {
                     Some(val.parse::<u64>().unwrap())
@@ -695,7 +695,7 @@ pub fn init(
             } else {
                 None
             };
-
+            
             test_runner.run_test(
                 sub_matches.value_of("TEST").expect("required").to_string(),
                 Arc::new(logger),
@@ -1481,13 +1481,13 @@ fn do_aast(
     let show_timing = sub_matches.is_present("show-timing");
     if show_timing{
         let start_time = SystemTime::now();
-        let _ = hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str);
+        let _ = hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str, Arc::new(logger));
         let end_time = SystemTime::now();
         let duration = end_time.duration_since(start_time).unwrap();
-        logger.log_sync(&format!("Function execution time: {:?}", duration));
+        println!("Function execution time: {:?}", duration);
     }
     else{
-       let result =hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str);
+       let _ = hakana_workhorse::dump_aast_for_path(file_path_str, output_path_str, Arc::new(logger));
     };  
 }
 
@@ -1498,15 +1498,14 @@ fn do_new_aast(
     let file_path_str = sub_matches.value_of("file").unwrap();
     let output_path_str = sub_matches.value_of("output").unwrap();
     let show_timing = sub_matches.is_present("show-timing");
+
+    let start_time = SystemTime::now();
+    let _ = hakana_workhorse::dump_new_aast_for_path(file_path_str, output_path_str, Arc::new(logger));
+    let end_time = SystemTime::now();
+    let duration = end_time.duration_since(start_time).unwrap();
+
     if show_timing{
-        let start_time = SystemTime::now();
-        let _ = hakana_workhorse::dump_new_aast_for_path(file_path_str, output_path_str);
-        let end_time = SystemTime::now();
-        let duration = end_time.duration_since(start_time).unwrap();
-        logger.log_sync(&format!("Function execution time: {:?}", duration));
-    }
-    else{
-       let result =hakana_workhorse::dump_new_aast_for_path(file_path_str, output_path_str);
+        println!("Function execution time: {:?}", duration);
     };  
 }
 

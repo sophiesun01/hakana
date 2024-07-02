@@ -1,22 +1,14 @@
 extern crate json_value_merge;
 
 use std::collections::VecDeque;
-use std::collections::HashMap;
 use oxidized::{
     aast,
     aast_visitor::{AstParams, Node, Visitor},
     ast_defs,
-    aast_defs,
-    file_pos
+    aast_defs
 };
 use serde_json::{self, json};
 use serde_json::Value;
-
-// use crate::oxidized::file_pos::FilePos;
-// use crate::file_pos_large::FilePosLarge;
-// use crate::file_pos_small::FilePosSmall;
-// use crate::pos_span_raw::PosSpanRaw;
-// use crate::pos_span_tiny::PosSpanTiny;
 
 pub(crate) struct Scanner {
     pub tree_stack: Vec<Value>,
@@ -26,19 +18,6 @@ pub(crate) struct Scanner {
 }
 pub(crate) struct Context {
 
-}
-
-fn get_vec(tree_stack: &mut Vec<Value>, kind: &str
-    )-> VecDeque<Value> {
-
-    let mut arr = VecDeque::<Value>::new();
-    while let Some(last) = tree_stack.last() {
-        if last["kind"] != kind {
-            break;
-        }
-        arr.push_front(tree_stack.pop().unwrap());
-    }
-    arr
 }
 
 fn visit_pos(pos: ast_defs::Pos
@@ -64,7 +43,7 @@ let mut arr = VecDeque::new();
 while let Some(last) = tree_stack.last() {
     if last["kind"] != kind || n == 0 {
         if n > 0{
-            println!("Something ain't right {}", kind);
+            // println!("Something ain't right {}", kind);
         }
         break;
     }
@@ -75,26 +54,28 @@ while let Some(last) = tree_stack.last() {
 arr
 }
 
-// fn get_vec_string(tree_stack: &mut Vec<String>, kind: &str
-// )-> VecDeque<String> {
-
-// let mut arr = VecDeque::<String>::new();
-// while let Some(last) = tree_stack.last() {
-//     if last["kind"] != kind {
-//         break;
-//     }
-//     arr.push_front(tree_stack.pop().unwrap());
-// }
-// arr
-// }
-
 
 impl <'ast>Visitor<'ast> for Scanner {
 	type Params = AstParams<Context, ()>;
 	fn object(&mut self) -> &mut dyn Visitor<'ast, Params = Self::Params> {
         self
 	}
-    
+    //Skip
+    fn visit_ex(
+        &mut self,
+        _c: &mut <Self::Params as oxidized::aast_visitor::Params>::Context,
+        _p: &'ast <Self::Params as oxidized::aast_visitor::Params>::Ex,
+    ) -> Result<(), <Self::Params as oxidized::aast_visitor::Params>::Error> {
+        Ok(())
+    }
+    //Skip
+    fn visit_en(
+        &mut self,
+        _c: &mut <Self::Params as oxidized::aast_visitor::Params>::Context,
+        _p: &'ast <Self::Params as oxidized::aast_visitor::Params>::En,
+    ) -> Result<(), <Self::Params as oxidized::aast_visitor::Params>::Error> {
+        Ok(())
+    }
     // Used
     fn visit_abstraction(
         &mut self,
@@ -107,7 +88,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_afield(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::Afield<(), ()>,
+        _p: &'ast aast::Afield<(), ()>,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -117,44 +98,43 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::AsExpr<(), ()>,
     ) -> Result<(), ()> {
-        println!("As Expr");
+        // println!("As Expr");
         let _ = p.recurse(_c, self.object());
-        let mut ae = Value::Null;
-        match p{
-            aast::AsExpr::AsV(e) =>{
-                ae = json!({
+        let ae = match p{
+            aast::AsExpr::AsV(_) =>{
+                json!({
                     "kind": "AsExpr",
                     "type": "AsV",
                     "asExpr": self.tree_stack.pop(),
                 })
             }
-            aast::AsExpr::AsKv(e1, e2) =>{
+            aast::AsExpr::AsKv(_, _) =>{
                 let e2 = self.tree_stack.pop();
                 let e1 = self.tree_stack.pop();
-                ae = json!({
+                json!({
                     "kind": "AsExpr",
                     "type": "AsKv",
                     "asExpr": [e1, e2],
                 })
             }
-            aast::AsExpr::AwaitAsV(p, e) =>{
-                ae = json!({
+            aast::AsExpr::AwaitAsV(_, _) =>{
+                json!({
                     "kind": "AsExpr",
                     "type": "AwaitAsV",
                     "asExpr": self.tree_stack.pop(),
                 })
             }
-            aast::AsExpr::AwaitAsKv(_,_, _) =>{
+            aast::AsExpr::AwaitAsKv(_, _, _) =>{
                 let e2 = self.tree_stack.pop();
                 let e1 = self.tree_stack.pop();
 
-                ae = json!({
+                json!({
                     "kind": "AsExpr",
                     "type": "AwaitAsKv",
                     "asExpr": [e1, e2],
                 })
             }
-        }
+        };
         self.tree_stack.push(ae);
         Ok(())
     }
@@ -180,7 +160,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Binop<(), ()>,
     ) -> Result<(), ()> {
-        println!{"Binop"};
+        // println!{"Binop"};
         let _ = p.recurse(_c, self.object());
         let rhs = self.tree_stack.pop();
         let lhs = self.tree_stack.pop();
@@ -199,7 +179,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Block<(), ()>,
     ) -> Result<(), ()> {
-        println!("Block");
+        // println!("Block");
         let _  = p.recurse(_c, self.object());
         let stmts = get_vec_len(&mut self.tree_stack, "Stmt", p.0.len());
         let b = json!({
@@ -215,7 +195,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast ast_defs::Bop,
     ) -> Result<(), ()> {
-        println!("Bop");
+        // println!("Bop");
         let _ = p.recurse(_c, self.object());
         let bop = match p{
             ast_defs::Bop::Plus => "Plus".to_string(),
@@ -260,7 +240,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::CallExpr<(), ()>,
     ) -> Result<(), ()> {
-        println!("Call Expr");
+        // println!("Call Expr");
         let _ = p.recurse(_c, self.object());
 
         let mut unpacked_arg = Value::Null;
@@ -302,7 +282,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Case<(), ()>,
     ) -> Result<(), ()> {
-        println!("Case");
+        // println!("Case");
         let _ = p.recurse(_c, self.object());
         let block = self.tree_stack.pop();
         let expr = self.tree_stack.pop();
@@ -319,7 +299,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Catch<(), ()>,
     ) -> Result<(), ()> {
-        println!("Catch");
+        // println!("Catch");
         let _ = p.recurse(_c, self.object());
         let c = json!({
             "kind": "Catch",
@@ -343,7 +323,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_class_concrete_typeconst(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::ClassConcreteTypeconst,
+        _p: &'ast aast::ClassConcreteTypeconst,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -370,18 +350,18 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_class_get_expr(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::ClassGetExpr<(), ()>,
+        _p: &'ast aast::ClassGetExpr<(), ()>,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
     }
-    // PLEASE IMPLEMENT EVENTUALLY
+    // USED
     fn visit_class_id(
         &mut self,
         _c: &mut Context,
-        _p: &'ast aast::ClassId<(), ()>,
+        p: &'ast aast::ClassId<(), ()>,
     ) -> Result<(), ()> {
-        // p.recurse(_c, self.object())
+        let _ = p.recurse(_c, self.object());
         Ok(())
     }
     fn visit_class_id_(
@@ -464,17 +444,22 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::ClassVar<(), ()>,
     ) -> Result<(), ()> {
-        println!("Class Var");
+        // println!("Class Var");
         let _ = p.recurse(_c, self.object());
-
+        let mut expr = Value::Null;
+        if p.expr.is_some(){
+            expr = self.tree_stack.pop().unwrap();
+        }
+        let type_hint = self.tree_stack.pop();
         let cv = json!({
             "kind": "ClassVar",
             "abstract": p.abstract_.clone(),
             "readonly": p.readonly.clone(),
             "visibility": self.string_stack.pop(),
-            "type_hint": self.tree_stack.pop(),
+            "type_hint": type_hint,
             "name": p.id.1.clone(),
             "span": visit_pos(p.id.0.clone()),
+            "expr": expr,
             "doc_comment": p.doc_comment.clone(),
             "is_static": p.is_static.clone()
         });
@@ -487,7 +472,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Class_<(), ()>,
     ) -> Result<(), ()> {
-        println!("Class");
+        // println!("Class");
         let _ = p.recurse(_c, self.object());
   
         let methods = get_vec_len(&mut self.tree_stack, "Method", p.methods.len());
@@ -516,81 +501,45 @@ impl <'ast>Visitor<'ast> for Scanner {
         Ok(())
     }
 
-    // pub struct Class_<Ex, En> {
-    //     #[rust_to_ocaml(attr = "transform.opaque")]
-    //     pub span: Pos,
-    //     pub annotation: En,
-    //     #[rust_to_ocaml(attr = "visitors.opaque")]
-    //     #[rust_to_ocaml(attr = "transform.opaque")]
-    //     pub mode: file_info::Mode,
-    //     pub final_: bool,
-    //     pub is_xhp: bool,
-    //     pub has_xhp_keyword: bool,
-    //     #[rust_to_ocaml(attr = "transform.opaque")]
-    //     pub kind: ast_defs::ClassishKind,
-    //     pub name: ClassName,
-    //     /// The type parameters of a class A<T> (T is the parameter)
-    //     #[rust_to_ocaml(attr = "transform.explicit")]
-    //     pub tparams: Vec<Tparam<Ex, En>>,
-    //     #[rust_to_ocaml(attr = "transform.explicit")]
-    //     pub extends: Vec<ClassHint>,
-    //     #[rust_to_ocaml(attr = "transform.explicit")]
-    //     pub uses: Vec<TraitHint>,
-    //     #[rust_to_ocaml(attr   = "transform.explicit")]
-    //     pub xhp_attr_uses: Vec<XhpAttrHint>,
-    //     #[rust_to_ocaml(attr = "transform.explicit")]
-    //     pub reqs: Vec<ClassReq>,
-    //     #[rust_to_ocaml(attr = "transform.explicit")]
-    //     pub implements: Vec<ClassHint>,
-    //     pub where_constraints: Vec<WhereConstraintHint>,
-    //     /// a.k.a properties
-    //     pub vars: Vec<ClassVar<Ex, En>>,
-    //     pub methods: Vec<Method_<Ex, En>>,
-    //     pub file_attributes: Vec<FileAttribute<Ex, En>>,
-    //     pub docs_url: Option<String>,
-    //     pub enum_: Option<Enum_>,
-    // }
-
     fn visit_classish_kind(
         &mut self,
         _c: &mut Context,
         p: &'ast ast_defs::ClassishKind,
     ) -> Result<(), ()> {
-        println!("Classish Kind");
+        // println!("Classish Kind");
         let _ = p.recurse(_c, self.object());
-        let mut kind = String::new();
-        match p {
+        let kind = match p {
             ast_defs::ClassishKind::Cclass(a) =>{
                 match a{
                     ast_defs::Abstraction::Concrete =>{
-                        kind = "ConcreteClass".to_string();
+                        "ConcreteClass"
                     }
                     ast_defs::Abstraction::Abstract =>{
-                        kind = "AbstractClass".to_string();
+                        "AbstractClass"
                     }
                 }
             }
             ast_defs::ClassishKind::Cinterface =>{
-                kind = "Interface".to_string()
+                "Interface"
             }
             ast_defs::ClassishKind::Ctrait =>{
-                kind = "Trait".to_string();
+                "Trait"
             }
             ast_defs::ClassishKind::Cenum => {
-                kind = "Enum".to_string();
+                "Enum"
             }
             ast_defs::ClassishKind::CenumClass(a) =>{
                 match a{
                     ast_defs::Abstraction::Concrete =>{
-                        kind = "ConcreteEnumClass".to_string();
+                        "ConcreteEnumClass"
                     }
                     ast_defs::Abstraction::Abstract =>{
-                        kind = "AbstractEnumClass".to_string();
+                        "AbstractEnumClass"
                     }
                 }
             }
-        }
-        self.string_stack.push(kind);
+        };
+        self.string_stack.push(kind.to_string());
         Ok(())
     }
     // Skip
@@ -630,7 +579,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_ctx_refinement(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::CtxRefinement,
+        _p: &'ast aast::CtxRefinement,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -658,7 +607,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::DefaultCase<(), ()>,
     ) -> Result<(), ()> {
-        println!("Default Case");
+        // println!("Default Case");
         let _ = p.recurse(_c, self.object());
         let dc = json!({
             "kind": "DefaultCase",
@@ -673,7 +622,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Efun<(), ()>,
     ) -> Result<(), ()> {
-        println!("Expanded Lambda");
+        // println!("Expanded Lambda");
         let _ = p.recurse(_c, self.object());
         let ef = json!({
             "kind": "EfunLambda",
@@ -686,7 +635,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_emit_id(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::EmitId,
+        _p: &'ast aast::EmitId,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -714,7 +663,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Expr_<(), ()>,
     ) -> Result<(), ()> {
-        println!("Expr");
+        // println!("Expr");
         let _ = p.recurse(_c, self.object());
         match p {
             aast_defs::Expr_::Null => {
@@ -740,7 +689,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 self.tree_stack.push(expr);  
             }
             //Need Input
-            aast_defs::Expr_::Shape(b) => {
+            aast_defs::Expr_::Shape(_) => {
                 let expr = json!({
                     "kind": "Expr",
                     "type": "Shape",
@@ -783,7 +732,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr);  
             }
-            aast_defs::Expr_::Invalid(b) => {
+            aast_defs::Expr_::Invalid(_) => {
                 let expr = json!({
                     "kind": "Expr",
                     "type": "Invalid",
@@ -807,7 +756,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr);  
             }
-            aast_defs::Expr_::Dollardollar(b) => {
+            aast_defs::Expr_::Dollardollar(_) => {
                 let expr = json!({
                     "kind": "Expr",
                     "type": "Shape",
@@ -815,13 +764,13 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr);  
             }
-            aast_defs::Expr_::Clone(b) => {
-                // let expr = json!({
-                //     "kind": "Expr",
-                //     "type": "Shape",
-
-                // });
-                // self.tree_stack.push(expr);  
+            aast_defs::Expr_::Clone(_) => {
+                let expr = json!({
+                    "kind": "Expr",
+                    "type": "Clone",
+                    "expr": self.tree_stack.pop(),
+                });
+                self.tree_stack.push(expr);  
             }
             aast_defs::Expr_::ArrayGet(b) => {
                 let mut expr2 = Value::Null;
@@ -836,7 +785,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr);
             }
-            aast_defs::Expr_::ObjGet(_a)=>{
+            aast_defs::Expr_::ObjGet(_)=>{
                 let expr2 = self.tree_stack.pop();
                 let expr1 = self.tree_stack.pop();
                 let expr = json!({
@@ -846,27 +795,25 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::ClassGet(_a)=>{
-                let expr2 = self.tree_stack.pop();
-                let expr1 = self.tree_stack.pop();
+            aast_defs::Expr_::ClassGet(_)=>{
+                let class_id = self.tree_stack.pop();
                 let expr = json!({
                     "kind": "Expr",
-                    "type": "ObjGet",
-                    "expr": [expr1, expr2],
+                    "type": "ClassGet",
+                    "expr": class_id,
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::ClassConst(_a)=>{
-                let expr2 = self.tree_stack.pop();
-                let expr1 = self.tree_stack.pop();
+            aast_defs::Expr_::ClassConst(a)=>{
+                let class_id = self.tree_stack.pop();
                 let expr = json!({
                     "kind": "Expr",
-                    "type": "ObjGet",
-                    "expr": [expr1, expr2],
+                    "type": "ClassConst",
+                    "expr": [class_id, a.1.clone()],
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::Call(_a)=>{
+            aast_defs::Expr_::Call(_)=>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "Call",
@@ -874,8 +821,14 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::FunctionPointer(_a)=>{
-                println!("DO NOT SUPPORT");
+            aast_defs::Expr_::FunctionPointer(a)=>{
+                let targs = get_vec_len(&mut self.tree_stack, "Targ", a.1.len());
+                let expr = json!({
+                    "kind": "Expr",
+                    "type": "FunctionPointer",
+                    "expr": targs,
+                });
+                self.tree_stack.push(expr); 
             }
             aast_defs::Expr_::Int(a) =>{
                 let expr = json!({
@@ -918,11 +871,14 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::Yield(a) =>{
-                println!("DO NOT SUPPORT");
-
+            aast_defs::Expr_::Yield(_) =>{
+                let expr = json!({
+                    "kind": "Expr",
+                    "type": "Yield",
+                });
+                self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::Await(a) =>{
+            aast_defs::Expr_::Await(_) =>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "Await",
@@ -930,7 +886,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::ReadonlyExpr(a) =>{
+            aast_defs::Expr_::ReadonlyExpr(_) =>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "ReadonlyExpr",
@@ -956,7 +912,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::Cast(a) =>{
+            aast_defs::Expr_::Cast(_) =>{
                 let hint = self.tree_stack.pop();
                 let ex = self.tree_stack.pop();
                 let expr = json!({
@@ -966,7 +922,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::Unop(a) =>{
+            aast_defs::Expr_::Unop(_) =>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "Unop",
@@ -1018,7 +974,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                     self.tree_stack.push(expr); 
                 }
             }
-            aast_defs::Expr_::Is(a) =>{
+            aast_defs::Expr_::Is(_) =>{
                 let hint = self.tree_stack.pop();
                 let ex = self.tree_stack.pop();
                 let expr = json!({
@@ -1028,7 +984,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::As(a) =>{
+            aast_defs::Expr_::As(_) =>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "As",
@@ -1036,7 +992,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::Upcast(a) =>{
+            aast_defs::Expr_::Upcast(_) =>{
                 let hint = self.tree_stack.pop();
                 let ex = self.tree_stack.pop();
                 let expr = json!({
@@ -1050,11 +1006,10 @@ impl <'ast>Visitor<'ast> for Scanner {
                 if a.3.is_some(){
                     let opt_expr = self.tree_stack.pop();
                     let vec_exprs = get_vec_len(&mut self.tree_stack, "Expr", a.2.len());
-                    // let vec_targs = get_vec_len(&mut self.tree_stack, "Targ", a.1.len());
+                    let class_id = self.tree_stack.pop();
                     let expr = json!({
                         "kind": "Expr",
-                        "classId": self.tree_stack.pop(),
-                        // "targs": vec_targs,
+                        "classId": class_id,
                         "exprs": vec_exprs,
                         "opt": opt_expr,
                     });
@@ -1072,7 +1027,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                     self.tree_stack.push(expr); 
                 }
             }
-            aast_defs::Expr_::Efun(a) =>{
+            aast_defs::Expr_::Efun(_) =>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "Efun",
@@ -1080,7 +1035,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::Lfun(a) =>{
+            aast_defs::Expr_::Lfun(_) =>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "Lfun",
@@ -1099,7 +1054,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::Import(a) =>{
+            aast_defs::Expr_::Import(_) =>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "String",
@@ -1117,7 +1072,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::ExpressionTree(a) =>{
+            aast_defs::Expr_::ExpressionTree(_) =>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "String",
@@ -1126,7 +1081,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 self.tree_stack.push(expr); 
             }
             //Removed Info
-            aast_defs::Expr_::Lplaceholder(a) =>{
+            aast_defs::Expr_::Lplaceholder(_) =>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "Lplaceholder",
@@ -1177,23 +1132,21 @@ impl <'ast>Visitor<'ast> for Scanner {
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::Package(i) =>{
+            aast_defs::Expr_::Package(a) =>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "Package",
-                    "expr": i.1.clone(),
+                    "expr": a.1.clone(),
                 });
                 self.tree_stack.push(expr); 
             }
-            aast_defs::Expr_::Nameof(a) =>{
+            aast_defs::Expr_::Nameof(_) =>{
                 let expr = json!({
                     "kind": "Expr",
                     "type": "Nameof",
                     "expr": self.tree_stack.pop(),
                 });
                 self.tree_stack.push(expr); 
-            }
-            _ =>{    //Call Expr
             }
         }
         Ok(())
@@ -1203,7 +1156,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::ExpressionTree<(), ()>,
     ) -> Result<(), ()> {
-        println!("ExpressionTree");
+        // println!("ExpressionTree");
         let _ = p.recurse(_c, self.object());
         let runtime_expr = self.tree_stack.pop();
         let function_pointers = get_vec_len(&mut self.tree_stack, "Stmt_", p.function_pointers.len());
@@ -1223,7 +1176,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Field<(), ()>,
     ) -> Result<(), ()> {
-        println!("Fields");
+        // println!("Fields");
         let _ = p.recurse(_c, self.object());
         let expr2 = self.string_stack.pop();
         let expr1 = self.string_stack.pop();
@@ -1239,7 +1192,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_file_attribute(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::FileAttribute<(), ()>,
+        _p: &'ast aast::FileAttribute<(), ()>,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -1249,7 +1202,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::FinallyBlock<(), ()>,
     ) -> Result<(), ()> {
-        println!("Finally Block");
+        // println!("Finally Block");
         let _ = p.recurse(_c, self.object());
         let stmts = get_vec_len(&mut self.tree_stack, "Stmt", p.0.len());
         let fb = json!({
@@ -1265,7 +1218,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::FunDef<(), ()>,
     ) -> Result<(), ()> {
-        println!("FunDef");
+        // println!("FunDef");
         let _ = p.recurse(_c, self.object());
         let fd = json!({
             "kind": "FunDef",
@@ -1279,7 +1232,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_fun_kind(
         &mut self,
         _c: &mut Context,
-        p: &'ast ast_defs::FunKind,
+        _p: &'ast ast_defs::FunKind,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -1290,7 +1243,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::FunParam<(), ()>,
     ) -> Result<(), ()> {
-        println!("FunParam");
+        // println!("FunParam");
         let _ = p.recurse(_c, self.object());
 
         let mut visibility = "Unknown".to_string();
@@ -1317,7 +1270,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Fun_<(), ()>,
     ) -> Result<(), ()> {
-        println!("Fun_");
+        // println!("Fun_");
         let _ = p.recurse(_c, self.object());
 
         let body = self.tree_stack.pop();
@@ -1341,7 +1294,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::FuncBody<(), ()>,
     ) -> Result<(), ()> {
-        println!("FuncBody");
+        // println!("FuncBody");
         let _ = p.recurse(_c, self.object());
 
         let fb = json!({
@@ -1364,7 +1317,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_gconst(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::Gconst<(), ()>,
+        _p: &'ast aast::Gconst<(), ()>,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -1408,185 +1361,184 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Hint_,
     ) -> Result<(), ()> {
-        println!("Hint");
+        // println!("Hint");
         let _ = p.recurse(_c, self.object());
-        let mut ht = Value::Null;
-        match p {
+        let ht = match p {
             aast::Hint_::Hprim(_)=>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Prim",
                     "hint": self.string_stack.pop(),//Tprim
-                });
+                })
             },
             aast::Hint_::Happly(n, v) =>{
                 let hints = get_vec_len(&mut self.tree_stack, "Hint", v.len());
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Apply",
                     "name": n.1.clone(),
                     "hints": hints,
-                });
+                })
             },
             aast::Hint_::Hoption(_) =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Option",
                     "hint": self.tree_stack.pop(),
-                });
+                })
             },
             aast::Hint_::Hlike(_) =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Like",
                     "hint": self.tree_stack.pop(),
-                });
+                })
             },
             aast::Hint_::Hfun(_) =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Fun",
                     "hint": self.tree_stack.pop()
-                });
+                })
             },
             aast::Hint_::Htuple(h) =>{
                 let hints = get_vec_len(&mut self.tree_stack, "Hint", h.len());
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Tuple",
                     "hints": hints,
-                });
+                })
             },
             aast::Hint_::HclassArgs(_) =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "ClassArgs",
                     "hint": self.tree_stack.pop(),
-                });
+                })
             },
             aast::Hint_::Hshape(_) =>{
 
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "ClassArgs",
                     "hint": self.tree_stack.pop(),
-                });
+                })
             },
             aast::Hint_::Haccess(_, _) =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Access",
                     "hint": self.tree_stack.pop(),
-                });
+                })
             },
             aast::Hint_::Hsoft(_) =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Soft",
                     "hint": self.tree_stack.pop(),
-                });
+                })
             },
             aast::Hint_::Hrefinement(_, _) =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Refinement",
                     "hint": self.tree_stack.pop(),
-                });
+                })
             },
             aast::Hint_::Hmixed =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Mixed",
-                });
+                })
             },
             aast::Hint_::Hwildcard =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Wildcard",
-                });
+                })
             },
             aast::Hint_::Hnonnull =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "NonNull",
-                });
+                })
             },
             aast::Hint_::Habstr(s, v) =>{
                 let hints = get_vec_len(&mut self.tree_stack, "Hint", v.len());       
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Abstr",
                     "name": s.clone(),
                     "hints": hints,
-                });
+                })
             },
             aast::Hint_::HvecOrDict(o, _) =>{
                 if o.is_some(){
                     let o = self.tree_stack.pop();
                     let hint = self.tree_stack.pop();
-                    ht = json!({
+                    json!({
                         "kind": "Hint",
                         "type": "VecOrDict",
                         "hint": [o, hint],
-                    });
+                    })
                 }
                 else{
-                    ht = json!({
+                    json!({
                         "kind": "Hint",
                         "type": "VecOrDict",
                         "hint": self.tree_stack.pop(),
-                    });
+                    })
                 }
             },
             aast::Hint_::Hthis =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "This",
-                });
+                })
             },
             aast::Hint_::Hdynamic =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Dynamic",
-                });
+                })
             },
             aast::Hint_::Hnothing =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Nothing",
-                });
+                })
             },
             aast::Hint_::Hunion(h) =>{
                 let hints = get_vec_len(&mut self.tree_stack, "Hint", h.len());       
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Union",
                     "hint": hints,
-                });
+                })
             },
             aast::Hint_::Hintersection(h) =>{
                 let hints = get_vec_len(&mut self.tree_stack, "Hint", h.len());       
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Intersection",
                     "hint": hints,
-                });
+                })
             },
             aast::Hint_::HfunContext(s) =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "FunContext",
                     "hint": s,
-                });
+                })
             },
             aast::Hint_::Hvar(s) =>{
-                ht = json!({
+                json!({
                     "kind": "Hint",
                     "type": "Var",
                     "hint": s,
-                });
+                })
             },
-        }
+        };
         self.tree_stack.push(ht);
         Ok(())
     }
@@ -1596,7 +1548,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::HoleSource,
     ) -> Result<(), ()> {
-        println!("Hole Source");
+        // println!("Hole Source");
         // let _ = p.recurse(_c, self.object());
         let h = match p {
             aast::HoleSource::Typing => "Typing",
@@ -1636,7 +1588,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::KvcKind,
     ) -> Result<(), ()> {
-        println!("KvcKind");
+        // println!("KvcKind");
         let _ = p.recurse(_c, self.object());
         let kvc = match p{
             aast::KvcKind::Map => "Map",
@@ -1659,7 +1611,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_md_name_kind(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::MdNameKind,
+        _p: &'ast aast::MdNameKind,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -1670,7 +1622,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Method_<(), ()>,
     ) -> Result<(), ()> {
-        println!("Method");
+        // println!("Method");
         let _ = p.recurse(_c, self.object());
 
         let ret = self.tree_stack.pop();
@@ -1699,7 +1651,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_module_def(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::ModuleDef<(), ()>,
+        _p: &'ast aast::ModuleDef<(), ()>,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -1726,7 +1678,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_og_null_flavor(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::OgNullFlavor,
+        _p: &'ast aast::OgNullFlavor,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -1735,7 +1687,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_optional_kind(
         &mut self,
         _c: &mut Context,
-        p: &'ast ast_defs::OptionalKind,
+        _p: &'ast ast_defs::OptionalKind,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -1761,7 +1713,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_pat_var(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::PatVar,
+        _p: &'ast aast::PatVar,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -1781,7 +1733,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Program<(), ()>,
     ) -> Result<(), ()> {
-        println!("Program");
+        // println!("Program");
         let _ = p.recurse(_c, self.object());
         let mut defs = VecDeque::<Value>::new();
         while let Some(last) = self.tree_stack.pop() {
@@ -1793,7 +1745,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         });
 
         self.tree = serde_json::to_string_pretty(&obj).unwrap();
-        println!("{}", serde_json::to_string_pretty(&obj).unwrap());
+        // println!("{}", serde_json::to_string_pretty(&obj).unwrap());
         Ok(())
     }
     // Skip
@@ -1816,7 +1768,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_refinement(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::Refinement,
+        _p: &'ast aast::Refinement,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -1825,7 +1777,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_reify_kind(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::ReifyKind,
+        _p: &'ast aast::ReifyKind,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -1834,7 +1786,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_require_kind(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::RequireKind,
+        _p: &'ast aast::RequireKind,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -1870,7 +1822,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::StmtMatch<(), ()>,
     ) -> Result<(), ()> {
-        println!("Stmt Match");
+        // println!("Stmt Match");
         let _ = p.recurse(_c, self.object());
         let arms = get_vec_len(&mut self.tree_stack, "StmtMatchArm", p.arms.len());
         let expr = self.tree_stack.pop();
@@ -1888,7 +1840,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::StmtMatchArm<(), ()>,
     ) -> Result<(), ()> {
-        println!("Stmt Match Arm");
+        // println!("Stmt Match Arm");
         let _ = p.recurse(_c, self.object());
         let stmt = json!({
             "kind": "StmtMatchArm",
@@ -1902,91 +1854,89 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Stmt_<(), ()>,
     ) -> Result<(), ()> {
-        println!("Stmt");
+        // println!("Stmt");
         let _ = p.recurse(_c, self.object());
-        let mut stmt = Value::Null;
-        match p{
+        let stmt = match p{
             aast::Stmt_::Noop => {
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Noop",
-                });
+                })
             }
             aast::Stmt_::Fallthrough => {
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Fallthrough",
-                });
+                })
             }
             aast::Stmt_::Expr(_) => {
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Expr",
                     "stmt": self.tree_stack.pop(),
-                });
+                })
             }
             aast::Stmt_::Break => {
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Break",
-                });
+                })
             }
             aast::Stmt_::Continue => {
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Continue",
-                });
+                })
             }
             aast::Stmt_::Throw(_) => {
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Throw",
                     "stmt": self.tree_stack.pop(),
-                });
+                })
             }
             aast::Stmt_::Return(expr) => {
                 if (*expr).is_none(){
-                    stmt = json!({
+                    json!({
                         "kind": "Stmt",
                         "type": "Return",
-                    });
+                    })
                 }
                 else {
-                    stmt = json!({
+                    json!({
                         "kind": "Stmt",
                         "type": "Return",
                         "stmt": self.tree_stack.pop()
-                    });
+                    })
                 }
             }
             aast::Stmt_::YieldBreak => {
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "YieldBreak",
-                });
+                })
             }
-            //Be careful with awaitall
             aast::Stmt_::Awaitall(a) => {
                 let block = self.tree_stack.pop();
                 let exprs = get_vec_len(&mut self.tree_stack, "Expr", a.0.len());
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Awaitall",
                     "stmt": [block, exprs],
-                });
+                })
             }
             aast::Stmt_::Concurrent(_) => {
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Concurrent",
                     "stmt": self.tree_stack.pop(),
-                });
+                })
             }
             aast::Stmt_::If(_) => {
                 let b2 = self.tree_stack.pop();
                 let b1 = self.tree_stack.pop();
                 let expr = self.tree_stack.pop();
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "If",
                     "stmt": [expr, b1, b2],
@@ -1996,7 +1946,7 @@ impl <'ast>Visitor<'ast> for Scanner {
             aast::Stmt_::Do(_) => {
                 let expr = self.tree_stack.pop();
                 let b = self.tree_stack.pop();
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Do",
                     "stmt": [b, expr],
@@ -2005,14 +1955,14 @@ impl <'ast>Visitor<'ast> for Scanner {
             aast::Stmt_::While(_) => {
                 let b = self.tree_stack.pop();
                 let expr = self.tree_stack.pop();
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "While",
                     "stmt": [expr, b],
                 })
             }
             aast::Stmt_::Using(_) => {
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Using",
                     "stmt": self.tree_stack.pop(),
@@ -2024,7 +1974,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 if f.1.is_some(){
                     let opt_expr = self.tree_stack.pop();
                     let exprs1 = get_vec_len(&mut self.tree_stack, "Expr", f.0.len());
-                    stmt = json!({
+                    json!({
                         "kind": "Stmt",
                         "type": "For",
                         "stmt": [exprs1, opt_expr, exprs2, b],
@@ -2032,7 +1982,7 @@ impl <'ast>Visitor<'ast> for Scanner {
                 }
                 else{
                     let exprs1 = get_vec_len(&mut self.tree_stack, "Expr", f.0.len());
-                    stmt = json!({
+                    json!({
                         "kind": "Stmt",
                         "type": "For",
                         "stmt": [exprs1, exprs2, b],
@@ -2047,77 +1997,77 @@ impl <'ast>Visitor<'ast> for Scanner {
                 let cases = get_vec_len(&mut self.tree_stack, "Case", s.1.len());
                 let expr = self.tree_stack.pop();
                 if dc != Value::Null{
-                    stmt = json!({
+                    json!({
                         "kind": "Stmt",
                         "type": "Switch",
                         "stmt": [expr, cases, dc],
-                    });
+                    })
                 }
                 else{
-                    stmt = json!({
+                    json!({
                         "kind": "Stmt",
                         "type": "Switch",
                         "stmt": [expr, cases],
-                    });
+                    })
                 }
             }
-            aast::Stmt_::Match(match_stmt) => {
-                stmt = json!({
+            aast::Stmt_::Match(_) => {
+                json!({
                     "kind": "Stmt",
                     "type": "Match",
                     "stmt": self.tree_stack.pop(),
-                });
+                })
             }
             aast::Stmt_::Foreach(_) => {
                 let block = self.tree_stack.pop();
                 let as_expr = self.tree_stack.pop();
                 let expr = self.tree_stack.pop();
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Try",
                     "stmt": [block, as_expr, expr],
-                });
+                })
             }
             aast::Stmt_::Try(ts) => {
                 let finally_block = self.tree_stack.pop();
                 let catchs = get_vec_len(&mut self.tree_stack, "Catch", ts.1.len());
                 let block = self.tree_stack.pop();
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Try",
                     "stmt": [block, catchs, finally_block],
-                });
+                })
             }
             aast::Stmt_::DeclareLocal(dl) => {
                 if dl.2.is_some(){
-                    stmt = json!({
+                    json!({
                         "kind": "Stmt",
                         "type": "DeclareLocal",
                         "stmt": self.tree_stack.pop()
                     })
                 }
                 else{
-                    stmt = json!({
+                    json!({
                         "kind": "Stmt",
                         "type": "DeclareLocal",
                     })
                 }
             }
             aast::Stmt_::Block(_) => {
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Block",
                     "stmt": self.tree_stack.pop(),
                 })
             }
             aast::Stmt_::Markup(m) => {
-                stmt = json!({
+                json!({
                     "kind": "Stmt",
                     "type": "Markup",
                     "stmt": m.1,
-                });
+                })
             }
-        }
+        };
         self.tree_stack.push(stmt);
         Ok(())
     }
@@ -2178,7 +2128,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_type_refinement(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::TypeRefinement,
+        _p: &'ast aast::TypeRefinement,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -2187,7 +2137,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_type_refinement_bounds(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::TypeRefinementBounds,
+        _p: &'ast aast::TypeRefinementBounds,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -2196,7 +2146,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_typedef(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::Typedef<(), ()>,
+        _p: &'ast aast::Typedef<(), ()>,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -2216,7 +2166,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast ast_defs::Uop,
     ) -> Result<(), ()> {
-        println!("Uop");
+        // println!("Uop");
         let uop = match p{
             ast_defs::Uop::Utild => "Utild",
             ast_defs::Uop::Unot => "Unot",
@@ -2235,7 +2185,7 @@ impl <'ast>Visitor<'ast> for Scanner {
     fn visit_user_attribute(
         &mut self,
         _c: &mut Context,
-        p: &'ast aast::UserAttribute<(), ()>,
+        _p: &'ast aast::UserAttribute<(), ()>,
     ) -> Result<(), ()> {
         // p.recurse(_c, self.object())
         Ok(())
@@ -2255,7 +2205,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::UsingStmt<(), ()>,
     ) -> Result<(), ()> {
-        println!("Using Stmt");
+        // println!("Using Stmt");
         let _ = p.recurse(_c, self.object());
         let block = self.tree_stack.pop();
         let exprs = get_vec_len(&mut self.tree_stack, "Expr", p.exprs.1.len());
@@ -2281,7 +2231,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::VcKind,
     ) -> Result<(), ()> {
-        println!("VcKind");
+        // println!("VcKind");
         let _ = p.recurse(_c, self.object());
         let vc = match p {
             aast::VcKind::Vector => "Vector",
@@ -2300,7 +2250,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         _c: &mut Context,
         p: &'ast aast::Visibility,
     ) -> Result<(), ()> {
-        println!("Visibility");
+        // println!("Visibility");
         let _ = p.recurse(_c, self.object());
         let visibility = match p {
             ast_defs::Visibility::Private => "Private",
@@ -2330,21 +2280,6 @@ impl <'ast>Visitor<'ast> for Scanner {
         Ok(())
     }
     
-    fn visit_ex(
-        &mut self,
-        c: &mut <Self::Params as oxidized::aast_visitor::Params>::Context,
-        p: &'ast <Self::Params as oxidized::aast_visitor::Params>::Ex,
-    ) -> Result<(), <Self::Params as oxidized::aast_visitor::Params>::Error> {
-        Ok(())
-    }
-    
-    fn visit_en(
-        &mut self,
-        c: &mut <Self::Params as oxidized::aast_visitor::Params>::Context,
-        p: &'ast <Self::Params as oxidized::aast_visitor::Params>::En,
-    ) -> Result<(), <Self::Params as oxidized::aast_visitor::Params>::Error> {
-        Ok(())
-    }
     //Do Not Support
     fn visit_xhp_attr(
         &mut self,
