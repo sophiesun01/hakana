@@ -468,6 +468,7 @@ pub fn dump_new_aast_for_path(
     file_path_str: &str,
     output_file_str: &str,
     logger: Arc<Logger>,
+    show_pos: bool,
     ) -> String{
     
     let (aast, _comments, _idk) = match get_aast_for_path(FilePath(StrId::EMPTY), file_path_str) {
@@ -482,6 +483,7 @@ pub fn dump_new_aast_for_path(
             tree_stack: Vec::<serde_json::Value>::new(),
             string_stack: Vec::<String>::new(),
             tree: String::new(),
+            show_pos: show_pos,
         };
 
     let mut context = Context {};

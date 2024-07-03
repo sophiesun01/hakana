@@ -167,16 +167,7 @@
       "name": "foo",
       "child": {
         "kind": "Fun",
-        "span": {
-          "kind": "Pos",
-          "file": "root|tests/ast/basic_stmt/input.hack",
-          "startLine": 19,
-          "startBol": 171,
-          "startOffset": 171,
-          "endLine": 21,
-          "endBol": 210,
-          "endOffset": 211
-        },
+        "span": null,
         "ret": {
           "kind": "Hint",
           "type": "Apply",
@@ -193,16 +184,7 @@
               "name": "int",
               "hints": []
             },
-            "pos": {
-              "kind": "Pos",
-              "file": "root|tests/ast/basic_stmt/input.hack",
-              "startLine": 19,
-              "startBol": 171,
-              "startOffset": 188,
-              "endLine": 19,
-              "endBol": 171,
-              "endOffset": 190
-            },
+            "pos": null,
             "expr": null,
             "visibility": "Unknown"
           },
@@ -215,16 +197,7 @@
               "name": "int",
               "hints": []
             },
-            "pos": {
-              "kind": "Pos",
-              "file": "root|tests/ast/basic_stmt/input.hack",
-              "startLine": 19,
-              "startBol": 171,
-              "startOffset": 196,
-              "endLine": 19,
-              "endBol": 171,
-              "endOffset": 198
-            },
+            "pos": null,
             "expr": null,
             "visibility": "Unknown"
           }
@@ -321,16 +294,7 @@
       "name": "foo2",
       "child": {
         "kind": "Fun",
-        "span": {
-          "kind": "Pos",
-          "file": "root|tests/ast/basic_stmt/input.hack",
-          "startLine": 28,
-          "startBol": 272,
-          "startOffset": 272,
-          "endLine": 32,
-          "endBol": 342,
-          "endOffset": 343
-        },
+        "span": null,
         "ret": {
           "kind": "Hint",
           "type": "Apply",
@@ -347,16 +311,7 @@
               "name": "int",
               "hints": []
             },
-            "pos": {
-              "kind": "Pos",
-              "file": "root|tests/ast/basic_stmt/input.hack",
-              "startLine": 28,
-              "startBol": 272,
-              "startOffset": 290,
-              "endLine": 28,
-              "endBol": 272,
-              "endOffset": 292
-            },
+            "pos": null,
             "expr": null,
             "visibility": "Unknown"
           },
@@ -369,16 +324,7 @@
               "name": "int",
               "hints": []
             },
-            "pos": {
-              "kind": "Pos",
-              "file": "root|tests/ast/basic_stmt/input.hack",
-              "startLine": 28,
-              "startBol": 272,
-              "startOffset": 298,
-              "endLine": 28,
-              "endBol": 272,
-              "endOffset": 300
-            },
+            "pos": null,
             "expr": null,
             "visibility": "Unknown"
           }
@@ -524,16 +470,7 @@
       "name": "foo3",
       "child": {
         "kind": "Fun",
-        "span": {
-          "kind": "Pos",
-          "file": "root|tests/ast/basic_stmt/input.hack",
-          "startLine": 40,
-          "startBol": 414,
-          "startOffset": 414,
-          "endLine": 49,
-          "endBol": 531,
-          "endOffset": 532
-        },
+        "span": null,
         "ret": {
           "kind": "Hint",
           "type": "Apply",
@@ -550,16 +487,7 @@
               "name": "int",
               "hints": []
             },
-            "pos": {
-              "kind": "Pos",
-              "file": "root|tests/ast/basic_stmt/input.hack",
-              "startLine": 40,
-              "startBol": 414,
-              "startOffset": 432,
-              "endLine": 40,
-              "endBol": 414,
-              "endOffset": 434
-            },
+            "pos": null,
             "expr": null,
             "visibility": "Unknown"
           },
@@ -572,16 +500,7 @@
               "name": "int",
               "hints": []
             },
-            "pos": {
-              "kind": "Pos",
-              "file": "root|tests/ast/basic_stmt/input.hack",
-              "startLine": 40,
-              "startBol": 414,
-              "startOffset": 440,
-              "endLine": 40,
-              "endBol": 414,
-              "endOffset": 442
-            },
+            "pos": null,
             "expr": null,
             "visibility": "Unknown"
           }
@@ -774,16 +693,7 @@
       "name": "foo4",
       "child": {
         "kind": "Fun",
-        "span": {
-          "kind": "Pos",
-          "file": "root|tests/ast/basic_stmt/input.hack",
-          "startLine": 57,
-          "startBol": 607,
-          "startOffset": 607,
-          "endLine": 69,
-          "endBol": 761,
-          "endOffset": 762
-        },
+        "span": null,
         "ret": {
           "kind": "Hint",
           "type": "Apply",
@@ -800,16 +710,7 @@
               "name": "int",
               "hints": []
             },
-            "pos": {
-              "kind": "Pos",
-              "file": "root|tests/ast/basic_stmt/input.hack",
-              "startLine": 57,
-              "startBol": 607,
-              "startOffset": 625,
-              "endLine": 57,
-              "endBol": 607,
-              "endOffset": 627
-            },
+            "pos": null,
             "expr": null,
             "visibility": "Unknown"
           },
@@ -822,16 +723,7 @@
               "name": "int",
               "hints": []
             },
-            "pos": {
-              "kind": "Pos",
-              "file": "root|tests/ast/basic_stmt/input.hack",
-              "startLine": 57,
-              "startBol": 607,
-              "startOffset": 633,
-              "endLine": 57,
-              "endBol": 607,
-              "endOffset": 635
-            },
+            "pos": null,
             "expr": null,
             "visibility": "Unknown"
           }
@@ -1024,16 +916,7 @@
       "name": "foo5",
       "child": {
         "kind": "Fun",
-        "span": {
-          "kind": "Pos",
-          "file": "root|tests/ast/basic_stmt/input.hack",
-          "startLine": 76,
-          "startBol": 833,
-          "startOffset": 833,
-          "endLine": 86,
-          "endBol": 940,
-          "endOffset": 940
-        },
+        "span": null,
         "ret": {
           "kind": "Hint",
           "type": "Apply",
@@ -1057,16 +940,7 @@
                 }
               ]
             },
-            "pos": {
-              "kind": "Pos",
-              "file": "root|tests/ast/basic_stmt/input.hack",
-              "startLine": 76,
-              "startBol": 833,
-              "startOffset": 856,
-              "endLine": 76,
-              "endBol": 833,
-              "endOffset": 858
-            },
+            "pos": null,
             "expr": null,
             "visibility": "Unknown"
           }

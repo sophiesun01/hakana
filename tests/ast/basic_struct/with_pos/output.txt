@@ -6,7 +6,7 @@
       "name": "Point",
       "span": {
         "kind": "Pos",
-        "file": "root|tests/ast/basic_struct/input.hack",
+        "file": "root|tests/ast/basic_struct/with_pos/input.hack",
         "startLine": 2,
         "startBol": 18,
         "startOffset": 18,
@@ -34,7 +34,7 @@
           "name": "x",
           "span": {
             "kind": "Pos",
-            "file": "root|tests/ast/basic_struct/input.hack",
+            "file": "root|tests/ast/basic_struct/with_pos/input.hack",
             "startLine": 3,
             "startBol": 32,
             "startOffset": 47,
@@ -60,7 +60,7 @@
           "name": "y",
           "span": {
             "kind": "Pos",
-            "file": "root|tests/ast/basic_struct/input.hack",
+            "file": "root|tests/ast/basic_struct/with_pos/input.hack",
             "startLine": 4,
             "startBol": 51,
             "startOffset": 66,
@@ -79,7 +79,7 @@
           "name": "__construct",
           "span": {
             "kind": "Pos",
-            "file": "root|tests/ast/basic_struct/input.hack",
+            "file": "root|tests/ast/basic_struct/with_pos/input.hack",
             "startLine": 8,
             "startBol": 89,
             "startOffset": 107,
@@ -100,7 +100,7 @@
               },
               "pos": {
                 "kind": "Pos",
-                "file": "root|tests/ast/basic_struct/input.hack",
+                "file": "root|tests/ast/basic_struct/with_pos/input.hack",
                 "startLine": 8,
                 "startBol": 89,
                 "startOffset": 125,
@@ -122,7 +122,7 @@
               },
               "pos": {
                 "kind": "Pos",
-                "file": "root|tests/ast/basic_struct/input.hack",
+                "file": "root|tests/ast/basic_struct/with_pos/input.hack",
                 "startLine": 8,
                 "startBol": 89,
                 "startOffset": 135,
@@ -220,7 +220,7 @@
           "name": "print",
           "span": {
             "kind": "Pos",
-            "file": "root|tests/ast/basic_struct/input.hack",
+            "file": "root|tests/ast/basic_struct/with_pos/input.hack",
             "startLine": 14,
             "startBol": 218,
             "startOffset": 236,
@@ -357,7 +357,7 @@
         "kind": "Fun",
         "span": {
           "kind": "Pos",
-          "file": "root|tests/ast/basic_struct/input.hack",
+          "file": "root|tests/ast/basic_struct/with_pos/input.hack",
           "startLine": 19,
           "startBol": 317,
           "startOffset": 317,

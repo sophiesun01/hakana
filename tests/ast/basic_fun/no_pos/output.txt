@@ -6,16 +6,7 @@
       "name": "addTwoNumbers",
       "child": {
         "kind": "Fun",
-        "span": {
-          "kind": "Pos",
-          "file": "root|tests/ast/basic_fun/input.hack",
-          "startLine": 2,
-          "startBol": 20,
-          "startOffset": 20,
-          "endLine": 6,
-          "endBol": 90,
-          "endOffset": 90
-        },
+        "span": null,
         "ret": {
           "kind": "Hint",
           "type": "Apply",
@@ -32,16 +23,7 @@
               "name": "int",
               "hints": []
             },
-            "pos": {
-              "kind": "Pos",
-              "file": "root|tests/ast/basic_fun/input.hack",
-              "startLine": 2,
-              "startBol": 20,
-              "startOffset": 47,
-              "endLine": 2,
-              "endBol": 20,
-              "endOffset": 49
-            },
+            "pos": null,
             "expr": null,
             "visibility": "Unknown"
           },
@@ -54,16 +36,7 @@
               "name": "int",
               "hints": []
             },
-            "pos": {
-              "kind": "Pos",
-              "file": "root|tests/ast/basic_fun/input.hack",
-              "startLine": 2,
-              "startBol": 20,
-              "startOffset": 55,
-              "endLine": 2,
-              "endBol": 20,
-              "endOffset": 57
-            },
+            "pos": null,
             "expr": null,
             "visibility": "Unknown"
           }

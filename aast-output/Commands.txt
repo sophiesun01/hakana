@@ -5,6 +5,7 @@ cargo run --bin hakana aast -f aast-output/basic_fun.hack  -o aast-output/basic_
 New
 cargo run --bin hakana new_aast -f aast-output/basic_fun.hack  -o aast-output/basic_fun_new.txt -t
 
+cargo run --bin hakana new_aast -f aast-output/basic_fun.hack  -o aast-output/basic_fun_new.txt -t -p
 
 Basic Structs
 Original
@@ -20,3 +21,7 @@ cargo run --bin hakana aast -f aast-output/basic_stmt.hack  -o aast-output/basic
 
 New
 cargo run --bin hakana new_aast -f aast-output/basic_stmt.hack  -o aast-output/basic_stmt_new.txt -t
+
+
+Running Tests
+cargo run --bin hakana test tests/ast/

@@ -14,26 +14,34 @@ pub(crate) struct Scanner {
     pub tree_stack: Vec<Value>,
     pub tree: String,
     pub string_stack: Vec<String>,
-    // pub interner: &'a mut ThreadedInterner
+    pub show_pos: bool
 }
 pub(crate) struct Context {
 
 }
 
-fn visit_pos(pos: ast_defs::Pos
+fn visit_pos(
+    pos: ast_defs::Pos,
+    show_pos: bool,
     ) -> Value {
-        let (start, end) = pos.to_start_and_end_lnum_bol_offset();
-        let pos = json!({
-            "kind": "Pos",
-            "file": pos.filename(),
-            "startLine": start.0,
-            "startBol": start.1,
-            "startOffset": start.2,
-            "endLine": end.0,
-            "endBol": end.1,
-            "endOffset": end.2,
-        });
-        pos
+        if show_pos{
+            let (start, end) = pos.to_start_and_end_lnum_bol_offset();
+            let pos = json!({
+                "kind": "Pos",
+                "file": pos.filename(),
+                "startLine": start.0,
+                "startBol": start.1,
+                "startOffset": start.2,
+                "endLine": end.0,
+                "endBol": end.1,
+                "endOffset": end.2,
+            });
+            pos
+        }
+        else{
+            Value::Null
+        }
+
 }
 
 fn get_vec_len(tree_stack: &mut Vec<Value>, kind: &str, mut n: usize
@@ -458,7 +466,7 @@ impl <'ast>Visitor<'ast> for Scanner {
             "visibility": self.string_stack.pop(),
             "type_hint": type_hint,
             "name": p.id.1.clone(),
-            "span": visit_pos(p.id.0.clone()),
+            "span": visit_pos(p.id.0.clone(), self.show_pos),
             "expr": expr,
             "doc_comment": p.doc_comment.clone(),
             "is_static": p.is_static.clone()
@@ -487,7 +495,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         let class = json!({
             "kind": "Class",
             "name": p.name.1,
-            "span": visit_pos(p.span.clone()),
+            "span": visit_pos(p.span.clone(), self.show_pos),
             "class_kind": class_kind,
             "uses": uses,
             "extends": extends,
@@ -1249,7 +1257,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         let mut visibility = "Unknown".to_string();
         let mut expr = Value::Null;
         if p.expr.is_some(){ expr = self.tree_stack.pop().unwrap()};
-        let span = visit_pos(p.pos.clone());
+        let span = visit_pos(p.pos.clone(), self.show_pos);
         if p.visibility.is_some(){ visibility = self.string_stack.pop().unwrap()};
         let type_hint = self.tree_stack.pop();
 
@@ -1279,7 +1287,7 @@ impl <'ast>Visitor<'ast> for Scanner {
 
         let f = json!({
                 "kind": "Fun",
-                "span": visit_pos(p.span.clone()),
+                "span": visit_pos(p.span.clone(), self.show_pos),
                 "ret": ret,
                 "params": params,
                 "body": body,
@@ -1632,7 +1640,7 @@ impl <'ast>Visitor<'ast> for Scanner {
         let m = json!({
             "kind": "Method",
             "name": p.name.1.clone(),
-            "span": visit_pos(p.name.0.clone()),
+            "span": visit_pos(p.name.0.clone(), self.show_pos),
             "where_constraints": where_constraints,
             "params": params,
             "visibility": self.string_stack.pop(),

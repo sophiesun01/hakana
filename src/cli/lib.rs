@@ -490,6 +490,12 @@ pub fn init(
                             .required(false)
                             .help("Whether to show debug output"),
                     )
+                    .arg(
+                        arg!(--"pos")
+                            .short('p')
+                            .required(false)
+                            .help("Whether to show pos output"),
+                    )
             )
 
             .get_matches();
@@ -1498,9 +1504,9 @@ fn do_new_aast(
     let file_path_str = sub_matches.value_of("file").unwrap();
     let output_path_str = sub_matches.value_of("output").unwrap();
     let show_timing = sub_matches.is_present("show-timing");
-
+    let show_pos = sub_matches.is_present("pos");
     let start_time = SystemTime::now();
-    let _ = hakana_workhorse::dump_new_aast_for_path(file_path_str, output_path_str, Arc::new(logger));
+    let _ = hakana_workhorse::dump_new_aast_for_path(file_path_str, output_path_str, Arc::new(logger), show_pos);
     let end_time = SystemTime::now();
     let duration = end_time.duration_since(start_time).unwrap();
 

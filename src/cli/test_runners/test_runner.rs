@@ -438,8 +438,9 @@ impl TestRunner {
         let input_file = format!("{}/input.hack", dir);
         let output_file = format!("{}/output.txt", dir);
         let actual_file = format!("{}/actual.txt", dir);
-
-        let output_contents = hakana_workhorse::dump_new_aast_for_path(&input_file, &actual_file, logger);
+        let show_pos = !dir.contains("no_pos");
+    
+        let output_contents = hakana_workhorse::dump_new_aast_for_path(&input_file, &actual_file, logger, show_pos);
         let expected_output_contents = fs::read_to_string(output_file.clone()).unwrap();
   
         if output_contents == expected_output_contents {

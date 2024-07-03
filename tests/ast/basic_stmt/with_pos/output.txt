@@ -1,0 +1,1163 @@
+{
+  "kind": "Program",
+  "definitions": [
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Call",
+        "expr": {
+          "kind": "CallExpr",
+          "func": {
+            "kind": "Expr",
+            "type": "Id",
+            "expr": "foo"
+          },
+          "args": []
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$a"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "Int",
+            "expr": "1"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$b"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "String",
+            "expr": "hello"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Call",
+        "expr": {
+          "kind": "CallExpr",
+          "func": {
+            "kind": "Expr",
+            "type": "Id",
+            "expr": "foo"
+          },
+          "args": [
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$a"
+            },
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$a"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "Int",
+            "expr": "1"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$b"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "String",
+            "expr": "hello"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Call",
+        "expr": {
+          "kind": "CallExpr",
+          "func": {
+            "kind": "Expr",
+            "type": "Id",
+            "expr": "foo"
+          },
+          "args": [
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$a"
+            },
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "kind": "FunDef",
+      "name": "foo",
+      "child": {
+        "kind": "Fun",
+        "span": {
+          "kind": "Pos",
+          "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+          "startLine": 19,
+          "startBol": 171,
+          "startOffset": 171,
+          "endLine": 21,
+          "endBol": 210,
+          "endOffset": 211
+        },
+        "ret": {
+          "kind": "Hint",
+          "type": "Apply",
+          "name": "void",
+          "hints": []
+        },
+        "params": [
+          {
+            "kind": "FunParam",
+            "name": "$a",
+            "type_hint": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "int",
+              "hints": []
+            },
+            "pos": {
+              "kind": "Pos",
+              "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+              "startLine": 19,
+              "startBol": 171,
+              "startOffset": 188,
+              "endLine": 19,
+              "endBol": 171,
+              "endOffset": 190
+            },
+            "expr": null,
+            "visibility": "Unknown"
+          },
+          {
+            "kind": "FunParam",
+            "name": "$b",
+            "type_hint": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "int",
+              "hints": []
+            },
+            "pos": {
+              "kind": "Pos",
+              "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+              "startLine": 19,
+              "startBol": 171,
+              "startOffset": 196,
+              "endLine": 19,
+              "endBol": 171,
+              "endOffset": 198
+            },
+            "expr": null,
+            "visibility": "Unknown"
+          }
+        ],
+        "body": {
+          "kind": "FuncBody",
+          "body": {
+            "kind": "Block",
+            "stmts": [
+              {
+                "kind": "Stmt",
+                "type": "Noop"
+              }
+            ]
+          }
+        },
+        "doc_comment": null
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$a"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "Int",
+            "expr": "1"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$b"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "Int",
+            "expr": "2"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Call",
+        "expr": {
+          "kind": "CallExpr",
+          "func": {
+            "kind": "Expr",
+            "type": "Id",
+            "expr": "foo2"
+          },
+          "args": [
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$a"
+            },
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "kind": "FunDef",
+      "name": "foo2",
+      "child": {
+        "kind": "Fun",
+        "span": {
+          "kind": "Pos",
+          "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+          "startLine": 28,
+          "startBol": 272,
+          "startOffset": 272,
+          "endLine": 32,
+          "endBol": 342,
+          "endOffset": 343
+        },
+        "ret": {
+          "kind": "Hint",
+          "type": "Apply",
+          "name": "int",
+          "hints": []
+        },
+        "params": [
+          {
+            "kind": "FunParam",
+            "name": "$a",
+            "type_hint": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "int",
+              "hints": []
+            },
+            "pos": {
+              "kind": "Pos",
+              "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+              "startLine": 28,
+              "startBol": 272,
+              "startOffset": 290,
+              "endLine": 28,
+              "endBol": 272,
+              "endOffset": 292
+            },
+            "expr": null,
+            "visibility": "Unknown"
+          },
+          {
+            "kind": "FunParam",
+            "name": "$b",
+            "type_hint": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "int",
+              "hints": []
+            },
+            "pos": {
+              "kind": "Pos",
+              "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+              "startLine": 28,
+              "startBol": 272,
+              "startOffset": 298,
+              "endLine": 28,
+              "endBol": 272,
+              "endOffset": 300
+            },
+            "expr": null,
+            "visibility": "Unknown"
+          }
+        ],
+        "body": {
+          "kind": "FuncBody",
+          "body": {
+            "kind": "Block",
+            "stmts": [
+              {
+                "kind": "Stmt",
+                "type": "Expr",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Eq",
+                    "lhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$c"
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "type": "Float",
+                      "expr": "1.0"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "Stmt",
+                "type": "Expr",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Eq",
+                    "lhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$d"
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "type": "Int",
+                      "expr": "0"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "Stmt",
+                "type": "Return",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "LocalVar",
+                  "expr": "$c"
+                }
+              }
+            ]
+          }
+        },
+        "doc_comment": null
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$a"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "Int",
+            "expr": "1"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$b"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "String",
+            "expr": "hello"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Call",
+        "expr": {
+          "kind": "CallExpr",
+          "func": {
+            "kind": "Expr",
+            "type": "Id",
+            "expr": "foo3"
+          },
+          "args": [
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$a"
+            },
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "kind": "FunDef",
+      "name": "foo3",
+      "child": {
+        "kind": "Fun",
+        "span": {
+          "kind": "Pos",
+          "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+          "startLine": 40,
+          "startBol": 414,
+          "startOffset": 414,
+          "endLine": 49,
+          "endBol": 531,
+          "endOffset": 532
+        },
+        "ret": {
+          "kind": "Hint",
+          "type": "Apply",
+          "name": "arraykey",
+          "hints": []
+        },
+        "params": [
+          {
+            "kind": "FunParam",
+            "name": "$a",
+            "type_hint": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "int",
+              "hints": []
+            },
+            "pos": {
+              "kind": "Pos",
+              "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+              "startLine": 40,
+              "startBol": 414,
+              "startOffset": 432,
+              "endLine": 40,
+              "endBol": 414,
+              "endOffset": 434
+            },
+            "expr": null,
+            "visibility": "Unknown"
+          },
+          {
+            "kind": "FunParam",
+            "name": "$b",
+            "type_hint": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "int",
+              "hints": []
+            },
+            "pos": {
+              "kind": "Pos",
+              "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+              "startLine": 40,
+              "startBol": 414,
+              "startOffset": 440,
+              "endLine": 40,
+              "endBol": 414,
+              "endOffset": 442
+            },
+            "expr": null,
+            "visibility": "Unknown"
+          }
+        ],
+        "body": {
+          "kind": "FuncBody",
+          "body": {
+            "kind": "Block",
+            "stmts": [
+              {
+                "kind": "Stmt",
+                "type": "Expr",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Eq",
+                    "lhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$c"
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "type": "Float",
+                      "expr": "1.0"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "Stmt",
+                "type": "Expr",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Eq",
+                    "lhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$d"
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "type": "Int",
+                      "expr": "0"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "Stmt",
+                "type": "If",
+                "stmt": [
+                  {
+                    "kind": "Expr",
+                    "type": "Binop",
+                    "expr": {
+                      "kind": "Binop",
+                      "bop": "Eqeq",
+                      "lhs": {
+                        "kind": "Expr",
+                        "type": "LocalVar",
+                        "expr": "$b"
+                      },
+                      "rhs": {
+                        "kind": "Expr",
+                        "type": "String",
+                        "expr": "hello"
+                      }
+                    }
+                  },
+                  {
+                    "kind": "Block",
+                    "stmts": [
+                      {
+                        "kind": "Stmt",
+                        "type": "Return",
+                        "stmt": {
+                          "kind": "Expr",
+                          "type": "LocalVar",
+                          "expr": "$b"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "Block",
+                    "stmts": [
+                      {
+                        "kind": "Stmt",
+                        "type": "Noop"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "Stmt",
+                "type": "Return",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "LocalVar",
+                  "expr": "$c"
+                }
+              }
+            ]
+          }
+        },
+        "doc_comment": null
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$a"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "Int",
+            "expr": "1"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$b"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "String",
+            "expr": "hello"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Call",
+        "expr": {
+          "kind": "CallExpr",
+          "func": {
+            "kind": "Expr",
+            "type": "Id",
+            "expr": "foo4"
+          },
+          "args": [
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$a"
+            },
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "kind": "FunDef",
+      "name": "foo4",
+      "child": {
+        "kind": "Fun",
+        "span": {
+          "kind": "Pos",
+          "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+          "startLine": 57,
+          "startBol": 607,
+          "startOffset": 607,
+          "endLine": 69,
+          "endBol": 761,
+          "endOffset": 762
+        },
+        "ret": {
+          "kind": "Hint",
+          "type": "Apply",
+          "name": "float",
+          "hints": []
+        },
+        "params": [
+          {
+            "kind": "FunParam",
+            "name": "$a",
+            "type_hint": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "int",
+              "hints": []
+            },
+            "pos": {
+              "kind": "Pos",
+              "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+              "startLine": 57,
+              "startBol": 607,
+              "startOffset": 625,
+              "endLine": 57,
+              "endBol": 607,
+              "endOffset": 627
+            },
+            "expr": null,
+            "visibility": "Unknown"
+          },
+          {
+            "kind": "FunParam",
+            "name": "$b",
+            "type_hint": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "int",
+              "hints": []
+            },
+            "pos": {
+              "kind": "Pos",
+              "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+              "startLine": 57,
+              "startBol": 607,
+              "startOffset": 633,
+              "endLine": 57,
+              "endBol": 607,
+              "endOffset": 635
+            },
+            "expr": null,
+            "visibility": "Unknown"
+          }
+        ],
+        "body": {
+          "kind": "FuncBody",
+          "body": {
+            "kind": "Block",
+            "stmts": [
+              {
+                "kind": "Stmt",
+                "type": "Expr",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Eq",
+                    "lhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$c"
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "type": "Float",
+                      "expr": "1.0"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "Stmt",
+                "type": "Expr",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Eq",
+                    "lhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$d"
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "type": "Int",
+                      "expr": "0"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "Stmt",
+                "type": "Switch",
+                "stmt": [
+                  {
+                    "kind": "Expr",
+                    "type": "LocalVar",
+                    "expr": "$b"
+                  },
+                  [
+                    {
+                      "kind": "Case",
+                      "expr": {
+                        "kind": "Expr",
+                        "type": "String",
+                        "expr": "hello"
+                      },
+                      "block": {
+                        "kind": "Block",
+                        "stmts": [
+                          {
+                            "kind": "Stmt",
+                            "type": "Return",
+                            "stmt": {
+                              "kind": "Expr",
+                              "type": "String",
+                              "expr": "yes"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  {
+                    "kind": "DefaultCase",
+                    "block": {
+                      "kind": "Block",
+                      "stmts": [
+                        {
+                          "kind": "Stmt",
+                          "type": "Return",
+                          "stmt": {
+                            "kind": "Expr",
+                            "type": "String",
+                            "expr": "no"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "Stmt",
+                "type": "Return",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "LocalVar",
+                  "expr": "$c"
+                }
+              }
+            ]
+          }
+        },
+        "doc_comment": null
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Binop",
+        "expr": {
+          "kind": "Binop",
+          "bop": "Eq",
+          "lhs": {
+            "kind": "Expr",
+            "type": "LocalVar",
+            "expr": "$a"
+          },
+          "rhs": {
+            "kind": "Expr",
+            "type": "ValCollection",
+            "VcKind": "Vec",
+            "expr": [
+              {
+                "kind": "Expr",
+                "type": "Int",
+                "expr": "1"
+              },
+              {
+                "kind": "Expr",
+                "type": "Int",
+                "expr": "2"
+              },
+              {
+                "kind": "Expr",
+                "type": "Int",
+                "expr": "3"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "Stmt",
+      "type": "Expr",
+      "stmt": {
+        "kind": "Expr",
+        "type": "Call",
+        "expr": {
+          "kind": "CallExpr",
+          "func": {
+            "kind": "Expr",
+            "type": "Id",
+            "expr": "foo5"
+          },
+          "args": [
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$a"
+            },
+            {
+              "kind": "Expr",
+              "type": "LocalVar",
+              "expr": "$b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "kind": "FunDef",
+      "name": "foo5",
+      "child": {
+        "kind": "Fun",
+        "span": {
+          "kind": "Pos",
+          "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+          "startLine": 76,
+          "startBol": 833,
+          "startOffset": 833,
+          "endLine": 86,
+          "endBol": 940,
+          "endOffset": 940
+        },
+        "ret": {
+          "kind": "Hint",
+          "type": "Apply",
+          "name": "arraykey",
+          "hints": []
+        },
+        "params": [
+          {
+            "kind": "FunParam",
+            "name": "$a",
+            "type_hint": {
+              "kind": "Hint",
+              "type": "Apply",
+              "name": "vec",
+              "hints": [
+                {
+                  "kind": "Hint",
+                  "type": "Apply",
+                  "name": "int",
+                  "hints": []
+                }
+              ]
+            },
+            "pos": {
+              "kind": "Pos",
+              "file": "root|tests/ast/basic_stmt/with_pos/input.hack",
+              "startLine": 76,
+              "startBol": 833,
+              "startOffset": 856,
+              "endLine": 76,
+              "endBol": 833,
+              "endOffset": 858
+            },
+            "expr": null,
+            "visibility": "Unknown"
+          }
+        ],
+        "body": {
+          "kind": "FuncBody",
+          "body": {
+            "kind": "Block",
+            "stmts": [
+              {
+                "kind": "Stmt",
+                "type": "Expr",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Eq",
+                    "lhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$c"
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "type": "Float",
+                      "expr": "1.0"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "Stmt",
+                "type": "Expr",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "Binop",
+                  "expr": {
+                    "kind": "Binop",
+                    "bop": "Eq",
+                    "lhs": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$d"
+                    },
+                    "rhs": {
+                      "kind": "Expr",
+                      "type": "Int",
+                      "expr": "0"
+                    }
+                  }
+                }
+              },
+              {
+                "kind": "Stmt",
+                "type": "Try",
+                "stmt": [
+                  {
+                    "kind": "Block",
+                    "stmts": []
+                  },
+                  {
+                    "kind": "AsExpr",
+                    "type": "AsV",
+                    "asExpr": {
+                      "kind": "Expr",
+                      "type": "LocalVar",
+                      "expr": "$val"
+                    }
+                  },
+                  {
+                    "kind": "Expr",
+                    "type": "LocalVar",
+                    "expr": "$a"
+                  }
+                ]
+              },
+              {
+                "kind": "Stmt",
+                "type": "Return",
+                "stmt": {
+                  "kind": "Expr",
+                  "type": "LocalVar",
+                  "expr": "$c"
+                }
+              }
+            ]
+          }
+        },
+        "doc_comment": null
+      }
+    }
+  ]
+}
